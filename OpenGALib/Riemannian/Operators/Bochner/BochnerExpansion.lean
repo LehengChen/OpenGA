@@ -63,11 +63,12 @@ theorem ricciTensor_eq_sum_inner_orthonormal
     (x : M) (V W : TangentSpace I x) :
     Ric_g(V, W) x =
       ∑ i, ⟪(stdOrthonormalBasis ℝ (TangentSpace I x)) i,
-            curvatureEndo
+            curvatureEndo (HasMetric.metric)
               (SmoothVectorField.const (I := I) (M := M) V)
               (SmoothVectorField.const (I := I) (M := M) W) x
               ((stdOrthonormalBasis ℝ (TangentSpace I x)) i)⟫_ℝ := by
-  show ricci (SmoothVectorField.const (I := I) (M := M) V)
+  show ricci (HasMetric.metric)
+        (SmoothVectorField.const (I := I) (M := M) V)
         (SmoothVectorField.const (I := I) (M := M) W) x = _
   unfold ricci
   exact LinearMap.trace_eq_sum_inner _ (stdOrthonormalBasis ℝ (TangentSpace I x))
@@ -340,27 +341,27 @@ theorem heart_curvature_orthonormal_sum_eq_ricci
     SmoothVectorField.const (I := I) (M := M) (W.toFun x : E)
   let GV : SmoothVectorField I M :=
     SmoothVectorField.const (I := I) (M := M) (gradF.toFun x : E)
-  -- Bilinear form `Φ(v, w) := g_x(curvatureEndo WV GV x v, w)`.
+  -- Bilinear form `Φ(v, w) := g_x(curvatureEndo (HasMetric.metric) WV GV x v, w)`.
   set Φ : TangentSpace I x →ₗ[ℝ] TangentSpace I x →ₗ[ℝ] ℝ :=
     LinearMap.mk₂ ℝ
-      (fun v w => metricInner x (curvatureEndo WV GV x v) w)
+      (fun v w => metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) w)
       (fun v₁ v₂ w => by
-        show metricInner x (curvatureEndo WV GV x (v₁ + v₂)) w
-          = metricInner x (curvatureEndo WV GV x v₁) w
-            + metricInner x (curvatureEndo WV GV x v₂) w
-        rw [(curvatureEndo WV GV x).map_add, metricInner_add_left])
+        show metricInner x (curvatureEndo (HasMetric.metric) WV GV x (v₁ + v₂)) w
+          = metricInner x (curvatureEndo (HasMetric.metric) WV GV x v₁) w
+            + metricInner x (curvatureEndo (HasMetric.metric) WV GV x v₂) w
+        rw [(curvatureEndo (HasMetric.metric) WV GV x).map_add, metricInner_add_left])
       (fun c v w => by
-        show metricInner x (curvatureEndo WV GV x (c • v)) w
-          = c • metricInner x (curvatureEndo WV GV x v) w
-        rw [(curvatureEndo WV GV x).map_smul, metricInner_smul_left]; rfl)
+        show metricInner x (curvatureEndo (HasMetric.metric) WV GV x (c • v)) w
+          = c • metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) w
+        rw [(curvatureEndo (HasMetric.metric) WV GV x).map_smul, metricInner_smul_left]; rfl)
       (fun v w₁ w₂ => by
-        show metricInner x (curvatureEndo WV GV x v) (w₁ + w₂)
-          = metricInner x (curvatureEndo WV GV x v) w₁
-            + metricInner x (curvatureEndo WV GV x v) w₂
+        show metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) (w₁ + w₂)
+          = metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) w₁
+            + metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) w₂
         rw [metricInner_add_right])
       (fun c v w => by
-        show metricInner x (curvatureEndo WV GV x v) (c • w)
-          = c • metricInner x (curvatureEndo WV GV x v) w
+        show metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) (c • w)
+          = c • metricInner x (curvatureEndo (HasMetric.metric) WV GV x v) w
         rw [metricInner_smul_right]; rfl) with hΦ_def
   -- Step 1: per-`i` pointwise-eq reduction.
   have h_per_i : ∀ i,
@@ -369,7 +370,7 @@ theorem heart_curvature_orthonormal_sum_eq_ricci
         = Φ ((Bi i).toFun x) ((Bi i).toFun x) := by
     intro i
     have hR_eq : riemannCurvature (Bi i).toFun W.toFun gradF.toFun x
-        = curvatureEndo WV GV x ((Bi i).toFun x) := by
+        = curvatureEndo (HasMetric.metric) WV GV x ((Bi i).toFun x) := by
       show riemannCurvature (Bi i).toFun W.toFun gradF.toFun x
         = riemannCurvature
             (fun _ : M => ((Bi i).toFun x : TangentSpace I x))
@@ -390,18 +391,19 @@ theorem heart_curvature_orthonormal_sum_eq_ricci
         rw [ricciTensor_eq_sum_inner_orthonormal x (W.toFun x) (gradF.toFun x)]
         apply Finset.sum_congr rfl
         intro i _
-        -- Φ v v = metricInner (curvatureEndo WV GV x v) v
-        --       = ⟪curvatureEndo WV GV x v, v⟫_ℝ (def-eq)
-        --       = ⟪v, curvatureEndo WV GV x v⟫_ℝ (real_inner_comm).
-        show ⟪curvatureEndo WV GV x ((stdOrthonormalBasis ℝ (TangentSpace I x)) i),
+        -- Φ v v = metricInner (curvatureEndo (HasMetric.metric) WV GV x v) v
+        --       = ⟪curvatureEndo (HasMetric.metric) WV GV x v, v⟫_ℝ (def-eq)
+        --       = ⟪v, curvatureEndo (HasMetric.metric) WV GV x v⟫_ℝ (real_inner_comm).
+        show ⟪curvatureEndo (HasMetric.metric) WV GV x ((stdOrthonormalBasis ℝ (TangentSpace I x)) i),
                 (stdOrthonormalBasis ℝ (TangentSpace I x)) i⟫_ℝ
             = ⟪(stdOrthonormalBasis ℝ (TangentSpace I x)) i,
-                curvatureEndo WV GV x ((stdOrthonormalBasis ℝ (TangentSpace I x)) i)⟫_ℝ
+                curvatureEndo (HasMetric.metric) WV GV x ((stdOrthonormalBasis ℝ (TangentSpace I x)) i)⟫_ℝ
         exact real_inner_comm _ _
     _ = Ric_g(gradF.toFun x, W.toFun x) x := by
-        show ricciTensor x (W.toFun x) (gradF.toFun x)
-          = ricciTensor x (gradF.toFun x) (W.toFun x)
-        show ricci WV GV x = ricci GV WV x
+        show ricciTensor (HasMetric.metric) x (W.toFun x) (gradF.toFun x)
+          = ricciTensor (HasMetric.metric) x (gradF.toFun x) (W.toFun x)
+        show ricci (HasMetric.metric) WV GV x
+            = ricci (HasMetric.metric) GV WV x
         exact ricci_symm WV GV x h_interior
 
 /-- **Math.** Hessian-frame trace equals Laplacian locally: on a

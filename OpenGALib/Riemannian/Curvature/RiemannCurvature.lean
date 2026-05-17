@@ -64,10 +64,14 @@ theorem riemannCurvature_antisymm
 the constant section). Trace of this is the Ricci tensor at $x$. -/
 noncomputable def curvatureEndo
     [IsManifold I 2 M]
+    (g : RiemannianMetric I M)
     (X Y : SmoothVectorField I M) (x : M) :
     TangentSpace I x →ₗ[ℝ] TangentSpace I x where
-  toFun z := riemannCurvature (fun _ => z) X Y x
+  toFun z :=
+    letI : HasMetric I M := ⟨g⟩
+    riemannCurvature (fun _ => z) X Y x
   map_add' z₁ z₂ := by
+    letI : HasMetric I M := ⟨g⟩
     show riemannCurvature (fun _ => z₁ + z₂) X.toFun Y.toFun x
        = riemannCurvature (fun _ => z₁) X.toFun Y.toFun x
         + riemannCurvature (fun _ => z₂) X.toFun Y.toFun x
@@ -149,6 +153,7 @@ noncomputable def curvatureEndo
     rw [hT1, hT2, hT3]
     abel
   map_smul' c z := by
+    letI : HasMetric I M := ⟨g⟩
     show riemannCurvature (fun _ => c • z) X.toFun Y.toFun x
        = c • riemannCurvature (fun _ => z) X.toFun Y.toFun x
     show covDeriv (fun _ => c • z) (fun y => covDeriv X.toFun Y.toFun y) x
@@ -208,12 +213,16 @@ $$\mathrm{Ric}(X, Y)(x) := \mathrm{tr}(\mathrm{curvatureEndo}\,X\,Y\,x).$$
 
 Reference: do Carmo §4 ex. 1. -/
 noncomputable def ricci
+    (g : RiemannianMetric I M)
     (X Y : SmoothVectorField I M) (x : M) : ℝ :=
-  LinearMap.trace ℝ (TangentSpace I x) (curvatureEndo X Y x)
+  LinearMap.trace ℝ (TangentSpace I x) (curvatureEndo g X Y x)
 
 /-- **Math.** The Ricci curvature as a scalar function on the manifold:
-`(Ric(X, Y))(x) = ricci X Y x`. -/
-scoped[Riemannian] notation:max "Ric(" X ", " Y ")" => ricci X Y
+`(Ric(X, Y))(x) = ricci HasMetric.metric X Y x`. The notation pipes the
+ambient `[HasMetric I M]` metric so downstream consumers continue to
+write `Ric(X, Y)` unchanged during Phase 1 (typeclass retained). -/
+scoped[Riemannian] notation:max "Ric(" X ", " Y ")" =>
+  ricci (HasMetric.metric) X Y
 
 /-! ### Diagonal `(3,4)` vanishing: $g(R(X,Y)Z, Z) = 0$
 
@@ -749,11 +758,13 @@ theorem ricci_symm
   -- `LinearMap.trace_eq_sum_inner`.
   have h_RXY : Ric(X, Y) x =
       ∑ i, ⟪b i, riemannCurvature (fun _ : M => (b i : E)) X.toFun Y.toFun x⟫_ℝ := by
-    show LinearMap.trace ℝ (TangentSpace I x) (curvatureEndo X Y x) = _
+    show LinearMap.trace ℝ (TangentSpace I x)
+          (curvatureEndo (HasMetric.metric) X Y x) = _
     exact LinearMap.trace_eq_sum_inner _ b
   have h_RYX : Ric(Y, X) x =
       ∑ i, ⟪b i, riemannCurvature (fun _ : M => (b i : E)) Y.toFun X.toFun x⟫_ℝ := by
-    show LinearMap.trace ℝ (TangentSpace I x) (curvatureEndo Y X x) = _
+    show LinearMap.trace ℝ (TangentSpace I x)
+          (curvatureEndo (HasMetric.metric) Y X x) = _
     exact LinearMap.trace_eq_sum_inner _ b
   rw [h_RXY, h_RYX]
   -- Per i: the two inner products are equal (their difference vanishes
