@@ -10,7 +10,7 @@ primitive `ricci` and `riemannCurvature` from `Curvature.lean`; the
 engineering tax is the four `map_add'` / `map_smul'` proofs needed by
 the Mathlib `LinearMap` structure.
 
-* `ricciTensor x : T_xM →ₗ[ℝ] T_xM →ₗ[ℝ] ℝ` — the Ricci tensor as a
+* `ricciTensor g x : T_xM →ₗ[ℝ] T_xM →ₗ[ℝ] ℝ` — the Ricci tensor as a
   bilinear form, with bilinearity proved from `curvatureEndo`'s
   `LinearMap.trace` plus `riemannCurvature`'s tensoriality on
   constant lifts.
@@ -46,26 +46,28 @@ local notation "cF[" V "]" => SmoothVectorField.const (I := I) (M := M) V
 /-- **Math.** The **Ricci tensor** at $x$ as a bilinear form $T_xM \times T_xM \to \mathbb{R}$,
 $(V, W) \mapsto \mathrm{Ric}(V, W)(x)$ with $V, W$ extended to constant sections.
 Bundled as a `LinearMap → LinearMap → ℝ` for downstream metric raising. -/
-noncomputable def ricciTensor (x : M) :
+noncomputable def ricciTensor
+    (g : RiemannianMetric I M) (x : M) :
     TangentSpace I x →ₗ[ℝ] TangentSpace I x →ₗ[ℝ] ℝ where
   toFun V :=
+    letI : HasMetric I M := ⟨g⟩
     { toFun := fun W =>
-        ricci (cF[V])
+        ricci g (cF[V])
               (cF[W]) x
       map_add' := fun W₁ W₂ => by
         -- Route via `curvatureEndo` LinearMap-additivity, then trace.
-        show ricci (cF[V])
+        show ricci g (cF[V])
               (cF[W₁ + W₂]) x
-            = ricci (cF[V])
+            = ricci g (cF[V])
                 (cF[W₁]) x
-              + ricci (cF[V])
+              + ricci g (cF[V])
                 (cF[W₂]) x
         unfold ricci
-        rw [show curvatureEndo (cF[V])
+        rw [show curvatureEndo g (cF[V])
                   (cF[W₁ + W₂]) x
-              = curvatureEndo (cF[V])
+              = curvatureEndo g (cF[V])
                   (cF[W₁]) x
-                + curvatureEndo (cF[V])
+                + curvatureEndo g (cF[V])
                   (cF[W₂]) x from ?_]
         · exact (LinearMap.trace ℝ _).map_add _ _
         -- Pointwise LinearMap equality.
@@ -194,15 +196,15 @@ noncomputable def ricciTensor (x : M) :
         rw [hT2]
         abel
       map_smul' := fun c W => by
-        show ricci (cF[V])
+        show ricci g (cF[V])
               (cF[c • W]) x
-            = (RingHom.id ℝ) c • ricci
+            = (RingHom.id ℝ) c • ricci g
                 (cF[V])
                 (cF[W]) x
         unfold ricci
-        rw [show curvatureEndo (cF[V])
+        rw [show curvatureEndo g (cF[V])
                   (cF[c • W]) x
-              = c • curvatureEndo (cF[V])
+              = c • curvatureEndo g (cF[V])
                   (cF[W]) x from ?_]
         · simp
         refine LinearMap.ext fun z => ?_
@@ -288,20 +290,21 @@ noncomputable def ricciTensor (x : M) :
         rw [hT2]
         rw [smul_sub, smul_sub] }
   map_add' V₁ V₂ := by
+    letI : HasMetric I M := ⟨g⟩
     -- LinearMap-level additivity in V slot.
     refine LinearMap.ext fun W => ?_
-    show ricci (cF[V₁ + V₂])
+    show ricci g (cF[V₁ + V₂])
             (cF[W]) x
-        = ricci (cF[V₁])
+        = ricci g (cF[V₁])
             (cF[W]) x
-          + ricci (cF[V₂])
+          + ricci g (cF[V₂])
             (cF[W]) x
     unfold ricci
-    rw [show curvatureEndo (cF[V₁ + V₂])
+    rw [show curvatureEndo g (cF[V₁ + V₂])
               (cF[W]) x
-          = curvatureEndo (cF[V₁])
+          = curvatureEndo g (cF[V₁])
               (cF[W]) x
-            + curvatureEndo (cF[V₂])
+            + curvatureEndo g (cF[V₂])
               (cF[W]) x from ?_]
     · exact (LinearMap.trace ℝ _).map_add _ _
     refine LinearMap.ext fun z => ?_
@@ -412,15 +415,16 @@ noncomputable def ricciTensor (x : M) :
     rw [hT1, hT3]
     abel
   map_smul' c V := by
+    letI : HasMetric I M := ⟨g⟩
     refine LinearMap.ext fun W => ?_
-    show ricci (cF[c • V])
+    show ricci g (cF[c • V])
             (cF[W]) x
-        = ((RingHom.id ℝ) c • ricci (cF[V])
+        = ((RingHom.id ℝ) c • ricci g (cF[V])
             (cF[W]) x : ℝ)
     unfold ricci
-    rw [show curvatureEndo (cF[c • V])
+    rw [show curvatureEndo g (cF[c • V])
               (cF[W]) x
-          = c • curvatureEndo (cF[V])
+          = c • curvatureEndo g (cF[V])
               (cF[W]) x from ?_]
     · simp
     refine LinearMap.ext fun z => ?_
@@ -507,54 +511,62 @@ noncomputable def ricciTensor (x : M) :
 /-- **Math.** The **Ricci endomorphism** $\mathrm{Ric}^{\sharp}_x : T_xM \to T_xM$ defined
 by metric raising of the Ricci tensor:
 $\langle \mathrm{Ric}^{\sharp}_x V, W \rangle_g = \mathrm{Ric}(V, W)(x)$. -/
-noncomputable def ricciSharp (x : M) :
+noncomputable def ricciSharp
+    (g : RiemannianMetric I M) (x : M) :
     TangentSpace I x →ₗ[ℝ] TangentSpace I x where
   toFun V :=
-    (metricToDualEquiv x).symm (ricciTensor (I := I) (M := M) x V).toContinuousLinearMap
+    (g.metricToDualEquiv x).symm (ricciTensor (I := I) (M := M) g x V).toContinuousLinearMap
   map_add' V₁ V₂ := by
-    show (metricToDualEquiv x).symm ((ricciTensor x (V₁ + V₂)).toContinuousLinearMap)
-        = (metricToDualEquiv x).symm ((ricciTensor x V₁).toContinuousLinearMap)
-        + (metricToDualEquiv x).symm ((ricciTensor x V₂).toContinuousLinearMap)
-    rw [show ricciTensor (I := I) (M := M) x (V₁ + V₂)
-          = ricciTensor x V₁ + ricciTensor x V₂ from
-        (ricciTensor (I := I) (M := M) x).map_add V₁ V₂]
-    show (metricToDualEquiv x).symm
-          ((ricciTensor x V₁ + ricciTensor x V₂).toContinuousLinearMap)
-        = (metricToDualEquiv x).symm ((ricciTensor x V₁).toContinuousLinearMap)
-        + (metricToDualEquiv x).symm ((ricciTensor x V₂).toContinuousLinearMap)
-    rw [show (ricciTensor (I := I) (M := M) x V₁
-                + ricciTensor x V₂).toContinuousLinearMap
-          = (ricciTensor x V₁).toContinuousLinearMap
-            + (ricciTensor x V₂).toContinuousLinearMap from
+    show (g.metricToDualEquiv x).symm ((ricciTensor g x (V₁ + V₂)).toContinuousLinearMap)
+        = (g.metricToDualEquiv x).symm ((ricciTensor g x V₁).toContinuousLinearMap)
+        + (g.metricToDualEquiv x).symm ((ricciTensor g x V₂).toContinuousLinearMap)
+    rw [show ricciTensor (I := I) (M := M) g x (V₁ + V₂)
+          = ricciTensor g x V₁ + ricciTensor g x V₂ from
+        (ricciTensor (I := I) (M := M) g x).map_add V₁ V₂]
+    show (g.metricToDualEquiv x).symm
+          ((ricciTensor g x V₁ + ricciTensor g x V₂).toContinuousLinearMap)
+        = (g.metricToDualEquiv x).symm ((ricciTensor g x V₁).toContinuousLinearMap)
+        + (g.metricToDualEquiv x).symm ((ricciTensor g x V₂).toContinuousLinearMap)
+    rw [show (ricciTensor (I := I) (M := M) g x V₁
+                + ricciTensor g x V₂).toContinuousLinearMap
+          = (ricciTensor g x V₁).toContinuousLinearMap
+            + (ricciTensor g x V₂).toContinuousLinearMap from
         LinearMap.toContinuousLinearMap.map_add _ _]
-    exact (metricToDualEquiv x).symm.map_add _ _
+    exact (g.metricToDualEquiv x).symm.map_add _ _
   map_smul' c V := by
-    show (metricToDualEquiv x).symm ((ricciTensor x (c • V)).toContinuousLinearMap)
-        = c • (metricToDualEquiv x).symm ((ricciTensor x V).toContinuousLinearMap)
-    rw [show ricciTensor (I := I) (M := M) x (c • V)
-          = c • ricciTensor x V from
-        (ricciTensor (I := I) (M := M) x).map_smul c V]
-    show (metricToDualEquiv x).symm ((c • ricciTensor x V).toContinuousLinearMap)
-        = c • (metricToDualEquiv x).symm ((ricciTensor x V).toContinuousLinearMap)
-    rw [show (c • ricciTensor (I := I) (M := M) x V).toContinuousLinearMap
-          = c • (ricciTensor x V).toContinuousLinearMap from
+    show (g.metricToDualEquiv x).symm ((ricciTensor g x (c • V)).toContinuousLinearMap)
+        = c • (g.metricToDualEquiv x).symm ((ricciTensor g x V).toContinuousLinearMap)
+    rw [show ricciTensor (I := I) (M := M) g x (c • V)
+          = c • ricciTensor g x V from
+        (ricciTensor (I := I) (M := M) g x).map_smul c V]
+    show (g.metricToDualEquiv x).symm ((c • ricciTensor g x V).toContinuousLinearMap)
+        = c • (g.metricToDualEquiv x).symm ((ricciTensor g x V).toContinuousLinearMap)
+    rw [show (c • ricciTensor (I := I) (M := M) g x V).toContinuousLinearMap
+          = c • (ricciTensor g x V).toContinuousLinearMap from
         LinearMap.toContinuousLinearMap.map_smul _ _]
-    exact (metricToDualEquiv x).symm.map_smul c _
+    exact (g.metricToDualEquiv x).symm.map_smul c _
 
 /-- **Math.** The **scalar curvature** $\mathrm{scal}(x) := \mathrm{tr}_g \mathrm{Ric}(x)
 = \mathrm{tr}(\mathrm{Ric}^{\sharp}_x)$.
 
 Basis-free definition: trace of the Ricci endomorphism. Equals $\sum_i \mathrm{Ric}(e_i, e_i)$
 for any $g$-orthonormal basis $\{e_i\}$ of $T_xM$. -/
-noncomputable def scalarCurvature (x : M) : ℝ :=
-  LinearMap.trace ℝ (TangentSpace I x) (ricciSharp (I := I) (M := M) x)
+noncomputable def scalarCurvature
+    (g : RiemannianMetric I M) (x : M) : ℝ :=
+  LinearMap.trace ℝ (TangentSpace I x) (ricciSharp (I := I) (M := M) g x)
 
-/-- **Math.** Notation `scal_g[I]` for the scalar curvature. `I` is bracketed because
-`x : M` does not expose the model with corners. -/
-scoped[Riemannian] notation:max "scal_g[" I "]" => scalarCurvature (I := I)
+/-- **Math.** Notation `scal_g[I]` for the scalar curvature on the ambient
+`[HasMetric I M]` metric. `I` is bracketed because `x : M` does not expose
+the model with corners. The notation pipes `HasMetric.metric` so downstream
+consumers continue to write `scal_g[I] x` during Phase 1 (typeclass
+retained until #19). -/
+scoped[Riemannian] notation:max "scal_g[" I "]" =>
+  scalarCurvature (I := I) (HasMetric.metric)
 
-/-- **Math.** Notation `Ric_g(v, w) x` for `ricciTensor x v w`. -/
-scoped[Riemannian] notation:max "Ric_g(" v ", " w ") " x:max => ricciTensor x v w
+/-- **Math.** Notation `Ric_g(v, w) x` for `ricciTensor HasMetric.metric x v w`
+on the ambient `[HasMetric I M]` metric. -/
+scoped[Riemannian] notation:max "Ric_g(" v ", " w ") " x:max =>
+  ricciTensor (HasMetric.metric) x v w
 
 /-! ## Ricci-flat and Einstein metric predicates
 

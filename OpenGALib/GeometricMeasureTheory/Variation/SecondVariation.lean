@@ -69,7 +69,7 @@ noncomputable def secondVariationFull
     ⟨hN.unitNormal, sorry⟩
   ∫ x, (‖grad_g[I] φ‖²_g x -
         (secondFundamentalFormSqNorm hN.unitNormal x +
-         ricci νSmooth νSmooth x) * φ x ^ 2)
+         ricci (HasMetric.metric) νSmooth νSmooth x) * φ x ^ 2)
       ∂V.massMeasure
 
 end GeometricMeasureTheory.Variation
