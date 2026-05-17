@@ -1,7 +1,6 @@
 import OpenGALib.MetricGeometry.GeodesicSpace
 import OpenGALib.MetricGeometry.LengthSpace
 import OpenGALib.MetricGeometry.MetricMeasureSpace
-import OpenGALib.MetricGeometry.Util.ScalarMultipleOfHausdorff
 import OpenGALib.MetricGeometry.Examples.EuclideanSpace
 
 /-!
