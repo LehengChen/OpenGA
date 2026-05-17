@@ -1,4 +1,5 @@
 import Mathlib.MeasureTheory.Measure.Hausdorff
+import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import OpenGALib.Riemannian.Volume.ChartPullback
 
 /-!
@@ -82,5 +83,35 @@ theorem volumeMeasure_eq_alphaFederer_smul_hausdorffMeasure
         MeasureTheory.Measure.hausdorffMeasure
           ((Module.finrank ℝ E : ℕ) : ℝ) := by
   sorry
+
+/-! ## Federer constant: positivity & finiteness
+
+General-purpose lemmas on `alphaFedererConstant` used both by the
+Federer bridge above and by any downstream consumer producing a
+volume-form / Hausdorff-measure scaling. -/
+
+/-- **Math.** `alphaFedererConstant n ≠ ⊤` — finiteness is immediate from
+the `ENNReal.ofReal` packaging. -/
+lemma alphaFedererConstant_ne_top (n : ℕ) :
+    alphaFedererConstant n ≠ ⊤ := by
+  unfold alphaFedererConstant
+  exact ENNReal.ofReal_ne_top
+
+/-- **Math.** `0 < alphaFedererConstant n` for `n ≥ 1`: the Euclidean unit
+ball has positive Lebesgue measure (open-positive-measure property),
+and `2^n > 0`. -/
+lemma alphaFedererConstant_pos {n : ℕ} (hn : 0 < n) :
+    0 < alphaFedererConstant n := by
+  unfold alphaFedererConstant
+  rw [ENNReal.ofReal_pos]
+  apply div_pos
+  · have h_pos : 0 < MeasureTheory.volume
+        (Metric.ball (0 : EuclideanSpace ℝ (Fin n)) 1) :=
+      Metric.measure_ball_pos _ _ one_pos
+    have h_lt_top : MeasureTheory.volume
+        (Metric.ball (0 : EuclideanSpace ℝ (Fin n)) 1) < ⊤ :=
+      MeasureTheory.measure_ball_lt_top
+    exact ENNReal.toReal_pos h_pos.ne' h_lt_top.ne
+  · positivity
 
 end Riemannian
