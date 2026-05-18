@@ -7,10 +7,10 @@ Builds $\nabla_X Y(x) \in T_xM$ as the Riesz representative of the
 half-Koszul functional $Z \mapsto \tfrac12 K(X, Y; Z)(x)$. The
 $C^\infty(M)$-tensoriality in $Z$ (`koszulFunctional_tensorialAt`) packages
 the half-Koszul as a `TangentSpace I x →L[ℝ] ℝ` via
-`TensorialAt.mkHom`; framework-owned `metricRiesz` then extracts the
+`TensorialAt.mkHom`; framework-owned `g.metricRiesz` then extracts the
 unique tangent vector.
 
-The output `koszulCovDeriv X Y x hX hY : TangentSpace I x` and its
+The output `koszulCovDeriv g X Y x hX hY : TangentSpace I x` and its
 defining identity `koszulCovDeriv_inner_eq` feed the Levi-Civita
 construction in `Connection.lean`.
 
@@ -40,15 +40,16 @@ Closed via `TensorialAt.mkHom` on `koszulFunctional_tensorialAt`.
 **Ground truth**: do Carmo 1992 §2 Theorem 3.6 existence proof, Step 3. -/
 theorem koszulLinearFunctional_exists
     [IsLocallyConstantChartedSpace H M]
+    (g : RiemannianMetric I M)
     (X Y : VectorFieldSection I M) (x : M)
     (hX : TangentSmoothAt X x) (hY : TangentSmoothAt Y x) :
     ∃ φ : (TangentSpace I x) →L[ℝ] ℝ,
       ∀ Z : VectorFieldSection I M,
         TangentSmoothAt Z x →
-        φ (Z x) = (1/2 : ℝ) * koszulFunctional X Y Z x := by
-  refine ⟨TensorialAt.mkHom _ x (koszulFunctional_tensorialAt X Y x hX hY),
+        φ (Z x) = (1/2 : ℝ) * koszulFunctional g X Y Z x := by
+  refine ⟨TensorialAt.mkHom _ x (koszulFunctional_tensorialAt g X Y x hX hY),
           fun Z hZ => ?_⟩
-  exact TensorialAt.mkHom_apply (koszulFunctional_tensorialAt X Y x hX hY) hZ
+  exact TensorialAt.mkHom_apply (koszulFunctional_tensorialAt g X Y x hX hY) hZ
 
 omit [CompleteSpace E] [InnerProductSpace ℝ E] [NeZero (Module.finrank ℝ E)]
   [I.Boundaryless] [T2Space M] in
@@ -57,39 +58,42 @@ $\langle v, Z(x)\rangle = \tfrac12 K(X, Y; Z)(x)$ for all smooth $Z$.
 The Levi-Civita value $\nabla_X Y(x)$. -/
 theorem koszulCovDeriv_exists
     [IsLocallyConstantChartedSpace H M]
+    (g : RiemannianMetric I M)
     (X Y : VectorFieldSection I M) (x : M)
     (hX : TangentSmoothAt X x) (hY : TangentSmoothAt Y x) :
     ∃ v : TangentSpace I x, ∀ Z : VectorFieldSection I M,
       TangentSmoothAt Z x →
-      metricInner x v (Z x) = (1/2 : ℝ) * koszulFunctional X Y Z x := by
-  obtain ⟨φ, hφ⟩ := koszulLinearFunctional_exists X Y x hX hY
-  refine ⟨metricRiesz x φ, fun Z hZ => ?_⟩
-  rw [metricRiesz_inner]
+      g.metricInner x v (Z x) = (1/2 : ℝ) * koszulFunctional g X Y Z x := by
+  obtain ⟨φ, hφ⟩ := koszulLinearFunctional_exists g X Y x hX hY
+  refine ⟨g.metricRiesz x φ, fun Z hZ => ?_⟩
+  rw [g.metricRiesz_inner]
   exact hφ Z hZ
 
 /-- **Math.** **Levi-Civita via Koszul + Riesz** (explicit construction):
 $\nabla_X Y(x) \in T_xM$ is the unique vector with
 $$\langle \nabla_X Y(x), Z(x)\rangle = \tfrac12 K(X, Y; Z)(x)$$
 for all smooth $Z$, extracted via Riesz over the framework-owned
-`metricInner`. -/
+`g.metricInner`. -/
 noncomputable def koszulCovDeriv
     [IsLocallyConstantChartedSpace H M]
+    (g : RiemannianMetric I M)
     (X Y : VectorFieldSection I M) (x : M)
     (hX : TangentSmoothAt X x) (hY : TangentSmoothAt Y x) : TangentSpace I x :=
-  Classical.choose (koszulCovDeriv_exists X Y x hX hY)
+  Classical.choose (koszulCovDeriv_exists g X Y x hX hY)
 
 omit [CompleteSpace E] [InnerProductSpace ℝ E] [NeZero (Module.finrank ℝ E)]
   [I.Boundaryless] [T2Space M] in
 /-- **Math.** **Riesz defining property**:
 $\langle \nabla_X Y(x), Z(x)\rangle = \tfrac12 K(X, Y; Z)(x)$ for smooth
-$X, Y, Z$, with `metricInner` as the framework-owned inner product. -/
+$X, Y, Z$, with `g.metricInner` as the framework-owned inner product. -/
 theorem koszulCovDeriv_inner_eq
     [IsLocallyConstantChartedSpace H M]
+    (g : RiemannianMetric I M)
     (X Y Z : VectorFieldSection I M) (x : M)
     (hX : TangentSmoothAt X x) (hY : TangentSmoothAt Y x)
     (hZ : TangentSmoothAt Z x) :
-    metricInner x (koszulCovDeriv X Y x hX hY) (Z x)
-      = (1/2 : ℝ) * koszulFunctional X Y Z x :=
-  Classical.choose_spec (koszulCovDeriv_exists X Y x hX hY) Z hZ
+    g.metricInner x (koszulCovDeriv g X Y x hX hY) (Z x)
+      = (1/2 : ℝ) * koszulFunctional g X Y Z x :=
+  Classical.choose_spec (koszulCovDeriv_exists g X Y x hX hY) Z hZ
 
 end Riemannian
