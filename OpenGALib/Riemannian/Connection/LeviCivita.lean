@@ -660,12 +660,6 @@ noncomputable def riemannCurvature
   covDeriv g X (covDeriv g Y Z) x - covDeriv g Y (covDeriv g X Z) x
     - covDeriv g (mlieBracket I X Y) Z x
 
-/-- **Math.** Notation `Riem(X, Y) Z` for `riemannCurvature (HasMetric.metric) X Y Z`.
-The notation pipes the ambient `[HasMetric I M]` metric so downstream code
-continues to write `Riem(X, Y) Z` unchanged during Phase 1. -/
-scoped[Riemannian] notation:max "Riem(" X ", " Y ") " Z:max =>
-  riemannCurvature (HasMetric.metric) X Y Z
-
 /-! ### `riem_simp` lemmas
 
 Two rewrites that drive the `riem_simp` simp set, populated for the
@@ -703,7 +697,7 @@ theorem covDeriv_mlieBracket_swap_apply
       ((leviCivitaConnection (I := I) (M := M) g).toFun Z x).map_neg]
 
 -- riemannCurvature_antisymm lives in Curvature.lean: its statement
--- uses the post-Bianchi `Riem(X, Y) Z` notation, so it must be in a
+-- uses the post-Bianchi `riemannCurvature HasMetric.metric X Y Z` notation, so it must be in a
 -- file that imports `Util/Notation/Curvature`.
 
 /-! ## Algebraic Bianchi I
@@ -920,14 +914,11 @@ This is the standard $(1,4)$-tensor covariant-derivative pattern: $\nabla$
 acts on each slot of $R$ as a derivation. -/
 noncomputable def covDerivRiemann
     (X Y Z W : SmoothVectorField I M) (x : M) : TangentSpace I x :=
-  covDeriv HasMetric.metric X.toFun (Riem(Y, Z) W) x
-    - Riem(covDeriv HasMetric.metric X Y, Z) W x
-    - Riem(Y, covDeriv HasMetric.metric X Z) W x
-    - Riem(Y, Z) (covDeriv HasMetric.metric X W) x
+  covDeriv HasMetric.metric X.toFun (riemannCurvature HasMetric.metric Y Z W) x
+    - riemannCurvature HasMetric.metric (covDeriv HasMetric.metric X Y) Z.toFun W.toFun x
+    - riemannCurvature HasMetric.metric Y.toFun (covDeriv HasMetric.metric X Z) W.toFun x
+    - riemannCurvature HasMetric.metric Y.toFun Z.toFun (covDeriv HasMetric.metric X W) x
 
-/-- **Math.** Notation `(∇R)[X](Y, Z) W` for `covDerivRiemann X Y Z W`. -/
-scoped[Riemannian] notation:max "(∇R)[" X "](" Y ", " Z ") " W:max =>
-  covDerivRiemann X Y Z W
 
 /-- **Math.** **Second (differential) Bianchi identity** for the
 Levi-Civita connection:
@@ -948,7 +939,7 @@ Estimated 80-120 LOC; repair tracked separately. -/
 theorem bianchi_second
     [IsManifold I 3 M]
     (X Y Z W : SmoothVectorField I M) (x : M) :
-    (∇R)[X](Y, Z) W x + (∇R)[Y](Z, X) W x + (∇R)[Z](X, Y) W x = 0 := by
+    covDerivRiemann X Y Z W x + covDerivRiemann Y Z X W x + covDerivRiemann Z X Y W x = 0 := by
   sorry
 
 end Riemannian
