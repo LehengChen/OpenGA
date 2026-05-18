@@ -215,13 +215,6 @@ noncomputable def ricci
     (X Y : SmoothVectorField I M) (x : M) : ℝ :=
   LinearMap.trace ℝ (TangentSpace I x) (curvatureEndo g X Y x)
 
-/-- **Math.** The Ricci curvature as a scalar function on the manifold:
-`(Ric(X, Y))(x) = ricci HasMetric.metric X Y x`. The notation pipes the
-ambient `[HasMetric I M]` metric so downstream consumers continue to
-write `Ric(X, Y)` unchanged during Phase 1 (typeclass retained). -/
-scoped[Riemannian] notation:max "Ric(" X ", " Y ")" =>
-  ricci (HasMetric.metric) X Y
-
 /-! ### Diagonal `(3,4)` vanishing: $g(R(X,Y)Z, Z) = 0$
 
 do Carmo §4 Proposition 2.5(iii) closure. The proof reduces, via metric
@@ -759,12 +752,12 @@ theorem ricci_symm
   set b := stdOrthonormalBasis ℝ (TangentSpace I x) with hb_def
   -- Expand each Ricci scalar as `∑ i, ⟪b i, R(const b i, ·) · x⟫_ℝ` via
   -- `LinearMap.trace_eq_sum_inner`.
-  have h_RXY : Ric(X, Y) x =
+  have h_RXY : ricci HasMetric.metric X Y x =
       ∑ i, ⟪b i, riemannCurvature HasMetric.metric (fun _ : M => (b i : E)) X.toFun Y.toFun x⟫_ℝ := by
     show LinearMap.trace ℝ (TangentSpace I x)
           (curvatureEndo (HasMetric.metric) X Y x) = _
     exact LinearMap.trace_eq_sum_inner _ b
-  have h_RYX : Ric(Y, X) x =
+  have h_RYX : ricci HasMetric.metric Y X x =
       ∑ i, ⟪b i, riemannCurvature HasMetric.metric (fun _ : M => (b i : E)) Y.toFun X.toFun x⟫_ℝ := by
     show LinearMap.trace ℝ (TangentSpace I x)
           (curvatureEndo (HasMetric.metric) Y X x) = _
@@ -806,7 +799,7 @@ is by isometries).
 Reference: do Carmo §3 Ex. 5; Petersen Ch. 8. -/
 def IsKilling (X : SmoothVectorField I M) : Prop :=
   ∀ (U W : SmoothVectorField I M) (y : M),
-    metricInner y ((∇[U] X) y) (W y) + metricInner y ((∇[W] X) y) (U y) = 0
+    metricInner y ((covDeriv HasMetric.metric U X) y) (W y) + metricInner y ((covDeriv HasMetric.metric W X) y) (U y) = 0
 
 /-- **Math.** Covariantly differentiating the Killing equation.
 
@@ -956,7 +949,9 @@ Cheeger–Ebin §1.84. -/
 theorem IsKilling.second_covDeriv_eq_curvature
     (X : SmoothVectorField I M) (hX : IsKilling X)
     (Y Z : SmoothVectorField I M) (x : M) :
-    (∇[Y] (∇[Z] X)) x - (∇[∇[Y] Z] X) x = Riem(Y, X) Z x := by
+    covDeriv HasMetric.metric Y.toFun (covDeriv HasMetric.metric Z X) x
+      - covDeriv HasMetric.metric (covDeriv HasMetric.metric Y Z) X.toFun x
+      = Riem(Y, X) Z x := by
   classical
   apply (metricInner_eq_iff_eq x _ _).mp
   intro w
@@ -1067,10 +1062,6 @@ noncomputable def sectionalCurvature
     (metricInner x (X x) (X x) * metricInner x (Y x) (Y x)
       - metricInner x (X x) (Y x) ^ 2)
 
-/-- **Math.** Notation `K_g[I](X, Y)` for `sectionalCurvature X Y`. -/
-scoped[Riemannian] notation:max "K_g[" I "](" X ", " Y ")" =>
-  sectionalCurvature (I := I) X Y
-
 /-- **Math.** **Tangent-vector form** of sectional curvature: same
 formula as `sectionalCurvature` but consuming the pointwise tangent
 vectors $v, w \in T_xM$ directly via constant-section lifts. Useful when
@@ -1093,7 +1084,7 @@ Denominator: symmetric in $X, Y$ via `metricInner_comm`. -/
 theorem sectionalCurvature_symmetric
     [IsManifold I 2 M]
     (X Y : SmoothVectorField I M) (x : M) :
-    K_g[I](X, Y) x = K_g[I](Y, X) x := by
+    sectionalCurvature (I := I) X Y x = sectionalCurvature (I := I) Y X x := by
   unfold sectionalCurvature
   congr 1
   · -- Numerator: g(R(X,Y) Y, X) = g(R(Y,X) X, Y) via pair-symmetry + double antisym.
