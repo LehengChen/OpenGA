@@ -125,7 +125,6 @@ theorem koszulCovDerivAux_tensorialAt
 
 /-! ### Bridge: smoothness of `koszulCovDeriv g X.toFun Y.toFun y` at `x` -/
 
-set_option backward.isDefEq.respectTransparency false in
 /-- **Mixed.** For `X, Y : SmoothVectorField I M`, the section
 `y ↦ koszulCovDeriv g X.toFun Y.toFun y` is `TangentSmoothAt` everywhere.
 
