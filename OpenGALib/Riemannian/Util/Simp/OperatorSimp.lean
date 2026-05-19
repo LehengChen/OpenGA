@@ -1,12 +1,12 @@
+import OpenGALib.Riemannian.Operators.ConnectionLaplacian
 import OpenGALib.Riemannian.Operators.Divergence
 
 /-!
-# Divergence — simp def-unfold
+# Operator simp def-unfolds
 
-Engineering simp lemma exposing the definition of `divergence` as a sum
-of `HasMetric.metric.metricInner (∇_{B_i} X) B_i` over the smooth $g$-orthonormal frame.
-Imported by callers that need to rewrite at the level of the frame sum
-rather than against the opaque operator name.
+Engineering simp lemmas exposing definitions of small Riemannian operators
+against the smooth $g$-orthonormal frame. Imported by callers that need to
+rewrite at the level of frame sums rather than against opaque operator names.
 -/
 
 noncomputable section
@@ -24,8 +24,20 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [InnerProductSpa
   [IsLocallyConstantChartedSpace H M]
   [hm : HasMetric I M]
 
+/-- **Eng.** Definitional unfolding of `connectionLaplacian` as a sum of
+`secondCovDerivSection` over the smooth $g$-orthonormal frame. Pure
+`rfl`; tagged `@[simp]` for tactic-level rewrites. -/
+@[simp] lemma connectionLaplacian_def
+    (g : RiemannianMetric I M)
+    (Z : VectorFieldSection I M) (α : M) :
+    connectionLaplacian (I := I) (M := M) g Z α =
+      ∑ i, Riemannian.Operators.secondCovDerivSection (I := I) (M := M) g Z
+        (Riemannian.Tensor.smoothOrthoFrame (I := I) g α i)
+        (Riemannian.Tensor.smoothOrthoFrame (I := I) g α i) α :=
+  rfl
+
 /-- **Eng.** Definitional unfold of `divergence` as a sum of
-`HasMetric.metric.metricInner (∇_{B_i} X) B_i` over the smooth $g$-orthonormal frame. Pure
+`metricInner (∇_{B_i} X) B_i` over the smooth $g$-orthonormal frame. Pure
 `rfl`; tagged `@[simp]` for tactic-level rewrites. -/
 @[simp] lemma divergence_def
     (g : RiemannianMetric I M)

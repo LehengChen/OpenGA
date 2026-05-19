@@ -2,8 +2,8 @@ import OpenGALib.Riemannian.Connection.LeviCivita
 import OpenGALib.Riemannian.Connection.LeviCivita
 import OpenGALib.Riemannian.TangentBundle.TangentSmooth
 import OpenGALib.Riemannian.Operators.HessianLie
-import OpenGALib.Riemannian.Util.MetricInnerSmoothness
--- `riemannCurvature HasMetric.metric X Y Z` notation is now defined inline in `Connection.lean`
+import OpenGALib.Riemannian.Util.Metric.MetricInnerSmoothness
+-- `Riem(X, Y) Z` notation is now defined inline in `Connection.lean`
 -- alongside `riemannCurvature`; it transitively reaches us via the
 -- `import OpenGALib.Riemannian.Connection.LeviCivita` above.
 import Mathlib.LinearAlgebra.Trace
@@ -11,7 +11,7 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.Trace
 import Mathlib.Geometry.Manifold.VectorField.LieBracket
 import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import OpenGALib.Riemannian.Util.CovDerivBridges
+import OpenGALib.Riemannian.Util.CovDeriv.CovDerivBridges
 
 /-!
 # Riemann curvature, Ricci, and scalar curvature
@@ -1086,4 +1086,3 @@ theorem sectionalCurvature_symmetric
     rw [hXY]; ring
 
 end Riemannian
-
