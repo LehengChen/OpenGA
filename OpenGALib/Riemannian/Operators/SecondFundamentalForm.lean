@@ -46,7 +46,6 @@ noncomputable def secondFundamentalFormScalar
     (ν X Y : VectorFieldSection I M) (x : M) : ℝ :=
   g.metricInner x (covDeriv g X Y x) (ν x)
 
-set_option backward.isDefEq.respectTransparency false in
 /-- **Math.** $|A|^2(x) = \sum_{i,j} A(e_i, e_j)^2$ over the standard
 orthonormal basis of `TangentSpace I x`. Basis-independent for
 orthonormal frames. -/
@@ -66,8 +65,6 @@ theorem secondFundamentalFormSqNorm_nonneg
     0 ≤ secondFundamentalFormSqNorm g ν x := by
   unfold secondFundamentalFormSqNorm
   positivity
-
-set_option backward.isDefEq.respectTransparency false in
 /-- **Math.** $H(x) = \mathrm{tr}_g A(x) = \sum_i A(e_i, e_i)(x)$. -/
 noncomputable def meanCurvature
     (g : RiemannianMetric I M)
