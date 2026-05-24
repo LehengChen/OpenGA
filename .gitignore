@@ -39,6 +39,3 @@ external/
 # Charter manifesto (kept in separate Overleaf project, not part of lib history)
 manifesto/
 
-# Paper drafts (kept outside lib history)
-paper/
-
