@@ -1,6 +1,28 @@
 # Exponential-map / geodesic layer migration — scope, cone, staged plan
 
-**Status (2026-06-14):** scoping complete; migration not yet started.
+**Status (2026-06-14):** scoping complete. **Stage 2 (ODE bedrock) DONE** —
+`OpenGALib/Analysis/ODE/Flow/` (8 files, 0 sorry, 0 version drift): the
+Picard–Lindelöf variational equation + C1/Ck flow regularity, self-contained on
+Mathlib, rehomed to namespace `Analysis.ODE`. Next: geodesic layer.
+
+**Decisions (confirmed with Moqian):**
+- *Reuse our foundation, migrate only new content* — do not lift external's
+  dedup-able Connection/Operator/Metric/Curvature/Tensor (76 files / 38k lines);
+  rewire the new geometric code onto `OpenGALib.Riemannian.*` / `OpenGALib.Tensor.*`.
+- *Homing*: ODE → `OpenGALib/Analysis/ODE/` (ns `Analysis.ODE`); geodesics/exp/
+  Gauss → `OpenGALib/Riemannian/{Geodesic,Exponential}/` (ns `Riemannian.Geodesic`,
+  `Riemannian.Exponential`).
+- `SmoothRiemannianMetric` ≡ our `RiemannianMetric` (same `ContMDiffRiemannianMetric`
+  abbrev) — trivial rename on lift.
+
+**Geodesic layer note:** `Geometry/Geodesic/Equation` defines geodesics via
+chart-local Christoffel symbols (`γ'' = -Γ(γ',γ')`) computed directly from the
+metric in coordinates — a thin foundation slice (chart Gram + metric), not the
+full 29-file external Connection cone. Per-file the rewire vs bridge call is made
+when lifting.
+
+---
+
 **Goal:** supply the three geometric facts that gate `LaplacianComparison`
 (`Comparison/BishopGromov/LaplacianComparison.lean`) and, downstream,
 `bishopGromov_volume_comparison`:
