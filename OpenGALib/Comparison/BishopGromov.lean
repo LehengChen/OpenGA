@@ -12,8 +12,7 @@ Proof chain (each layer reduces the next):
 
 * `RiccatiComparison.lean` (Petersen Ch.9 Lemma 27.1) — the real-analytic ODE
   core: the model mean curvature `m_K = (n-1) s_K'/s_K` solves the Riccati
-  equation, and any Riccati sub-solution is dominated by it. *Stated; proof
-  pending.*
+  equation, and any Riccati sub-solution is dominated by it. *Proved (0 sorry).*
 * `LaplacianComparison.lean` (do Carmo Ch.10 §1 Thm 1.4) — `Δ_g r ≤ m_K`, the
   geometric reading of the Riccati comparison (mean curvature of geodesic
   spheres = `Δ_g r`), turning the Ricci bound into volume-element growth.
