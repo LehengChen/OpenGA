@@ -34,6 +34,23 @@ bounds the mean curvature of geodesic spheres. -/
 noncomputable def modelMeanCurvature (n : ℕ) (K r : ℝ) : ℝ :=
   ((n : ℝ) - 1) * deriv (snakeFunction K) r / snakeFunction K r
 
+/-- **Math.** The model mean curvature is differentiable on the admissible window,
+with derivative given by the quotient rule applied to `(n-1) s_K'/s_K` (using the
+Jacobi ODE `s_K'' = -K s_K`). -/
+theorem hasDerivAt_modelMeanCurvature (n : ℕ) (K : ℝ) {r : ℝ}
+    (hr : r ∈ spaceFormAdmissibleRadii K) :
+    HasDerivAt (modelMeanCurvature n K)
+      (((n : ℝ) - 1) * (((-K * snakeFunction K r) * snakeFunction K r
+          - snakeDeriv K r * snakeDeriv K r) / snakeFunction K r ^ 2)) r := by
+  have hs_ne : snakeFunction K r ≠ 0 := (snakeFunction_pos hr).ne'
+  have hmodel : modelMeanCurvature n K
+      = fun x => ((n : ℝ) - 1) * (snakeDeriv K x / snakeFunction K x) := by
+    funext x
+    unfold modelMeanCurvature
+    rw [(hasDerivAt_snakeFunction K x).deriv]; ring
+  rw [hmodel]
+  exact ((hasDerivAt_snakeDeriv K r).div (hasDerivAt_snakeFunction K r) hs_ne).const_mul _
+
 /-- **Math.** Riccati identity for the model: the model mean curvature solves
 `m_K'(r) + m_K(r)^2 / (n-1) + (n-1) K = 0` on the admissible radius window, the
 equality case of the Riccati inequality satisfied by a manifold mean curvature
@@ -47,22 +64,72 @@ theorem modelMeanCurvature_riccati (n : ℕ) (hn : 2 ≤ n) (K : ℝ) {r : ℝ}
   have hn1 : (n : ℝ) - 1 ≠ 0 := by
     have : (2 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
     linarith
-  -- `modelMeanCurvature` written via the proven derivative `snakeDeriv`
-  have hmodel : modelMeanCurvature n K
-      = fun x => ((n : ℝ) - 1) * (snakeDeriv K x / snakeFunction K x) := by
-    funext x
+  have hval : modelMeanCurvature n K r
+      = ((n : ℝ) - 1) * (snakeDeriv K r / snakeFunction K r) := by
     unfold modelMeanCurvature
-    rw [(hasDerivAt_snakeFunction K x).deriv]; ring
-  -- quotient rule, using the Jacobi ODE `s'' = -K·s` baked into `hasDerivAt_snakeDeriv`
-  have hm : HasDerivAt (modelMeanCurvature n K)
-      (((n : ℝ) - 1) * (((-K * snakeFunction K r) * snakeFunction K r
-          - snakeDeriv K r * snakeDeriv K r) / snakeFunction K r ^ 2)) r := by
-    rw [hmodel]
-    exact ((hasDerivAt_snakeDeriv K r).div (hasDerivAt_snakeFunction K r) hs_ne).const_mul _
-  rw [hm.deriv, show modelMeanCurvature n K r
-      = ((n : ℝ) - 1) * (snakeDeriv K r / snakeFunction K r) by rw [hmodel]]
+    rw [(hasDerivAt_snakeFunction K r).deriv]; ring
+  rw [(hasDerivAt_modelMeanCurvature n K hr).deriv, hval]
   field_simp
   ring
+
+/-- **Math.** Core of the Riccati comparison: the `s_K²`-weighted gap
+`z = (m - m_K) · s_K²` is non-increasing. Its derivative equals
+`-(m - m_K)² · s_K² / (n-1) ≤ 0`, computed from the product rule, the model
+Riccati identity, and the Riccati sub-equation for `m`. -/
+theorem hasDerivAt_riccatiGap_nonpos (n : ℕ) (hn : 2 ≤ n) (K : ℝ) (m : ℝ → ℝ)
+    {x : ℝ} (hx : x ∈ spaceFormAdmissibleRadii K)
+    (hmx : DifferentiableAt ℝ m x)
+    (hsubx : deriv m x + m x ^ 2 / ((n : ℝ) - 1) + ((n : ℝ) - 1) * K ≤ 0) :
+    deriv (fun y => (m y - modelMeanCurvature n K y) * snakeFunction K y ^ 2) x ≤ 0 := by
+  have hn1 : (0 : ℝ) < (n : ℝ) - 1 := by
+    have : (2 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+    linarith
+  have hs_ne : snakeFunction K x ≠ 0 := (snakeFunction_pos hx).ne'
+  -- s' = m_K · s / (n-1)
+  have hsd : snakeDeriv K x = modelMeanCurvature n K x * snakeFunction K x / ((n : ℝ) - 1) := by
+    unfold modelMeanCurvature
+    rw [(hasDerivAt_snakeFunction K x).deriv]; field_simp
+  -- HasDerivAt of the gap z = (m - m_K)·s², in terms of the derivatives
+  have hmm : HasDerivAt m (deriv m x) x := hmx.hasDerivAt
+  have hmKK : HasDerivAt (modelMeanCurvature n K) (deriv (modelMeanCurvature n K) x) x :=
+    (hasDerivAt_modelMeanCurvature n K hx).differentiableAt.hasDerivAt
+  have hs2 : HasDerivAt (fun y => snakeFunction K y ^ 2)
+      (2 * snakeFunction K x ^ 1 * snakeDeriv K x) x :=
+    (hasDerivAt_snakeFunction K x).pow 2
+  have hz : HasDerivAt (fun y => (m y - modelMeanCurvature n K y) * snakeFunction K y ^ 2)
+      ((deriv m x - deriv (modelMeanCurvature n K) x) * snakeFunction K x ^ 2
+        + (m x - modelMeanCurvature n K x) * (2 * snakeFunction K x ^ 1 * snakeDeriv K x)) x :=
+    (hmm.sub hmKK).mul hs2
+  rw [hz.deriv, hsd]
+  -- model Riccati identity gives the derivative of m_K (equality)
+  have hric := modelMeanCurvature_riccati n hn K hx
+  have hs2nonneg : (0 : ℝ) ≤ snakeFunction K x ^ 2 := sq_nonneg _
+  -- clear `/(n-1)` and bound `deriv m` via the sub-equation; the gap derivative is
+  -- `-(m - m_K)^2 · s^2 / (n-1) ≤ 0`.
+  have hsubx' : deriv m x * ((n : ℝ) - 1) + m x ^ 2 + ((n : ℝ) - 1) ^ 2 * K ≤ 0 := by
+    have := mul_le_mul_of_nonneg_right hsubx hn1.le
+    field_simp at this; nlinarith [this]
+  have hric' : deriv (modelMeanCurvature n K) x * ((n : ℝ) - 1)
+      + modelMeanCurvature n K x ^ 2 + ((n : ℝ) - 1) ^ 2 * K = 0 := by
+    have := congrArg (· * ((n : ℝ) - 1)) hric
+    field_simp at this; nlinarith [this]
+  -- write the gap derivative as a single fraction over `(n-1)`
+  have key : (deriv m x - deriv (modelMeanCurvature n K) x) * snakeFunction K x ^ 2
+        + (m x - modelMeanCurvature n K x)
+            * (2 * snakeFunction K x ^ 1
+                * (modelMeanCurvature n K x * snakeFunction K x / ((n : ℝ) - 1)))
+      = ((deriv m x - deriv (modelMeanCurvature n K) x) * snakeFunction K x ^ 2 * ((n : ℝ) - 1)
+          + (m x - modelMeanCurvature n K x) * 2 * snakeFunction K x ^ 2
+              * modelMeanCurvature n K x) / ((n : ℝ) - 1) := by
+    field_simp
+  rw [key, div_nonpos_iff]
+  right
+  refine ⟨?_, hn1.le⟩
+  have hbound : deriv m x * ((n : ℝ) - 1) - deriv (modelMeanCurvature n K) x * ((n : ℝ) - 1)
+      ≤ modelMeanCurvature n K x ^ 2 - m x ^ 2 := by linarith [hsubx', hric']
+  nlinarith [mul_le_mul_of_nonneg_right hbound hs2nonneg,
+    sq_nonneg (m x - modelMeanCurvature n K x), hs2nonneg,
+    mul_nonneg hs2nonneg (sq_nonneg (m x - modelMeanCurvature n K x))]
 
 /-- **Math.** Riccati comparison. If a differentiable real function `m` on the
 admissible window satisfies the Riccati sub-equation
