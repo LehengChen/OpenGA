@@ -154,6 +154,75 @@ theorem riccati_le_model (n : ℕ) (hn : 2 ≤ n) (K : ℝ) (m : ℝ → ℝ)
       (nhds 0))
     {r : ℝ} (hr : r ∈ spaceFormAdmissibleRadii K) :
     m r ≤ modelMeanCurvature n K r := by
-  sorry
+  classical
+  set z : ℝ → ℝ := fun y => (m y - modelMeanCurvature n K y) * snakeFunction K y ^ 2 with hz_def
+  -- `z` is differentiable on the window (for continuity, and `deriv z ≤ 0`)
+  have hzdiff : ∀ x ∈ spaceFormAdmissibleRadii K, DifferentiableAt ℝ z x := by
+    intro x hx
+    exact ((hdiff x hx).sub (hasDerivAt_modelMeanCurvature n K hx).differentiableAt).mul
+      ((hasDerivAt_snakeFunction K x).pow 2).differentiableAt
+  -- `z` is non-increasing on the window
+  have hint : interior (spaceFormAdmissibleRadii K) = spaceFormAdmissibleRadii K :=
+    (isOpen_spaceFormAdmissibleRadii K).interior_eq
+  have hanti : AntitoneOn z (spaceFormAdmissibleRadii K) := by
+    refine antitoneOn_of_deriv_nonpos (convex_spaceFormAdmissibleRadii K)
+      (fun x hx => (hzdiff x hx).continuousAt.continuousWithinAt)
+      (fun x hx => (hzdiff x (hint ▸ hx)).differentiableWithinAt) ?_
+    intro x hx
+    rw [hint] at hx
+    exact hasDerivAt_riccatiGap_nonpos n hn K m hx (hdiff x hx) (hsub x hx)
+  -- singular boundary: `z → 0` as `r → 0⁺`
+  have hs0 : Filter.Tendsto (snakeFunction K) (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    simpa using ((continuous_snakeFunction K).tendsto 0).mono_left
+      (nhdsWithin_le_nhds (s := Set.Ioi 0))
+  have hsd1 : Filter.Tendsto (snakeDeriv K) (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
+    simpa using ((continuous_snakeDeriv K).tendsto 0).mono_left
+      (nhdsWithin_le_nhds (s := Set.Ioi 0))
+  have hs2lim : Filter.Tendsto (fun y => snakeFunction K y ^ 2)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by simpa using hs0.pow 2
+  -- `m_K · s² = (n-1)·s'·s` near 0, hence → 0
+  have hmKlim : Filter.Tendsto (fun y => modelMeanCurvature n K y * snakeFunction K y ^ 2)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have heq : (fun y => modelMeanCurvature n K y * snakeFunction K y ^ 2)
+        =ᶠ[nhdsWithin 0 (Set.Ioi 0)]
+        (fun y => ((n : ℝ) - 1) * snakeDeriv K y * snakeFunction K y) := by
+      filter_upwards [eventually_mem_spaceFormAdmissibleRadii hr] with s hs
+      have hsne : snakeFunction K s ≠ 0 := (snakeFunction_pos hs.1).ne'
+      unfold modelMeanCurvature
+      rw [(hasDerivAt_snakeFunction K s).deriv]; field_simp
+    refine Filter.Tendsto.congr' heq.symm ?_
+    simpa using ((tendsto_const_nhds.mul hsd1).mul hs0)
+  -- `m · s² → 0` via the asymptotic `m - (n-1)/r → 0` and `s/r → 1`
+  have hmlim : Filter.Tendsto (fun y => m y * snakeFunction K y ^ 2)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have ht1 : Filter.Tendsto (fun y => (m y - ((n : ℝ) - 1) / y) * snakeFunction K y ^ 2)
+        (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by simpa using hasymp.mul hs2lim
+    have ht2 : Filter.Tendsto (fun y => ((n : ℝ) - 1) * (snakeFunction K y * (snakeFunction K y / y)))
+        (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+      simpa using tendsto_const_nhds.mul (hs0.mul (tendsto_snakeFunction_div_one K))
+    have heq : (fun y => m y * snakeFunction K y ^ 2)
+        =ᶠ[nhdsWithin 0 (Set.Ioi 0)]
+        (fun y => (m y - ((n : ℝ) - 1) / y) * snakeFunction K y ^ 2
+          + ((n : ℝ) - 1) * (snakeFunction K y * (snakeFunction K y / y))) := by
+      filter_upwards [self_mem_nhdsWithin] with y hy
+      have hyne : y ≠ 0 := ne_of_gt hy
+      field_simp; ring
+    have hadd : Filter.Tendsto
+        (fun y => (m y - ((n : ℝ) - 1) / y) * snakeFunction K y ^ 2
+          + ((n : ℝ) - 1) * (snakeFunction K y * (snakeFunction K y / y)))
+        (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by simpa using ht1.add ht2
+    exact hadd.congr' heq.symm
+  have hlim : Filter.Tendsto z (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have := hmlim.sub hmKlim
+    simpa [hz_def, sub_mul] using this
+  -- antitone + boundary limit ⟹ `z r ≤ 0`
+  have hzr : z r ≤ 0 := by
+    refine ge_of_tendsto hlim ?_
+    filter_upwards [eventually_mem_spaceFormAdmissibleRadii hr] with s hs
+    exact hanti hs.1 hr hs.2
+  -- conclude `m r ≤ m_K r` from `(m r - m_K r)·s² ≤ 0` and `s² > 0`
+  have hs2pos : 0 < snakeFunction K r ^ 2 := pow_pos (snakeFunction_pos hr) 2
+  simp only [hz_def] at hzr
+  nlinarith [hzr, hs2pos, mul_pos hs2pos hs2pos]
 
 end OpenGA.Comparison.BishopGromov
