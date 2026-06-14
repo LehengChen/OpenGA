@@ -123,4 +123,82 @@ theorem trace_sq_le_dim_sub_one_mul_frobeniusSq
   rw [htr, hfr]
   exact hcs
 
+/-- **Math.** **Radial Riccati sub-equation from Bochner.** Let `f` satisfy the
+eikonal equation at `x` (its gradient is `g`-unit, `|∇f|²_g = 1`, with the
+gradient-norm critical and harmonic there — all automatic where `|∇f|² ≡ 1`),
+on a manifold with `Ric_g ≥ (n-1) K g`. Then the radial derivative of the
+Laplacian obeys the scalar Riccati sub-equation
+`⟨∇f, ∇(Δf)⟩ + (Δf)² / (n-1) + (n-1) K ≤ 0`,
+the exact sub-solution hypothesis consumed by `riccati_le_model`.
+
+This is the Bochner–Weitzenböck identity `½ Δ|∇f|² = |Hess f|² + ⟨∇f, ∇Δf⟩ +
+Ric(∇f, ∇f)` with the left side killed by the eikonal equation, the Hessian term
+bounded below by `(Δf)²/(n-1)` (sharpened Cauchy–Schwarz), and the curvature term
+by `(n-1) K`. -/
+theorem bochner_radial_riccati
+    [IsManifold I 2 M]
+    (g : RiemannianMetric I M) (hg : g = hm.metric)
+    (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f) {K : ℝ} (x : M)
+    (hn : 2 ≤ Module.finrank ℝ E)
+    (hunit : g.metricInner x (manifoldGradient (I := I) g f x)
+              (manifoldGradient (I := I) g f x) = 1)
+    (hcrit : mfderiv I 𝓘(ℝ, ℝ)
+      (fun y => g.metricInner y (manifoldGradient (I := I) g f y)
+                                (manifoldGradient (I := I) g f y)) x = 0)
+    (hlap0 : Operators.scalarLaplacian g
+      (fun y => g.metricInner y (manifoldGradient (I := I) g f y)
+                                (manifoldGradient (I := I) g f y)) x = 0)
+    (hRic : ∀ v : TangentSpace I x,
+      ((Module.finrank ℝ E : ℝ) - 1) * K * g.metricInner x v v
+        ≤ ricciTensor g x v v) :
+    g.metricInner x (manifoldGradient (I := I) g f x)
+        (manifoldGradient (I := I) g (Operators.scalarLaplacian g f) x)
+      + (Operators.scalarLaplacian g f x) ^ 2 / ((Module.finrank ℝ E : ℝ) - 1)
+      + ((Module.finrank ℝ E : ℝ) - 1) * K ≤ 0 := by
+  -- Smoothness of the gradient field at `x` (for the symmetry lemma).
+  have h_grad : TangentSmoothAt (manifoldGradient (I := I) g f) x := by
+    subst hg
+    exact (manifoldGradient_smooth_of_smooth HasMetric.metric f hf x).mdifferentiableAt (by simp)
+  have hf2 : ContMDiffAt I 𝓘(ℝ, ℝ) 2 f x :=
+    (hf x).of_le (by
+      show ((2 : ℕ∞) : ℕ∞ω) ≤ ∞
+      exact_mod_cast (le_top : (2 : ℕ∞) ≤ ⊤))
+  have h_int : extChartAt I x x ∈ closure (interior (Set.range I)) := by
+    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
+    exact Set.mem_univ _
+  -- Hessian symmetry at `x`.
+  have hsym : ∀ v w : TangentSpace I x,
+      hessianBilin (I := I) g f x v w = hessianBilin (I := I) g f x w v :=
+    fun v w => hessianBilin_symm (I := I) g f x h_int hf2 h_grad v w
+  -- Eikonal kills the radial Hessian direction.
+  have hker : ∀ v : TangentSpace I x,
+      hessianBilin (I := I) g f x v (manifoldGradient (I := I) g f x) = 0 :=
+    fun v => hessianBilin_grad_apply_eq_zero g f x v h_grad hcrit
+  -- Sharpened Cauchy–Schwarz: `(Δf)² ≤ (n-1) |Hess f|²_F`.
+  have hCS := trace_sq_le_dim_sub_one_mul_frobeniusSq g hg f x hsym hunit hker
+  -- Trace of the Hessian is the scalar Laplacian.
+  have htrace_eq : Operators.trace (I := I) (M := M) (hessianBilin (I := I) g f) x
+      = Operators.scalarLaplacian g f x :=
+    (Operators.scalarLaplacian_eq_laplacian_hessianBilin g f x).symm
+  rw [htrace_eq] at hCS
+  -- Bochner identity with the eikonal-killed left side.
+  have hBoch := Operators.bochner_weitzenboeck g hg f hf x
+  rw [hlap0, mul_zero] at hBoch
+  -- Ricci lower bound along `∇f`, using `|∇f|² = 1`.
+  have hRicf : ((Module.finrank ℝ E : ℝ) - 1) * K
+      ≤ ricciTensor g x (manifoldGradient (I := I) g f x)
+                        (manifoldGradient (I := I) g f x) := by
+    have := hRic (manifoldGradient (I := I) g f x)
+    rwa [hunit, mul_one] at this
+  -- Positivity of `n - 1`.
+  have hn1 : (0 : ℝ) < (Module.finrank ℝ E : ℝ) - 1 := by
+    have : (2 : ℝ) ≤ (Module.finrank ℝ E : ℝ) := by exact_mod_cast hn
+    linarith
+  -- `|Hess f|²_F ≥ (Δf)²/(n-1)`.
+  have hfrob : (Operators.scalarLaplacian g f x) ^ 2 / ((Module.finrank ℝ E : ℝ) - 1)
+      ≤ Operators.frobeniusSq (I := I) (M := M) (hessianBilin (I := I) g f) x :=
+    (div_le_iff₀ hn1).mpr (by linarith [hCS])
+  -- Assemble: `0 = frobeniusSq + ⟨∇f,∇Δf⟩ + Ric ≥ (Δf)²/(n-1) + ⟨∇f,∇Δf⟩ + (n-1)K`.
+  linarith [hBoch, hfrob, hRicf]
+
 end OpenGA.Comparison.BishopGromov
