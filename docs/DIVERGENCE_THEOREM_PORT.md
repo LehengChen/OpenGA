@@ -60,14 +60,16 @@ lines)**, built on top of our existing `Volume/` foundation.
 | `Measure/ChartDensity`, `JacobiFormula` | `Volume/Util/{ChartLocalMeasure, GramDeterminant}` |
 | docstrings | single `**Math.**` anchor tags; `Provenance:` footer citing upstream commit; book refs in `## References` only (per house style) |
 
-## Realistic estimate
+## Scope
 
-~10 files / ~4000 lines, re-implemented in our conventions, on top of our
-`Volume/`. The Measure half is largely a reconciliation (we have it); the
-`DivergenceTheorem/` half is genuine new work. **Multi-week.** It is bounded
-(the upstream proof is the blueprint, 0 sorry) and high-leverage: it closes the
-COMPARISON_GEOMETRY_ROADMAP keystone, unlocking Bishop–Gromov, Lichnerowicz, and
-the Green-identity-based spectral results in one stroke.
+Genuine new work: the `DivergenceTheorem/` layer — **~10 files / ~4000 lines**,
+re-implemented in our conventions on top of our `Volume/`. The `Measure/` half
+is largely reconciliation (we have the construction already). The effort is
+**bounded** — the upstream proof is a complete, 0-sorry blueprint — and
+**high-leverage**: closing it resolves the COMPARISON_GEOMETRY_ROADMAP keystone,
+unlocking Bishop–Gromov, Lichnerowicz, and the Green-identity spectral results
+together. Scope is measured in files / lines / blueprint-completeness, not
+calendar time.
 
 ## Open prerequisite to verify first
 
