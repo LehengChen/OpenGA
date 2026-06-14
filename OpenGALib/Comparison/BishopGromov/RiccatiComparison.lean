@@ -1,5 +1,7 @@
 import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.Calculus.Deriv.Mul
 import OpenGALib.Comparison.Util.SpaceForm
+import OpenGALib.Comparison.Util.SnakeCalculus
 
 /-!
 # Riccati comparison
@@ -41,7 +43,26 @@ theorem modelMeanCurvature_riccati (n : ℕ) (hn : 2 ≤ n) (K : ℝ) {r : ℝ}
     deriv (modelMeanCurvature n K) r
         + modelMeanCurvature n K r ^ 2 / ((n : ℝ) - 1)
         + ((n : ℝ) - 1) * K = 0 := by
-  sorry
+  have hs_ne : snakeFunction K r ≠ 0 := (snakeFunction_pos hr).ne'
+  have hn1 : (n : ℝ) - 1 ≠ 0 := by
+    have : (2 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+    linarith
+  -- `modelMeanCurvature` written via the proven derivative `snakeDeriv`
+  have hmodel : modelMeanCurvature n K
+      = fun x => ((n : ℝ) - 1) * (snakeDeriv K x / snakeFunction K x) := by
+    funext x
+    unfold modelMeanCurvature
+    rw [(hasDerivAt_snakeFunction K x).deriv]; ring
+  -- quotient rule, using the Jacobi ODE `s'' = -K·s` baked into `hasDerivAt_snakeDeriv`
+  have hm : HasDerivAt (modelMeanCurvature n K)
+      (((n : ℝ) - 1) * (((-K * snakeFunction K r) * snakeFunction K r
+          - snakeDeriv K r * snakeDeriv K r) / snakeFunction K r ^ 2)) r := by
+    rw [hmodel]
+    exact ((hasDerivAt_snakeDeriv K r).div (hasDerivAt_snakeFunction K r) hs_ne).const_mul _
+  rw [hm.deriv, show modelMeanCurvature n K r
+      = ((n : ℝ) - 1) * (snakeDeriv K r / snakeFunction K r) by rw [hmodel]]
+  field_simp
+  ring
 
 /-- **Math.** Riccati comparison. If a real function `m` on the admissible window
 satisfies the Riccati sub-equation `m'(r) + m(r)^2/(n-1) + (n-1) K ≤ 0` and is

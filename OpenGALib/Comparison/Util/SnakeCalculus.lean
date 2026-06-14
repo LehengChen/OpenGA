@@ -87,4 +87,29 @@ theorem hasDerivAt_snakeDeriv (K r : ℝ) :
     have hK0 : K = 0 := le_antisymm (not_lt.mp hK) (not_lt.mp hK')
     rw [hK0]; simp only [neg_zero, zero_mul]; exact hasDerivAt_const r (1 : ℝ)
 
+/-- **Math.** The snake function is strictly positive on the admissible radius
+window `𝒟_K` (where it governs the model ball volume). -/
+theorem snakeFunction_pos {K r : ℝ} (hr : r ∈ spaceFormAdmissibleRadii K) :
+    0 < snakeFunction K r := by
+  unfold spaceFormAdmissibleRadii at hr
+  unfold snakeFunction
+  split_ifs with hK hK'
+  · -- K > 0 : sin(√K r)/√K with √K r ∈ (0, π)
+    rw [if_pos hK] at hr
+    obtain ⟨hr0, hrπ⟩ := hr
+    have hsqrtK : 0 < Real.sqrt K := Real.sqrt_pos.mpr hK
+    have h1 : 0 < Real.sqrt K * r := mul_pos hsqrtK hr0
+    have h2 : Real.sqrt K * r < Real.pi := by
+      rw [lt_div_iff₀ hsqrtK] at hrπ; linarith [hrπ]
+    exact div_pos (Real.sin_pos_of_pos_of_lt_pi h1 h2) hsqrtK
+  · -- K < 0 : sinh(√(-K) r)/√(-K), r > 0
+    rw [if_neg hK] at hr
+    have hr0 : 0 < r := hr
+    have hKpos : 0 < -K := by linarith
+    have hsqrt : 0 < Real.sqrt (-K) := Real.sqrt_pos.mpr hKpos
+    exact div_pos (Real.sinh_pos_iff.mpr (mul_pos hsqrt hr0)) hsqrt
+  · -- K = 0 : r, r > 0
+    rw [if_neg hK] at hr
+    exact hr
+
 end OpenGA.Comparison.BishopGromov
