@@ -1,0 +1,60 @@
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import OpenGALib.Comparison.Util.SpaceForm
+
+/-!
+# Riccati comparison
+
+Layer 3a-ODE of the Bishop–Gromov chain, and OpenGALib's own contribution (no
+upstream counterpart). The mean curvature `m(r)` of the geodesic spheres around a
+point satisfies the Riccati differential inequality
+`m'(r) + m(r)^2 / (n-1) + Ric(∂_r, ∂_r) ≤ 0`, and under `Ric ≥ (n-1) K` this is
+dominated by the model equality solution
+`m_K(r) = (n-1) · s_K'(r) / s_K(r)` (`s_K = snakeFunction K`). Comparison of the
+two then forces `m ≤ m_K`, which is exactly the Laplacian comparison
+`Δ_g r ≤ m_K` (`LaplacianComparison`).
+
+This file isolates the purely real-analytic core: the model mean-curvature
+function, its Riccati identity, and the sub-solution comparison. The geometric
+identification `m = Δ_g r` and the curvature input live in `LaplacianComparison`.
+
+Ground truth: Petersen Ch.9 Lemma 27.1; do Carmo Ch.10 §1.
+-/
+
+open scoped Real
+open OpenGA.Comparison.BishopGromov
+
+namespace OpenGA.Comparison.BishopGromov
+
+/-- **Math.** The model mean-curvature function of a space form of curvature `K` in
+dimension `n`: `m_K(r) = (n-1) · s_K'(r) / s_K(r)`, where `s_K = snakeFunction K`
+is the Jacobi function. It is the equality solution of the Riccati equation that
+bounds the mean curvature of geodesic spheres. -/
+noncomputable def modelMeanCurvature (n : ℕ) (K r : ℝ) : ℝ :=
+  ((n : ℝ) - 1) * deriv (snakeFunction K) r / snakeFunction K r
+
+/-- **Math.** Riccati identity for the model: the model mean curvature solves
+`m_K'(r) + m_K(r)^2 / (n-1) + (n-1) K = 0` on the admissible radius window, the
+equality case of the Riccati inequality satisfied by a manifold mean curvature
+with `Ric ≥ (n-1) K`. -/
+theorem modelMeanCurvature_riccati (n : ℕ) (hn : 2 ≤ n) (K : ℝ) {r : ℝ}
+    (hr : r ∈ spaceFormAdmissibleRadii K) :
+    deriv (modelMeanCurvature n K) r
+        + modelMeanCurvature n K r ^ 2 / ((n : ℝ) - 1)
+        + ((n : ℝ) - 1) * K = 0 := by
+  sorry
+
+/-- **Math.** Riccati comparison. If a real function `m` on the admissible window
+satisfies the Riccati sub-equation `m'(r) + m(r)^2/(n-1) + (n-1) K ≤ 0` and is
+asymptotic to the model singularity `(n-1)/r` as `r → 0⁺`, then it is dominated by
+the model mean curvature: `m(r) ≤ m_K(r)`. This is the ODE engine behind the
+Laplacian comparison. -/
+theorem riccati_le_model (n : ℕ) (hn : 2 ≤ n) (K : ℝ) (m : ℝ → ℝ)
+    (hsub : ∀ r ∈ spaceFormAdmissibleRadii K,
+      deriv m r + m r ^ 2 / ((n : ℝ) - 1) + ((n : ℝ) - 1) * K ≤ 0)
+    (hasymp : Filter.Tendsto (fun r => m r - ((n : ℝ) - 1) / r) (nhdsWithin 0 (Set.Ioi 0))
+      (nhds 0))
+    {r : ℝ} (hr : r ∈ spaceFormAdmissibleRadii K) :
+    m r ≤ modelMeanCurvature n K r := by
+  sorry
+
+end OpenGA.Comparison.BishopGromov
