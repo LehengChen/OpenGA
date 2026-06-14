@@ -17,10 +17,13 @@ Proof chain (each layer reduces the next):
 * `RadialRiccati.lean` — the analytic half of the Laplacian comparison, built
   by *reusing the proved Bochner stack* (not new ODE/exp-map theory): under the
   eikonal equation `|∇f|² ≡ 1`, the Bochner–Weitzenböck identity collapses to
-  the scalar Riccati sub-equation `∇f(Δf) + (Δf)²/(n-1) + (n-1)K ≤ 0`, the exact
-  hypothesis `riccati_le_model` consumes. The eikonal kernel lemma is proved;
-  the `(n-1)`-sharpened Cauchy–Schwarz on the radial-kernel Hessian is the one
-  remaining analytic lemma.
+  the scalar Riccati sub-equation `∇f(Δf) + (Δf)²/(n-1) + (n-1)K ≤ 0`
+  (`bochner_radial_riccati`), the exact hypothesis `riccati_le_model` consumes.
+  *Proved (0 sorry)*, via the eikonal kernel lemma and the `(n-1)`-sharpened
+  Cauchy–Schwarz (`Comparison/Util/RefinedCauchySchwarz`). The ODE/analytic core
+  of Bishop–Gromov is now complete; only the geometry of the distance function
+  (eikonal for `r = dist p ·`, radial-derivative identification, base-point
+  asymptotic — the exponential-map layer) gates `LaplacianComparison`.
 * `LaplacianComparison.lean` (do Carmo Ch.10 §1 Thm 1.4) — `Δ_g r ≤ m_K`, the
   geometric reading of the Riccati comparison (mean curvature of geodesic
   spheres = `Δ_g r`), turning the Ricci bound into volume-element growth.
