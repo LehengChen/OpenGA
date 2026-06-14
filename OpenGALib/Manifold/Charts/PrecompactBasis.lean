@@ -11,13 +11,17 @@ import OpenGALib.Manifold.Charts.CoordinateBall
 /-!
 # Precompact coordinate balls and locally finite refinements
 
-A *precompact coordinate ball* is the source of a coordinate-ball chart whose
-closure is compact. On a topological `n`-manifold — a Hausdorff, second-countable
-space charted over `EuclideanSpace ℝ (Fin n)` — these sets form a basis for the
-topology, and second countability thins this basis to a countable one (Lee's
-Lemma 1.10). Combined with paracompactness, every open cover of such a manifold
-admits a countable, locally finite refinement by precompact coordinate balls
-subordinate to the cover (Lee's Theorem 1.15).
+Covering infrastructure beneath partitions of unity and exhaustions. A
+*precompact coordinate ball* is the source of a coordinate-ball chart with
+compact closure; on a topological `n`-manifold (Hausdorff, second-countable,
+charted over `EuclideanSpace ℝ (Fin n)`) these form a countable basis, and
+together with paracompactness every open cover admits a countable, locally
+finite refinement by precompact coordinate balls subordinate to it.
+
+The development is layered: the basis results need only the ambient topology
+and a chart; the refinement adds paracompactness, factored through an abstract
+basis-refinement lemma (`exists_countable_locallyFinite_refinement_of_isTopologicalBasis`)
+reusable for any topological basis.
 
 ## Main definitions
 
@@ -32,10 +36,7 @@ subordinate to the cover (Lee's Theorem 1.15).
 * `Manifold.exists_countable_locally_finite_precompact_coordinate_ball_refinement` —
   every open cover has a countable locally finite refinement by precompact coordinate balls.
 
-Reference: Lee, *Introduction to Smooth Manifolds*, §1 (Lemma 1.10, Theorem 1.15).
-
-Ported from SmoothManifoldsLee Chap01/Sec01/Lemma_1_10.lean (a5f308c)
-Ported from SmoothManifoldsLee Chap01/Sec01/Theorem_1_15.lean (a5f308c)
+Provenance: SmoothManifoldsLee a5f308c — Lemma_1_10, Theorem_1_15.
 -/
 
 open Set TopologicalSpace
@@ -50,25 +51,19 @@ section Basis
 variable {n : ℕ} {M : Type u} [TopologicalSpace M]
 
 /-- **Math.** A set `s ⊆ M` is a *precompact coordinate ball*: it is the source of
-some coordinate-ball chart and its closure is compact. **Eng.** Conjunction of an
-existential over a chart `e : OpenPartialHomeomorph M (EuclideanSpace ℝ (Fin n))`
-with `e.source = s` and `e.IsCoordinateBall`, together with
-`IsCompact (closure s)`. Stated purely on Mathlib's chart/compactness API. -/
+some coordinate-ball chart and its closure is compact. -/
 def IsPrecompactCoordinateBall (n : ℕ) (s : Set M) : Prop :=
   (∃ e : OpenPartialHomeomorph M (EuclideanSpace ℝ (Fin n)),
     e.source = s ∧ e.IsCoordinateBall) ∧
       IsCompact (closure s)
 
-/-- **Math.** A precompact coordinate ball is open. **Eng.** Extract the witnessing
-chart `e` with `e.source = s`; the source of an open partial homeomorphism is open
-(`e.open_source`), so rewriting along `e.source = s` closes the goal. -/
+/-- **Math.** A precompact coordinate ball is open. -/
 theorem IsPrecompactCoordinateBall.isOpen {s : Set M}
     (hs : IsPrecompactCoordinateBall n s) : IsOpen s := by
   rcases hs.1 with ⟨e, rfl, -⟩
   simpa using e.open_source
 
-/-- **Math.** A precompact coordinate ball has compact closure. **Eng.** Projection
-onto the compact-closure component of the defining conjunction. -/
+/-- **Math.** A precompact coordinate ball has compact closure. -/
 theorem IsPrecompactCoordinateBall.isCompact_closure {s : Set M}
     (hs : IsPrecompactCoordinateBall n s) : IsCompact (closure s) :=
   hs.2
@@ -79,14 +74,7 @@ variable [T2Space M] [SecondCountableTopology M]
 omit [SecondCountableTopology M] [ChartedSpace (EuclideanSpace ℝ (Fin n)) M] in
 /-- **Math.** Restricting a chart to a Euclidean open ball whose closed ball is
 compactly contained in the chart target produces a precompact coordinate ball in
-`M`. **Eng.** Restrict `e` to `Metric.ball c r` via `trans (OpenPartialHomeomorph.ofSet …)`;
-identify the restricted source/target, get compactness of the closure from the
-compact closed ball pushed through the continuous inverse chart, and exhibit the
-coordinate-ball witness with `isCoordinateBall_of_target_eq_ball`. The
-`[TopologicalManifold n M]` binder of the source is restated as the four Mathlib
-classes `[T2Space M] [SecondCountableTopology M] [ChartedSpace … M]`; here only
-`[T2Space M]` (for compactness of the closure) is needed beyond the ambient
-topology, so the second-countable and charted-space instances are `omit`ted. -/
+`M`. -/
 theorem isPrecompactCoordinateBall_chart_preimage_metric_ball
     (e : OpenPartialHomeomorph M (EuclideanSpace ℝ (Fin n))) {c : EuclideanSpace ℝ (Fin n)}
     {r : ℝ} (hr : 0 < r) (hclosed : Metric.closedBall c r ⊆ e.target) :
@@ -116,11 +104,7 @@ theorem isPrecompactCoordinateBall_chart_preimage_metric_ball
 
 omit [SecondCountableTopology M] in
 /-- **Math.** Every point of an open set lies in a precompact coordinate ball
-contained in that open set. **Eng.** Work in the preferred chart `e := chartAt … x`:
-its image of `e.source ∩ u` is open, so a small closed Euclidean ball around `e x`
-sits inside it; pulling the corresponding open ball back through `e` gives the
-required precompact coordinate ball, using
-`isPrecompactCoordinateBall_chart_preimage_metric_ball`. -/
+contained in that open set. -/
 theorem exists_isPrecompactCoordinateBall_subset_of_mem_open {x : M}
     {u : Set M} (hx : x ∈ u) (hu : IsOpen u) :
     ∃ s : Set M, IsPrecompactCoordinateBall n s ∧ x ∈ s ∧ s ⊆ u := by
@@ -164,9 +148,7 @@ theorem exists_isPrecompactCoordinateBall_subset_of_mem_open {x : M}
 
 omit [SecondCountableTopology M] in
 /-- **Math.** Precompact coordinate balls form a topological basis on a topological
-manifold. **Eng.** Use `isTopologicalBasis_of_isOpen_of_nhds`: each precompact
-coordinate ball is open, and `exists_isPrecompactCoordinateBall_subset_of_mem_open`
-supplies a basis element inside every open neighborhood of every point. -/
+manifold. -/
 theorem isTopologicalBasis_isPrecompactCoordinateBall :
     IsTopologicalBasis { s : Set M | IsPrecompactCoordinateBall n s } := by
   -- The local chart construction gives a basis element inside every open neighborhood.
@@ -179,10 +161,7 @@ theorem isTopologicalBasis_isPrecompactCoordinateBall :
     exact ⟨s, hs, hxs, hsu⟩
 
 /-- **Math.** Lemma 1.10: every topological manifold has a *countable* topological
-basis consisting of precompact coordinate balls. **Eng.** Start from the (possibly
-uncountable) basis `isTopologicalBasis_isPrecompactCoordinateBall`; second
-countability lets `IsTopologicalBasis.exists_countable` thin it to a countable
-subfamily, every member of which is still a precompact coordinate ball. -/
+basis consisting of precompact coordinate balls. -/
 theorem exists_countable_precompact_coordinate_ball_basis :
     ∃ b : Set (Set M),
       b.Countable ∧ IsTopologicalBasis b ∧ ∀ s ∈ b, IsPrecompactCoordinateBall n s := by
@@ -200,13 +179,7 @@ variable {n : ℕ} {M : Type u} [TopologicalSpace M] [T2Space M]
   [SecondCountableTopology M] [ChartedSpace (EuclideanSpace ℝ (Fin n)) M]
 
 include n in
-/-- **Math.** A topological manifold is paracompact. **Eng.** It is locally compact
-because charted over the locally compact `EuclideanSpace ℝ (Fin n)`
-(`ChartedSpace.locallyCompactSpace`), and second-countable by hypothesis, hence
-sigma-compact (`sigmaCompactSpace_of_locallyCompact_secondCountable`); a locally
-compact, sigma-compact Hausdorff space is paracompact. The source's
-`TopologicalManifold.locallyCompactSpace_of_topologicalManifold` projection is
-re-pointed to the Mathlib lemma `ChartedSpace.locallyCompactSpace`. -/
+/-- **Math.** A topological manifold is paracompact. -/
 theorem paracompactSpace_of_manifold : ParacompactSpace M := by
   letI : LocallyCompactSpace M :=
     ChartedSpace.locallyCompactSpace (EuclideanSpace ℝ (Fin n)) M
@@ -215,14 +188,7 @@ theorem paracompactSpace_of_manifold : ParacompactSpace M := by
 
 /-- **Math.** Companion bridge: given an open cover of a locally compact,
 sigma-compact, Hausdorff space and any basis for its topology, there is a countable
-locally finite refinement by basis elements subordinate to the cover. **Eng.**
-Pick, at each point, a cover member containing it; build subordinate neighborhood
-bases from `hB` and feed them to Mathlib's
-`refinement_of_locallyCompact_sigmaCompact_of_nhds_basis`; local finiteness yields
-countability of the index. Placed in `namespace Manifold` (the source put it in the
-Mathlib type namespace `TopologicalSpace.IsOpenCover` for `hU.…` dot notation; we
-keep the declaration name but state it as a plain theorem to stay inside the
-project namespace whitelist — see PR description). -/
+locally finite refinement by basis elements subordinate to the cover. -/
 theorem exists_countable_locallyFinite_refinement_of_isTopologicalBasis {X : Type u}
     [TopologicalSpace X] [LocallyCompactSpace X] [SigmaCompactSpace X] [T2Space X]
     {ι : Type v} {U : ι → Opens X}
@@ -255,12 +221,7 @@ theorem exists_countable_locallyFinite_refinement_of_isTopologicalBasis {X : Typ
 
 /-- **Math.** Theorem 1.15: given an open cover of a topological manifold, there is a
 countable locally finite refinement by precompact coordinate balls subordinate to
-the cover. **Eng.** Take the countable precompact-coordinate-ball basis from Lemma
-1.10, supply the manifold's locally compact + sigma-compact instances (via
-`ChartedSpace.locallyCompactSpace` and
-`sigmaCompactSpace_of_locallyCompact_secondCountable`), then apply
-`exists_countable_locallyFinite_refinement_of_isTopologicalBasis`; each refinement
-member lies in the basis, hence is a precompact coordinate ball. -/
+the cover. -/
 theorem exists_countable_locally_finite_precompact_coordinate_ball_refinement
     {ι : Type v} {U : ι → Opens M} (hU : IsOpenCover U) :
     ∃ (κ : Type u), Countable κ ∧ ∃ V : κ → Opens M,
