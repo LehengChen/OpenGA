@@ -64,12 +64,23 @@ theorem modelMeanCurvature_riccati (n : ℕ) (hn : 2 ≤ n) (K : ℝ) {r : ℝ}
   field_simp
   ring
 
-/-- **Math.** Riccati comparison. If a real function `m` on the admissible window
-satisfies the Riccati sub-equation `m'(r) + m(r)^2/(n-1) + (n-1) K ≤ 0` and is
-asymptotic to the model singularity `(n-1)/r` as `r → 0⁺`, then it is dominated by
-the model mean curvature: `m(r) ≤ m_K(r)`. This is the ODE engine behind the
-Laplacian comparison. -/
+/-- **Math.** Riccati comparison. If a differentiable real function `m` on the
+admissible window satisfies the Riccati sub-equation
+`m'(r) + m(r)^2/(n-1) + (n-1) K ≤ 0` and is asymptotic to the model singularity
+`(n-1)/r` as `r → 0⁺`, then it is dominated by the model mean curvature:
+`m(r) ≤ m_K(r)`. This is the ODE engine behind the Laplacian comparison.
+
+PRE-PAPER. Proof plan (concrete `s_K²` integrating factor, avoiding an abstract
+`exp ∫` — Mathlib's Gronwall is constant-coefficient only): with `a := m/(n-1)`,
+`ā := m_K/(n-1) = s_K'/s_K`, set `w := a - ā` and `z := w · s_K²`. From the
+sub-equation, `w' ≤ -(a + ā) w`, hence
+`z' = s_K²(w' + 2 ā w) ≤ s_K²(-w²) ≤ 0`, so `z` is antitone; the asymptotic gives
+`z(0⁺) = 0` (both `w → 0` and `s_K² → 0`); therefore `z ≤ 0`, and `s_K² > 0`
+(`snakeFunction_pos`) gives `w ≤ 0`, i.e. `m ≤ m_K`. Needs: differentiability of
+`m` (hypothesis below), the product/quotient `HasDerivAt` for `z`, the singular
+limit, and `antitoneOn_of_deriv_nonpos`. -/
 theorem riccati_le_model (n : ℕ) (hn : 2 ≤ n) (K : ℝ) (m : ℝ → ℝ)
+    (hdiff : ∀ r ∈ spaceFormAdmissibleRadii K, DifferentiableAt ℝ m r)
     (hsub : ∀ r ∈ spaceFormAdmissibleRadii K,
       deriv m r + m r ^ 2 / ((n : ℝ) - 1) + ((n : ℝ) - 1) * K ≤ 0)
     (hasymp : Filter.Tendsto (fun r => m r - ((n : ℝ) - 1) / r) (nhdsWithin 0 (Set.Ioi 0))
