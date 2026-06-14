@@ -1,6 +1,5 @@
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Manifold.ChartedSpace
-import Mathlib.Geometry.Manifold.ContMDiff.Atlas
 import Mathlib.Geometry.Manifold.Instances.Real
 import Mathlib.Topology.Bases
 import Mathlib.Topology.Separation.Basic
