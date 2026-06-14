@@ -115,11 +115,11 @@ strict match to the table above). Actual status takes precedence:
 | PR | Branch | Content | Status |
 |---|---|---|---|
 | #65 | `port/coordinate-ball` | coordinate-ball chart predicates | **merged to develop** (docstrings house-style-revised in db767b1, serves as the exemplar) |
-| #66 | `port/precompact-basis` | precompact coordinate-ball countable basis + locally-finite refinement | open, pending feedback: retarget base to develop, revise docstrings |
-| #67 | `port/charted-space-core` | manifold from a chart-family core | open, same |
-| #68 | `port/exhaustion-cutoff` | exhaustion functions + local smoothness + partition-of-unity ⇒ paracompact | open, same |
-| #69 | `port/curve-velocity-mfderiv` | curve velocity + mfderiv (has snake_case defs to rename) | open, same |
-| #70 | `port/coordinate-components` | coordinate tangent components (has snake_case defs; inlines `tangent_coordinates_change`) | open, same |
+| #66 | `port/precompact-basis` | precompact coordinate-ball countable basis + locally-finite refinement | **merged to develop** (cherry-pick 498d57e, docstrings house-style-revised; second exemplar) |
+| #67 | `port/charted-space-core` | manifold from a chart-family core | open, feedback posted |
+| #68 | `port/exhaustion-cutoff` | exhaustion functions + local smoothness + partition-of-unity ⇒ paracompact | open, feedback posted |
+| #69 | `port/curve-velocity-mfderiv` | curve velocity + mfderiv (has snake_case defs to rename) | open, feedback posted |
+| #70 | `port/coordinate-components` | coordinate tangent components (has snake_case defs; inlines `tangent_coordinates_change`) | open, feedback posted |
 
 Common feedback (pointing at merged #65 as the exemplar): ① docstring house
 style (single Math tags / architecture narrative / provenance footer); ②
