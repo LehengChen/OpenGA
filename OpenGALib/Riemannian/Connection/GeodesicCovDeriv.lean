@@ -173,4 +173,27 @@ theorem IsGeodesic.covDerivAlongCurve_curveVelocity_eq_zero
   Riemannian.covDerivAlongCurve_curveVelocity_eq_zero g γ t₀ (hγ t₀)
     (Filter.Eventually.of_forall hγdiff)
 
+/-- **Math.** **Constant speed of a geodesic.** A geodesic has constant speed: the
+derivative of its squared speed vanishes, `d/dt ⟨γ', γ'⟩_g = 0`. This is the
+immediate composition of the metric-compatibility of `D_t`
+(`covDerivAlongCurve_metricInner`, with `V = W = γ'`) and `D_t γ' = 0`
+(`covDerivAlongCurve_curveVelocity_eq_zero`):
+`d/dt⟨γ',γ'⟩ = ⟨D_tγ', γ'⟩ + ⟨γ', D_tγ'⟩ = ⟨0, γ'⟩ + ⟨γ', 0⟩ = 0`. -/
+theorem covDerivAlongCurve_curveVelocity_metricInner_deriv_eq_zero
+    [ModelWithCorners.Boundaryless I]
+    (g : RiemannianMetric I M) (γ : ℝ → M) (t₀ : ℝ)
+    (hgeo : Geodesic.HasGeodesicEquationAt (I := I) g γ t₀)
+    (hVc : DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t)
+        (curveVelocity (I := I) γ t)) t₀)
+    (hγc : DifferentiableAt ℝ (fun t => extChartAt I (γ t₀) (γ t)) t₀)
+    (hγdiff : ∀ᶠ t in 𝓝 t₀, MDifferentiableAt 𝓘(ℝ, ℝ) I γ t) :
+    deriv (fun t => g.metricInner (γ t) (curveVelocity (I := I) γ t)
+        (curveVelocity (I := I) γ t)) t₀ = 0 := by
+  have hγcont : ContinuousAt γ t₀ := (hγdiff.self_of_nhds).continuousAt
+  rw [covDerivAlongCurve_metricInner g γ (curveVelocity (I := I) γ)
+        (curveVelocity (I := I) γ) t₀ hVc hVc hγc hγcont,
+      covDerivAlongCurve_curveVelocity_eq_zero g γ t₀ hgeo hγdiff,
+      g.metricInner_zero_left, g.metricInner_zero_right, add_zero]
+
 end Riemannian
