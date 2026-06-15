@@ -1,6 +1,7 @@
 import OpenGALib.Manifold.Charts.ChartedSpaceCore
 import OpenGALib.Manifold.Charts.CoordinateBall
 import OpenGALib.Manifold.Charts.PrecompactBasis
+import OpenGALib.Manifold.Cutoff.Exhaustion
 
 /-!
 # Manifold
