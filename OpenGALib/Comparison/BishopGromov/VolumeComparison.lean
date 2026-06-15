@@ -2,6 +2,7 @@ import Mathlib.Geometry.Manifold.Riemannian.Basic
 import OpenGALib.Comparison.Util.SpaceForm
 import OpenGALib.Riemannian.Curvature.RicciTensorBundle
 import OpenGALib.Riemannian.Volume.ChartPullback
+import OpenGALib.Riemannian.Volume.ChartPullbackFormula
 
 /-!
 # Bishop–Gromov volume comparison
