@@ -87,4 +87,23 @@ theorem manifoldGradient_smooth_of_smooth
   exact Riemannian.Tensor.metricRiesz_section_contMDiffAt
     (I := I) g x hx_base (Φ := fun y => mfderiv I 𝓘(ℝ, ℝ) f y) hΦ
 
+omit [CompleteSpace E] hm in
+/-- **Math.** **Gradient norm bound from a bounded differential.** If the
+differential of `f` at `x` is dominated by the metric norm — equivalently, by
+Riesz duality `df_x(v) = ⟨∇f, v⟩_g`, the hypothesis `⟨∇f, v⟩_g² ≤ ⟨v,v⟩_g` for
+every `v` (the infinitesimal form of `f` being `1`-Lipschitz, `(d r(v))² ≤
+|v|²_g`) — then the squared gradient norm is at most `1`: `⟨∇f, ∇f⟩_g ≤ 1`. This
+is the algebraic core of the easy (`≤ 1`) half of the eikonal equation
+`|∇(dist p ·)| = 1`, separating the Riesz-duality algebra from the
+distance-function geometry. Proof: take `v = ∇f`, giving `⟨∇f,∇f⟩² ≤ ⟨∇f,∇f⟩`,
+and `a² ≤ a` forces `0 ≤ a ≤ 1`. -/
+theorem manifoldGradient_metricInner_self_le_one
+    (g : RiemannianMetric I M) (f : M → ℝ) (x : M)
+    (hbound : ∀ v : TangentSpace I x,
+      (g.metricInner x (manifoldGradient g f x) v) ^ 2 ≤ g.metricInner x v v) :
+    g.metricInner x (manifoldGradient g f x) (manifoldGradient g f x) ≤ 1 := by
+  have hself := hbound (manifoldGradient g f x)
+  nlinarith [hself,
+    sq_nonneg (g.metricInner x (manifoldGradient g f x) (manifoldGradient g f x) - 1)]
+
 end Riemannian
