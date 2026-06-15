@@ -174,4 +174,25 @@ theorem volumeMeasure_eq_chartLocalMeasure
   simp_rw [hinner]
   rw [setLIntegral_one]
 
+/-- **Math.** **Chart-coordinate volume integral.** On an open `U ⊆ source p`, the
+Riemannian volume of `U` is the chart-coordinate integral of the metric density
+`√det(g)`:
+`vol_g U = ∫_{φ(U)} √det(g ∘ φ⁻¹) dLeb`, where `φ = extChartAt I p`.
+Combines the chart-pullback keystone with the chart-local measure's explicit
+image integral. This is the measure-theoretic precursor of the exp-volume bridge:
+once `φ` is replaced by exp-normal coordinates, the density becomes the volume
+Jacobian `|det d exp_p|`. -/
+theorem volumeMeasure_eq_setLIntegral_chartSqrtGramDet
+    (g : RiemannianMetric I M) (p : M) {U : Set M}
+    (hUopen : IsOpen U) (hUsub : U ⊆ (chartAt H p).source) :
+    volumeMeasure g U
+      = ∫⁻ y in (extChartAt I p) '' U,
+          ENNReal.ofReal (chartSqrtGramDet (I := I) g p ((extChartAt I p).symm y))
+          ∂(modelHaar (E := E)) := by
+  have key := chartLocalMeasure_lintegral_U_eq_setLIntegral_image (I := I) g p hUopen hUsub
+    (F := fun _ => (1 : ℝ≥0∞)) measurable_const hUopen.measurableSet
+  rw [volumeMeasure_eq_chartLocalMeasure g p hUopen.measurableSet hUsub,
+    ← setLIntegral_one U, key]
+  simp
+
 end Riemannian.Tensor
