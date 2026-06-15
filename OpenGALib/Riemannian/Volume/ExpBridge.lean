@@ -38,6 +38,7 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [InnerProductSpa
   [ModelWithCorners.Boundaryless I]
   {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M] [T2Space M]
   [MeasurableSpace M] [BorelSpace M] [SigmaCompactSpace M]
+  [T2Space (TangentBundle I M)]
 
 private local instance : MeasurableSpace E := borel E
 private local instance : BorelSpace E := ⟨rfl⟩
@@ -68,6 +69,22 @@ theorem chartExp_hasFDerivWithinAt
       (fun w : E => extChartAt I p (expMap (I := I) g p (show TangentSpace I p from w))) W :=
     contMDiffOn_iff_contDiffOn.mp hcomp
   exact (hcd.differentiableOn_one w hw).hasFDerivWithinAt
+
+/-- **Math.** `exp_p` is injective on the source of the local-diffeomorphism
+witness — an open normal ball around `0`. This is the injectivity input the
+exp-volume change of variables needs; it comes from the partial diffeomorphism
+`Φ` (`exists_open_nhds_expMap_diffeoOn`), which is injective on its source and
+agrees with `exp_p` there. -/
+theorem exists_expMap_injOn_nhds_zero (g : RiemannianMetric I M) (p : M) :
+    ∃ W : Set E, IsOpen W ∧ (0 : E) ∈ W ∧
+      Set.InjOn
+        (fun v : E => (expMap (I := I) g p (show TangentSpace I p from v) : M)) W := by
+  obtain ⟨Φ, h0, hΦeq⟩ := exists_open_nhds_expMap_diffeoOn (I := I) g p
+  refine ⟨Φ.source, Φ.open_source, h0, ?_⟩
+  have heqon : Set.EqOn (Φ : E → M)
+      (fun v : E => (expMap (I := I) g p (show TangentSpace I p from v) : M))
+      Φ.source := fun v hv => hΦeq v hv
+  exact (Φ.toPartialEquiv.injOn).congr heqon
 
 /-- **Math.** **Exp-volume bridge (change-of-variables core).** For a measurable
 `W ⊆ T_p M` whose exponential image is open and contained in a single chart
