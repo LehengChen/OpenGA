@@ -67,6 +67,19 @@ theorem expMap_mdifferentiableAt_of_isLocalDiffeomorphAt
       (fun v : E => (expMap (I := I) g p (show TangentSpace I p from v) : M)) v :=
   hv.mdifferentiableAt (by norm_num)
 
+/-- **Math.** On the normal ball, `d(expMap g p)|_v` is a continuous linear
+equivalence `T_v(T_pM) ≃L T_{exp v} M`. In particular it is invertible — the
+source of nondegeneracy of the volume Jacobian `det d exp_p(v) ≠ 0` that the
+geodesic-polar volume formula needs. Its forward map is exactly the manifold
+derivative `mfderiv ... (expMap g p) v`. -/
+noncomputable def expMap_mfderivContinuousLinearEquiv
+    {g : RiemannianMetric I M} {p : M} {v : E}
+    (hv : IsLocalDiffeomorphAt 𝓘(ℝ, E) I 1
+      (fun v : E => (expMap (I := I) g p (show TangentSpace I p from v) : M)) v) :
+    TangentSpace 𝓘(ℝ, E) v ≃L[ℝ]
+      TangentSpace I (expMap (I := I) g p (show TangentSpace I p from v) : M) :=
+  hv.mfderivToContinuousLinearEquiv (by norm_num)
+
 end NormalBall
 
 end Exponential
