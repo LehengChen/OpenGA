@@ -466,4 +466,247 @@ private theorem hasDerivAt_chartGramOnE_comp [ModelWithCorners.Boundaryless I]
     (deriv c t₀)]
   exact hcomp
 
+/-- **Math.** Derivative of a single Gram-weighted coordinate product along a
+curve. For chart-coordinate functions `Vc Wc : ℝ → E` (the trivialization
+coordinates of the two fields) differentiable at `t₀`, and a chart-coordinate
+curve `c : ℝ → E` with `c t₀` in the chart target, the `(i,j)` term
+`t ↦ vⁱ(t) · wʲ(t) · G_{ij}(c t)` of the bilinear Gram form has, at `t₀`, the
+product-rule derivative `(vⁱ)' wʲ G + vⁱ (wʲ)' G + vⁱ wʲ (Σ_k uᵏ ∂_k G)`, with
+`u = deriv c t₀`. The three factors are differentiable via
+`hasDerivAt_chartCoord_of_hasDerivAt` (twice) and `hasDerivAt_chartGramOnE_comp`. -/
+private theorem hasDerivAt_chartGram_term [ModelWithCorners.Boundaryless I]
+    (g : RiemannianMetric I M) (α : M) (i j : Fin (Module.finrank ℝ E))
+    {Vc Wc c : ℝ → E} {t₀ : ℝ}
+    (hVc : DifferentiableAt ℝ Vc t₀) (hWc : DifferentiableAt ℝ Wc t₀)
+    (hc : DifferentiableAt ℝ c t₀) (hmem : c t₀ ∈ (extChartAt I α).target) :
+    HasDerivAt
+      (fun t => Geodesic.chartCoord (E := E) i (Vc t)
+        * Geodesic.chartCoord (E := E) j (Wc t)
+        * chartGramOnE (I := I) g α i j (c t))
+      (Geodesic.chartCoord (E := E) i (deriv Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (deriv Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * (∑ k, Geodesic.chartCoord (E := E) k (deriv c t₀)
+                * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀)))
+      t₀ := by
+  have hv := hasDerivAt_chartCoord_of_hasDerivAt (E := E) hVc.hasDerivAt i
+  have hw := hasDerivAt_chartCoord_of_hasDerivAt (E := E) hWc.hasDerivAt j
+  have hG := hasDerivAt_chartGramOnE_comp (I := I) g α i j hc hmem
+  have hprod := ((hv.mul hw).mul hG)
+  convert hprod using 1
+  simp only [Geodesic.chartCoord_def, Pi.mul_apply]
+  ring
+
+/-- **Math.** **Metric-compatibility of the covariant derivative along a curve.**
+The Riemannian metric is parallel for `D_t`: the time derivative of the inner
+product of two fields `V W` along `γ` is the sum of the inner products with the
+covariant derivatives,
+`d/dt⟨V,W⟩_g = ⟨D_tV,W⟩_g + ⟨V,D_tW⟩_g`.
+The chart-coordinate curves of `V`, `W` and `γ` are assumed differentiable at
+`t₀`, and `γ` is continuous at `t₀` (so it stays in the trivialization base set on
+a neighborhood, letting the inner product be read as the bilinear Gram form).
+The proof differentiates the bilinear Gram form termwise (product rule via
+`hasDerivAt_chartGram_term`), expands `D_tV`, `D_tW` through the
+trivialization/Christoffel formula of `covDerivAlongCurve`, and cancels the
+Gram-derivative term against the two Christoffel corrections with the algebraic
+heart `chartGram_dirDeriv_eq_christoffel_correction`. -/
+theorem covDerivAlongCurve_metricInner [ModelWithCorners.Boundaryless I]
+    (g : RiemannianMetric I M) (γ : ℝ → M)
+    (V W : (t : ℝ) → TangentSpace I (γ t)) (t₀ : ℝ)
+    (hVc : DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t) (V t)) t₀)
+    (hWc : DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t) (W t)) t₀)
+    (hγc : DifferentiableAt ℝ (fun t => extChartAt I (γ t₀) (γ t)) t₀)
+    (hγcont : ContinuousAt γ t₀) :
+    deriv (fun t => g.metricInner (γ t) (V t) (W t)) t₀
+      = g.metricInner (γ t₀) (covDerivAlongCurve (I := I) g γ V t₀) (W t₀)
+        + g.metricInner (γ t₀) (V t₀) (covDerivAlongCurve (I := I) g γ W t₀) := by
+  classical
+  set α := γ t₀ with hα
+  set T := trivializationAt E (TangentSpace I) α with hT
+  -- chart-coordinate functions of the two fields and of the curve
+  set Vc : ℝ → E := fun t => T.continuousLinearMapAt ℝ (γ t) (V t) with hVcdef
+  set Wc : ℝ → E := fun t => T.continuousLinearMapAt ℝ (γ t) (W t) with hWcdef
+  set c : ℝ → E := fun t => extChartAt I α (γ t) with hcdef
+  set u : E := deriv c t₀ with hu
+  have hbase : α ∈ T.baseSet := mem_chart_source H α
+  -- `c t₀ = extChartAt I α α` is in the chart target
+  have hct₀ : c t₀ = extChartAt I α α := rfl
+  have hmem : c t₀ ∈ (extChartAt I α).target := by
+    rw [hct₀]; exact mem_extChartAt_target α
+  -- `(extChartAt I α).symm (c t₀) = α`
+  have hsymm : (extChartAt I α).symm (c t₀) = α := by
+    rw [hct₀]; exact (extChartAt I α).left_inv (mem_extChartAt_source α)
+  -- Bridge: chartGramOnE pulled to `c t₀` is the Gram matrix at `α`.
+  have hGram0 : ∀ i j, chartGramOnE (I := I) g α i j (c t₀)
+      = chartGramMatrix (I := I) g α α i j := by
+    intro i j; rw [chartGramOnE_def, hsymm]
+  -- STEP 1: on a neighborhood of `t₀`, the inner product is the bilinear Gram form.
+  have hnhds : ∀ᶠ t in nhds t₀, γ t ∈ T.baseSet := by
+    have hopen : IsOpen T.baseSet := T.open_baseSet
+    exact hγcont (hopen.mem_nhds hbase)
+  have hEq : (fun t => g.metricInner (γ t) (V t) (W t))
+      =ᶠ[nhds t₀] (fun t => ∑ i, ∑ j,
+        Geodesic.chartCoord (E := E) i (Vc t) * Geodesic.chartCoord (E := E) j (Wc t)
+          * chartGramOnE (I := I) g α i j (c t)) := by
+    filter_upwards [hnhds] with t ht
+    have htsrc : γ t ∈ (extChartAt I α).source := by
+      rw [extChartAt_source]; exact ht
+    rw [metricInner_eq_chartGram_bilinear (I := I) g α ht (V t) (W t)]
+    refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
+    rw [chartGramOnE_def, (extChartAt I α).left_inv htsrc]
+    rw [hVcdef, hWcdef]; simp only [Geodesic.chartCoord_def, hT]
+  -- STEP 2: differentiate the bilinear Gram form termwise (product rule per term).
+  have hterm : ∀ i j, HasDerivAt
+      (fun t => Geodesic.chartCoord (E := E) i (Vc t)
+        * Geodesic.chartCoord (E := E) j (Wc t)
+        * chartGramOnE (I := I) g α i j (c t))
+      (Geodesic.chartCoord (E := E) i (deriv Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (deriv Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * (∑ k, Geodesic.chartCoord (E := E) k u
+                * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀)))
+      t₀ := fun i j =>
+    hasDerivAt_chartGram_term (I := I) g α i j hVc hWc hγc hmem
+  -- The whole inner sum (over j) has the sum of the per-term derivatives.
+  have hsumj : ∀ i, HasDerivAt
+      (fun t => ∑ j, Geodesic.chartCoord (E := E) i (Vc t)
+        * Geodesic.chartCoord (E := E) j (Wc t)
+        * chartGramOnE (I := I) g α i j (c t))
+      (∑ j, (Geodesic.chartCoord (E := E) i (deriv Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (deriv Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * (∑ k, Geodesic.chartCoord (E := E) k u
+                * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀))))
+      t₀ := fun i => HasDerivAt.fun_sum fun j _ => hterm i j
+  have hsum : HasDerivAt
+      (fun t => ∑ i, ∑ j, Geodesic.chartCoord (E := E) i (Vc t)
+        * Geodesic.chartCoord (E := E) j (Wc t)
+        * chartGramOnE (I := I) g α i j (c t))
+      (∑ i, ∑ j, (Geodesic.chartCoord (E := E) i (deriv Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (deriv Wc t₀)
+            * chartGramOnE (I := I) g α i j (c t₀)
+          + Geodesic.chartCoord (E := E) i (Vc t₀)
+            * Geodesic.chartCoord (E := E) j (Wc t₀)
+            * (∑ k, Geodesic.chartCoord (E := E) k u
+                * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀))))
+      t₀ := HasDerivAt.fun_sum fun i _ => hsumj i
+  rw [hEq.deriv_eq, hsum.deriv]
+  -- Abbreviations for the chart coordinates at `t₀`.
+  set vc : Fin (Module.finrank ℝ E) → ℝ := fun i => Geodesic.chartCoord (E := E) i (Vc t₀) with hvc
+  set wc : Fin (Module.finrank ℝ E) → ℝ := fun j => Geodesic.chartCoord (E := E) j (Wc t₀) with hwc
+  set vc' : Fin (Module.finrank ℝ E) → ℝ := fun i => Geodesic.chartCoord (E := E) i (deriv Vc t₀)
+    with hvc'
+  set wc' : Fin (Module.finrank ℝ E) → ℝ := fun j => Geodesic.chartCoord (E := E) j (deriv Wc t₀)
+    with hwc'
+  set G : Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → ℝ :=
+    fun i j => chartGramOnE (I := I) g α i j (c t₀) with hG
+  -- STEP 3: expand the right-hand inner products in chart coordinates.
+  -- `⟨D_tV, W⟩ = Σᵢⱼ (vⁱ' + Γ(u,v)ⁱ) wʲ Gᵢⱼ`.
+  -- `T.continuousLinearMapAt α (D_t V t₀) = deriv Vc t₀ + Γ(u, Vc t₀)(c t₀)`.
+  have hcoordVecDV : T.continuousLinearMapAt ℝ α (covDerivAlongCurve (I := I) g γ V t₀)
+      = deriv Vc t₀ + Geodesic.chartChristoffelContraction (I := I) g α u (Vc t₀) (c t₀) := by
+    show T.continuousLinearMapAt ℝ α (T.symmL ℝ α _) = _
+    rw [T.continuousLinearMapAt_symmL hbase]
+  have hcoordVecDW : T.continuousLinearMapAt ℝ α (covDerivAlongCurve (I := I) g γ W t₀)
+      = deriv Wc t₀ + Geodesic.chartChristoffelContraction (I := I) g α u (Wc t₀) (c t₀) := by
+    show T.continuousLinearMapAt ℝ α (T.symmL ℝ α _) = _
+    rw [T.continuousLinearMapAt_symmL hbase]
+  -- coordinate of `D_tV` / `D_tW` at `t₀`
+  have hcoordDV : ∀ i, Geodesic.chartCoord (E := E) i
+      (T.continuousLinearMapAt ℝ α (covDerivAlongCurve (I := I) g γ V t₀))
+      = vc' i + Geodesic.chartCoord (E := E) i
+          (Geodesic.chartChristoffelContraction (I := I) g α u (Vc t₀) (c t₀)) := by
+    intro i; rw [hcoordVecDV, Geodesic.chartCoord_add, hvc']
+  have hcoordDW : ∀ j, Geodesic.chartCoord (E := E) j
+      (T.continuousLinearMapAt ℝ α (covDerivAlongCurve (I := I) g γ W t₀))
+      = wc' j + Geodesic.chartCoord (E := E) j
+          (Geodesic.chartChristoffelContraction (I := I) g α u (Wc t₀) (c t₀)) := by
+    intro j; rw [hcoordVecDW, Geodesic.chartCoord_add, hwc']
+  -- Rewrite both RHS inner products as bilinear Gram forms.
+  rw [metricInner_eq_chartGram_bilinear (I := I) g α hbase
+        (covDerivAlongCurve (I := I) g γ V t₀) (W t₀),
+      metricInner_eq_chartGram_bilinear (I := I) g α hbase
+        (V t₀) (covDerivAlongCurve (I := I) g γ W t₀)]
+  -- Fold `trivializationAt … α` back to `T`, replace `repr` by `chartCoord`,
+  -- bridge `chartGramMatrix` to `G`, and expand the covariant-derivative coords.
+  simp only [← hT, ← Geodesic.chartCoord_def]
+  have hGbridge : ∀ i j, chartGramMatrix (I := I) g α α i j = G i j := by
+    intro i j; rw [hG]; exact (hGram0 i j).symm
+  -- coordinate of `W t₀` / `V t₀` at base equals `wc j` / `vc i`
+  have hWcoord : ∀ j, Geodesic.chartCoord (E := E) j (T.continuousLinearMapAt ℝ α (W t₀)) = wc j :=
+    fun j => rfl
+  have hVcoord : ∀ i, Geodesic.chartCoord (E := E) i (T.continuousLinearMapAt ℝ α (V t₀)) = vc i :=
+    fun i => rfl
+  simp only [hcoordDV, hcoordDW, hWcoord, hVcoord, hGbridge]
+  -- STEP 4: algebraic cancellation.
+  -- LHS = Σᵢⱼ [vⁱ' wʲ + vⁱ wʲ'] Gᵢⱼ + Σᵢⱼ vⁱ wʲ (Σₖ uᵏ ∂ₖG_ij).
+  -- RHS = Σᵢⱼ (vⁱ' + Γ(u,v)ⁱ) wʲ Gᵢⱼ + Σᵢⱼ vⁱ (wʲ' + Γ(u,w)ʲ) Gᵢⱼ.
+  -- Difference reduces to the heart identity.
+  have hheart := chartGram_dirDeriv_eq_christoffel_correction (I := I) g α u (Vc t₀) (Wc t₀) (c t₀)
+    (by rw [hsymm]; exact hbase)
+  -- Reassemble: rewrite both sides as a single double sum over `(i,j)`, then match
+  -- termwise — using the heart identity for the Gram-derivative block.
+  set Γv : Fin (Module.finrank ℝ E) → ℝ := fun i => Geodesic.chartCoord (E := E) i
+    (Geodesic.chartChristoffelContraction (I := I) g α u (Vc t₀) (c t₀)) with hΓv
+  set Γw : Fin (Module.finrank ℝ E) → ℝ := fun j => Geodesic.chartCoord (E := E) j
+    (Geodesic.chartChristoffelContraction (I := I) g α u (Wc t₀) (c t₀)) with hΓw
+  -- LHS as a single double sum, with the heart already substituted.
+  have hLHS : (∑ i, ∑ j, (vc' i * wc j * G i j + vc i * wc' j * G i j
+        + vc i * wc j * (∑ k, Geodesic.chartCoord (E := E) k u
+            * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀))))
+      = ∑ i, ∑ j, (vc' i * wc j * G i j + vc i * wc' j * G i j
+          + (Γv i * wc j + vc i * Γw j) * G i j) := by
+    have hsplit : (∑ i, ∑ j, (vc' i * wc j * G i j + vc i * wc' j * G i j
+          + vc i * wc j * (∑ k, Geodesic.chartCoord (E := E) k u
+              * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀))))
+        = (∑ i, ∑ j, (vc' i * wc j * G i j + vc i * wc' j * G i j))
+          + ∑ i, ∑ j, vc i * wc j * (∑ k, Geodesic.chartCoord (E := E) k u
+              * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀)) := by
+      rw [← Finset.sum_add_distrib]
+      exact Finset.sum_congr rfl fun i _ => Finset.sum_add_distrib
+    have hmerge : (∑ i, ∑ j, (vc' i * wc j * G i j + vc i * wc' j * G i j))
+          + ∑ i, ∑ j, ((Γv i * wc j + vc i * Γw j) * G i j)
+        = ∑ i, ∑ j, (vc' i * wc j * G i j + vc i * wc' j * G i j
+            + (Γv i * wc j + vc i * Γw j) * G i j) := by
+      rw [← Finset.sum_add_distrib]
+      exact Finset.sum_congr rfl fun i _ => (Finset.sum_add_distrib).symm
+    -- The Gram-derivative block equals the Christoffel-correction block by the heart.
+    have hheart' : (∑ i, ∑ j, vc i * wc j * (∑ k, Geodesic.chartCoord (E := E) k u
+            * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀)))
+        = ∑ i, ∑ j, ((Γv i * wc j + vc i * Γw j) * G i j) := by
+      rw [show (∑ i, ∑ j, vc i * wc j * (∑ k, Geodesic.chartCoord (E := E) k u
+            * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀)))
+          = ∑ i, ∑ j, (Γv i * wc j + vc i * Γw j) * chartGramOnE (I := I) g α i j (c t₀)
+            from hheart]
+    rw [hsplit, hheart', hmerge]
+  rw [hLHS]
+  -- RHS: combine the two double sums into one, then match termwise.
+  rw [show (∑ i, ∑ j, (vc' i + Γv i) * wc j * G i j)
+          + ∑ i, ∑ j, vc i * (wc' j + Γw j) * G i j
+        = ∑ i, ∑ j, ((vc' i + Γv i) * wc j * G i j + vc i * (wc' j + Γw j) * G i j) from by
+    rw [← Finset.sum_add_distrib]
+    exact Finset.sum_congr rfl fun i _ => (Finset.sum_add_distrib).symm]
+  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
+  ring
+
 end Riemannian
