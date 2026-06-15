@@ -26,16 +26,22 @@ full 29-file external Connection cone.
 - `OpenGALib/Riemannian/Connection/ChartChristoffel.lean` — `partialDeriv`,
   `chartInvGramMatrix`, `chartGramOnE`, `chartChristoffel` (+lower-index symmetry).
 
-**Resume point — `Geodesic/Equation` lift:** the sed-lift + adding
-`import Mathlib.Analysis.Calculus.Deriv.{Add,Shift}` (v4.30 moved
-`deriv_comp_add_const`/`deriv_comp_neg`/`hasDerivAt_neg` there) clears the deriv
-drift. Remaining: three foundation lemmas not yet migrated —
-`chartChristoffel_contDiffOn_interior` (Christoffel **smoothness**, external
-`Operator/HessianTrace`; needs the Gram-matrix + inverse smoothness chain),
-`extChartAt_source_eq_chartAt_source` (external `Measure/Invariance`),
-`extChartAt_target_subset_interior_of_boundaryless` (external
-`DivergenceTheorem/TangentAction`). Migrate the chart-Christoffel **smoothness**
-sub-layer (a real chunk) + the two small chart helpers, then `Equation` builds.
+**Chart-Christoffel smoothness sub-layer DONE** (committed, 0 sorry):
+`OpenGALib/Riemannian/Connection/ChartChristoffelSmooth.lean` — adjugate →
+inverse-Gram → Gram/InvGram-on-E → `chartChristoffel_contDiffOn_interior`, plus
+the chart helpers (`extChartAt_source_eq_chartAt_source`,
+`trivializationAt_baseSet_eq_chartAt_source`,
+`extChartAt_target_subset_interior_of_boundaryless`).
+
+**`Geodesic/Equation` DONE** (committed, 0 sorry):
+`OpenGALib/Riemannian/Geodesic/Equation.lean` — `geodesicVectorField`,
+`HasGeodesicEquationAt` (`γ''=-Γ(γ',γ')`), `IsGeodesic{,At,On}`, affine
+reparametrization (shift / time-reversal), chart-fixed smoothness. v4.30 deriv
+drift fixed via `import Mathlib.Analysis.Calculus.Deriv.{Add,Shift}`.
+
+**Next:** rest of `Geometry/Geodesic` bottom-up — `Existence`, `Uniqueness`,
+`MaximalInterval`, `SmoothFlow` (consumes the migrated `Analysis.ODE.Flow`),
+then the `Geometry/Exponential` layer (`expMap`, smoothness, Gauss lemma).
 
 ---
 

@@ -27,14 +27,20 @@ variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M
 
 /-! ## Chart helpers -/
 
+omit [FiniteDimensional ℝ E] [IsManifold I ∞ M] in
+/-- **Math.** The extended-chart source coincides with the chart source. -/
 lemma extChartAt_source_eq_chartAt_source (x₀ : M) :
     (extChartAt I x₀).source = (chartAt H x₀).source := by
   rw [extChartAt_source]
 
+omit [FiniteDimensional ℝ E] in
+/-- **Math.** The tangent-bundle trivialization base set is the chart source. -/
 lemma trivializationAt_baseSet_eq_chartAt_source (x₀ : M) :
     (trivializationAt E (TangentSpace I) x₀).baseSet = (chartAt H x₀).source :=
   rfl
 
+omit [FiniteDimensional ℝ E] [IsManifold I ∞ M] in
+/-- **Math.** Boundaryless: the chart target is its own interior. -/
 lemma extChartAt_target_subset_interior_of_boundaryless [I.Boundaryless] (α : M) :
     (extChartAt I α).target ⊆ interior (extChartAt I α).target := by
   intro y hy
@@ -153,7 +159,7 @@ lemma chartGramOnE_contDiffOn
       (extChartAt I α).target := hbase.comp hsymm hsubset
   exact hcomp.contDiffOn
 
-/-- The pulled-back inverse Gram matrix entry on the chart target. -/
+/-- **Math.** The pulled-back inverse Gram matrix entry on the chart target. -/
 def chartInvGramOnE (g : RiemannianMetric I M) (α : M)
     (i j : Fin (Module.finrank ℝ E)) : E → ℝ :=
   fun y => chartInvGramMatrix (I := I) g α ((extChartAt I α).symm y) i j
@@ -193,8 +199,8 @@ lemma chartInvGramOnE_contDiffOn
 
 /-! ## Christoffel smoothness -/
 
-/-- **Smoothness of `chartChristoffel`.** The chart Christoffel symbol is `C^∞`
-on the interior of the chart target. -/
+/-- **Math.** **Smoothness of `chartChristoffel`.** The chart Christoffel symbol
+is `C^∞` on the interior of the chart target. -/
 theorem chartChristoffel_contDiffOn_interior
     (g : RiemannianMetric I M) (α : M)
     (i j k : Fin (Module.finrank ℝ E)) :
