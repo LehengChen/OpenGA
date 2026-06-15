@@ -3,6 +3,7 @@ import OpenGALib.Comparison.Util.SpaceForm
 import OpenGALib.Riemannian.Curvature.RicciTensorBundle
 import OpenGALib.Riemannian.Volume.ChartPullback
 import OpenGALib.Riemannian.Operators.Laplacian
+import OpenGALib.Riemannian.Exponential.NormalBallSmooth
 
 /-!
 # Laplacian comparison
