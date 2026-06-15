@@ -63,7 +63,7 @@ variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M
 
 open Riemannian.Geodesic
 
-/-- The exponential map at `p ∈ M` applied to a tangent vector `v ∈ T_p M`,
+/-- **Math.** The exponential map at `p ∈ M` applied to a tangent vector `v ∈ T_p M`,
 defined as the value of the maximal geodesic with initial data `(p, v)`
 at time `t = 1`. When `1` lies outside the maximal interval, the value is
 the constant junk value `p` of `maximalGeodesic`. -/
@@ -74,7 +74,7 @@ def expMap (g : RiemannianMetric I M) (p : M) (v : TangentSpace I p) : M :=
     (v : TangentSpace I p) :
     expMap (I := I) g p v = maximalGeodesic (I := I) g p v 1 := rfl
 
-/-- The natural domain of `expMap g p`: the set of vectors `v : T_p M`
+/-- **Math.** The natural domain of `expMap g p`: the set of vectors `v : T_p M`
 such that the maximal interval of the geodesic with initial data
 `(p, v)` contains `1`. On this set, `expMap g p v` is the genuine
 geodesic-flow value; outside, it reverts to `p`. -/
@@ -90,7 +90,7 @@ section StationaryWitness
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- For the zero initial velocity, the constant geodesic at `p` is a
+/-- **Math.** For the zero initial velocity, the constant geodesic at `p` is a
 `MaximalGeodesicWitness` at every time, witnessed on the preconnected set
 `Set.univ`. -/
 theorem maximalGeodesicWitness_zero_all_times
@@ -106,12 +106,12 @@ theorem maximalGeodesicWitness_zero_all_times
       geodesicVectorFieldChart_zero_section (I := I) g p
     exact (isMIntegralCurve_const hvf_zero).isMIntegralCurveOn Set.univ
 
-/-- The zero vector is always in the natural domain of `expMap g p`. -/
+/-- **Math.** The zero vector is always in the natural domain of `expMap g p`. -/
 theorem zero_mem_expDomain (g : RiemannianMetric I M) (p : M) :
     (0 : TangentSpace I p) ∈ expDomain (I := I) g p :=
   maximalGeodesicWitness_zero_all_times (I := I) g p 1
 
-/-- The natural domain of `expMap g p` is nonempty (it always contains `0`). -/
+/-- **Math.** The natural domain of `expMap g p` is nonempty (it always contains `0`). -/
 theorem expDomain_nonempty (g : RiemannianMetric I M) (p : M) :
     (expDomain (I := I) g p).Nonempty :=
   ⟨0, zero_mem_expDomain (I := I) g p⟩
@@ -122,7 +122,7 @@ section JunkValue
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- Outside the natural domain, `expMap` returns the junk value `p`. -/
+/-- **Math.** Outside the natural domain, `expMap` returns the junk value `p`. -/
 theorem expMap_of_not_mem_expDomain
     {g : RiemannianMetric I M} {p : M} {v : TangentSpace I p}
     (hv : v ∉ expDomain (I := I) g p) :
@@ -136,7 +136,7 @@ section ExpMapZeroWitnessLevel
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- The chosen geodesic witness curve for `(p, 0)` at time `1` starts at
+/-- **Math.** The chosen geodesic witness curve for `(p, 0)` at time `1` starts at
 `p`. (This is `maximalGeodesicChosenCurve_spec` paired with the
 `start_eq` lemma.) -/
 theorem maximalGeodesicChosenCurve_zero_start_eq
@@ -155,7 +155,7 @@ section ZeroVelocityPropagation
 variable [I.Boundaryless] [CompleteSpace E]
   [T2Space (TangentBundle I M)]
 
-/-- The constant lift `fun _ : ℝ => ⟨p, 0⟩` is a global integral curve
+/-- **Math.** The constant lift `fun _ : ℝ => ⟨p, 0⟩` is a global integral curve
 of `geodesicVectorFieldChart g p`, since the vector field vanishes at the
 zero section over the chart basepoint. -/
 private lemma isMIntegralCurve_const_zero_section
@@ -164,7 +164,7 @@ private lemma isMIntegralCurve_const_zero_section
       (geodesicVectorFieldChart (I := I) g p) :=
   isMIntegralCurve_const (geodesicVectorFieldChart_zero_section (I := I) g p)
 
-/-- **Zero-velocity propagation.** If `f : ℝ → TangentBundle I M` is an
+/-- **Math.** **Zero-velocity propagation.** If `f : ℝ → TangentBundle I M` is an
 integral curve of `geodesicVectorFieldChart g p` on a preconnected open
 set `J ∋ 0` and satisfies the initial condition `f 0 = ⟨p, 0⟩`, then
 `f t = ⟨p, 0⟩` for every `t ∈ J`.
@@ -250,7 +250,7 @@ section ExpMapZero
 variable [I.Boundaryless] [CompleteSpace E]
   [T2Space (TangentBundle I M)]
 
-/-- For any witness `(γ, J)` of a `MaximalGeodesicWitness` with zero
+/-- **Math.** For any witness `(γ, J)` of a `MaximalGeodesicWitness` with zero
 initial velocity, the witness curve is identically `p` on `J`. -/
 theorem maximalGeodesicWitness_zero_curve_eq_p
     {g : RiemannianMetric I M} {p : M}
@@ -267,7 +267,7 @@ theorem maximalGeodesicWitness_zero_curve_eq_p
   rw [hf_eq] at this
   exact this.symm
 
-/-- **`expMap g p 0 = p`** — the value of the exponential map at the
+/-- **Math.** **`expMap g p 0 = p`** — the value of the exponential map at the
 zero vector is the base point itself. -/
 @[simp] theorem expMap_zero
     (g : RiemannianMetric I M) (p : M) :
