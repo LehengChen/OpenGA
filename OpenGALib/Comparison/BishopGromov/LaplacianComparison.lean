@@ -37,7 +37,7 @@ local notation:max "n_M" => Module.finrank ℝ E
 
 /-- **Math.** **Radial Laplacian-profile interface** for the distance function
 `r = dist p ·` toward the Laplacian comparison. This is the *geometric interface*
-of `docs/EXP_GEODESIC_MIGRATION.md` (the hybrid route, "Note on alternatives"):
+(the hybrid geometric-interface route):
 the smooth-distance / radial structure that the exponential-map layer
 (Gauss lemma + eikonal + radial-derivative identification + base-point asymptotic)
 discharges, packaged so the Laplacian comparison is proved 0-sorry *modulo* it.
@@ -78,8 +78,8 @@ by the model space-form mean curvature:
 `Δ_g r (x) ≤ (n - 1) · s_K'(r(x)) / s_K(r(x))`,
 where `s_K = snakeFunction K` is the space-form Jacobi function.
 
-Proved **0-sorry modulo** the `RadialLaplacianProfile` interface (the hybrid route
-of `docs/EXP_GEODESIC_MIGRATION.md`): given the radial profile and its Riccati /
+Proved **0-sorry modulo** the `RadialLaplacianProfile` interface (the hybrid
+geometric-interface route): given the radial profile and its Riccati /
 asymptotic data, the conclusion is exactly the proved ODE comparison
 `riccati_le_model`. The interface itself is discharged by the exponential-map
 layer (eikonal + radial-derivative identification, via `bochner_radial_riccati`)

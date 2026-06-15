@@ -39,8 +39,8 @@ local notation:max "V_K^" n:max "(" r:max ")" => spaceFormBallVolume n K r
 local notation:max "𝒟_K" => spaceFormAdmissibleRadii K
 
 /-- **Math.** **Geodesic-polar volume interface** toward Bishop–Gromov. This is
-the *volume-side* geometric interface of `docs/EXP_GEODESIC_MIGRATION.md` (the
-hybrid route, "Note on alternatives"): the geodesic-polar volume structure that
+the *volume-side* geometric interface (the hybrid geometric-interface route):
+the geodesic-polar volume structure that
 the exponential-map layer discharges (via the exp-volume bridge `ExpBridge`, the
 polar Jacobian `det d exp_p(tξ) = t^{n-1} J`, and `∂_t log J = Δ_g r ≤ m_K` from
 the Laplacian comparison), packaged so Bishop–Gromov is proved 0-sorry *modulo*
@@ -78,8 +78,8 @@ For a Riemannian manifold `(M, g)` with `Ric_g ≥ (n - 1) K g`, the ratio
 to the model space-form ball is monotone non-increasing in `R` on the
 admissible radius window `𝒟_K`.
 
-Proved **0-sorry modulo** the `BishopGromovVolumeData` interface (the hybrid route
-of `docs/EXP_GEODESIC_MIGRATION.md`): given the geodesic-polar volume formula and
+Proved **0-sorry modulo** the `BishopGromovVolumeData` interface (the hybrid
+geometric-interface route): given the geodesic-polar volume formula and
 the area-density monotonicity, the conclusion is exactly the proved analytic
 volume-ratio engine `ratio_spaceFormBallVolume_le`. The interface is discharged by
 the exponential-map / volume-Jacobian layer (the exp-volume bridge + polar
