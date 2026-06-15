@@ -18,8 +18,24 @@ Mathlib, rehomed to namespace `Analysis.ODE`. Next: geodesic layer.
 **Geodesic layer note:** `Geometry/Geodesic/Equation` defines geodesics via
 chart-local Christoffel symbols (`γ'' = -Γ(γ',γ')`) computed directly from the
 metric in coordinates — a thin foundation slice (chart Gram + metric), not the
-full 29-file external Connection cone. Per-file the rewire vs bridge call is made
-when lifting.
+full 29-file external Connection cone.
+
+**Progress (chart-Christoffel foundation, committed, 0 sorry):**
+- `OpenGALib/Riemannian/Metric/ChartGram.lean` — `chartModelBasis`,
+  `chartGramMatrix` (+Hermitian/posDef/det/smoothness), on our `RiemannianMetric`.
+- `OpenGALib/Riemannian/Connection/ChartChristoffel.lean` — `partialDeriv`,
+  `chartInvGramMatrix`, `chartGramOnE`, `chartChristoffel` (+lower-index symmetry).
+
+**Resume point — `Geodesic/Equation` lift:** the sed-lift + adding
+`import Mathlib.Analysis.Calculus.Deriv.{Add,Shift}` (v4.30 moved
+`deriv_comp_add_const`/`deriv_comp_neg`/`hasDerivAt_neg` there) clears the deriv
+drift. Remaining: three foundation lemmas not yet migrated —
+`chartChristoffel_contDiffOn_interior` (Christoffel **smoothness**, external
+`Operator/HessianTrace`; needs the Gram-matrix + inverse smoothness chain),
+`extChartAt_source_eq_chartAt_source` (external `Measure/Invariance`),
+`extChartAt_target_subset_interior_of_boundaryless` (external
+`DivergenceTheorem/TangentAction`). Migrate the chart-Christoffel **smoothness**
+sub-layer (a real chunk) + the two small chart helpers, then `Equation` builds.
 
 ---
 
