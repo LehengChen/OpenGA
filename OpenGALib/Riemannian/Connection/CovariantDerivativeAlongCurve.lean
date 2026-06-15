@@ -247,4 +247,223 @@ theorem metricInner_eq_chartGram_bilinear (g : RiemannianMetric I M) (α : M) {x
     (fun j => (Module.finBasis ℝ E).repr
       ((trivializationAt E (TangentSpace I) α).continuousLinearMapAt ℝ x w) j)
 
+/-- **Math.** **Component of the Christoffel contraction.** The `m`-th chart
+coordinate of `Γ(a,b)(y)` reads off the basis-component formula in
+`chartChristoffelContraction`: `(Γ(a,b)(y))ᵐ = Σᵢ Σⱼ Γᵐ_{ij}(y) aⁱ bʲ`. The
+inverse of the `• eₘ` packaging, isolating the scalar component that pairs with
+the Gram matrix in the metric-compatibility cancellation. -/
+theorem chartCoord_chartChristoffelContraction (g : RiemannianMetric I M) (α : M)
+    (a b : E) (y : E) (m : Fin (Module.finrank ℝ E)) :
+    Geodesic.chartCoord (E := E) m (Geodesic.chartChristoffelContraction (I := I) g α a b y)
+      = ∑ i, ∑ j, chartChristoffel (I := I) g α i j m y
+          * Geodesic.chartCoord (E := E) i a * Geodesic.chartCoord (E := E) j b := by
+  classical
+  rw [Geodesic.chartChristoffelContraction_def, Geodesic.chartCoord_def, map_sum,
+    Finsupp.finset_sum_apply]
+  simp_rw [map_smul, Finsupp.smul_apply, Module.Basis.repr_self_apply, smul_eq_mul,
+    mul_ite, mul_one, mul_zero]
+  rw [Finset.sum_ite_eq' Finset.univ m
+    (fun k => ∑ i, ∑ j, chartChristoffel (I := I) g α i j k y
+      * Geodesic.chartCoord (E := E) i a * Geodesic.chartCoord (E := E) j b)]
+  simp
+
+/-- **Math.** **Metric-compatibility cancellation (the algebraic heart of `D_t`
+compatibility).** Contracting the directional derivative of the Gram matrix along
+`u` against the coordinate vectors `v, w` equals the two Christoffel-correction
+terms produced by the covariant derivatives of `v` and `w`:
+`Σᵢⱼ vⁱ wʲ (Σₖ uᵏ ∂ₖG_{ij}) = Σᵢⱼ (Γ(u,v)ⁱ wʲ + vⁱ Γ(u,w)ʲ) G_{ij}`.
+Pure pointwise algebra: substitute the component metric-compatibility
+`∂ₖG_{ij} = Σₘ (G_{mj}Γᵐ_{ki} + G_{im}Γᵐ_{kj})` (`partialDeriv_chartGramOnE_eq`) on
+the left and the component formula `chartCoord_chartChristoffelContraction` on the
+right; the four-index sums coincide after reindexing. This is the identity that
+makes `d/dt⟨V,W⟩ = ⟨D_tV,W⟩ + ⟨V,D_tW⟩` once the chain rule supplies the velocity
+`u = γ̇`. -/
+theorem chartGram_dirDeriv_eq_christoffel_correction (g : RiemannianMetric I M) (α : M)
+    (u v w : E) (y : E)
+    (hy : (extChartAt I α).symm y ∈ (trivializationAt E (TangentSpace I) α).baseSet) :
+    ∑ i, ∑ j, Geodesic.chartCoord (E := E) i v * Geodesic.chartCoord (E := E) j w *
+        (∑ k, Geodesic.chartCoord (E := E) k u
+          * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) y)
+      = ∑ i, ∑ j,
+          (Geodesic.chartCoord (E := E) i (Geodesic.chartChristoffelContraction (I := I) g α u v y)
+              * Geodesic.chartCoord (E := E) j w
+            + Geodesic.chartCoord (E := E) i v
+              * Geodesic.chartCoord (E := E) j
+                  (Geodesic.chartChristoffelContraction (I := I) g α u w y))
+          * chartGramOnE (I := I) g α i j y := by
+  classical
+  -- Expand the component Christoffel contractions on the right.
+  simp_rw [chartCoord_chartChristoffelContraction]
+  -- Expand the directional Gram derivative on the left.
+  simp_rw [partialDeriv_chartGramOnE_eq (I := I) g α _ _ _ y hy]
+  -- A reusable reindexing lemma for a 4-nested sum: permuting the four dummy
+  -- indices according to an equivalence `e` of the product type leaves the total
+  -- sum unchanged.  This is what lets us swap dummies *across* summations, which a
+  -- termwise `Finset.sum_congr` is not allowed to do.
+  have reindex : ∀ (F : Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E)
+        → Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → ℝ)
+      (e : (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+            × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E))
+          ≃ (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+            × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E))),
+      (∑ i, ∑ j, ∑ k, ∑ m, F i j k m)
+        = ∑ i, ∑ j, ∑ k, ∑ m,
+            F (e (i, j, k, m)).1 (e (i, j, k, m)).2.1
+              (e (i, j, k, m)).2.2.1 (e (i, j, k, m)).2.2.2 := by
+    intro F e
+    rw [show (∑ i, ∑ j, ∑ k, ∑ m, F i j k m)
+          = ∑ p : (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+              × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)),
+              F p.1 p.2.1 p.2.2.1 p.2.2.2 by simp only [Fintype.sum_prod_type],
+       show (∑ i, ∑ j, ∑ k, ∑ m,
+            F (e (i, j, k, m)).1 (e (i, j, k, m)).2.1
+              (e (i, j, k, m)).2.2.1 (e (i, j, k, m)).2.2.2)
+          = ∑ p : (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+              × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)),
+              F (e p).1 (e p).2.1 (e p).2.2.1 (e p).2.2.2 by
+        simp only [Fintype.sum_prod_type]]
+    exact (Equiv.sum_comp e (fun p => F p.1 p.2.1 p.2.2.1 p.2.2.2)).symm
+  -- The swap `i ↔ m` of the first and last dummy.
+  let e14 : (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+        × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E))
+      ≃ (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+        × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)) :=
+    { toFun := fun p => (p.2.2.2, p.2.1, p.2.2.1, p.1)
+      invFun := fun p => (p.2.2.2, p.2.1, p.2.2.1, p.1)
+      left_inv := fun p => rfl
+      right_inv := fun p => rfl }
+  -- The swap `j ↔ m` of the second and last dummy.
+  let e24 : (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+        × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E))
+      ≃ (Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)
+        × Fin (Module.finrank ℝ E) × Fin (Module.finrank ℝ E)) :=
+    { toFun := fun p => (p.1, p.2.2.2, p.2.2.1, p.2.1)
+      invFun := fun p => (p.1, p.2.2.2, p.2.2.1, p.2.1)
+      left_inv := fun p => rfl
+      right_inv := fun p => rfl }
+  have he14 : ∀ p, e14 p = (p.2.2.2, p.2.1, p.2.2.1, p.1) := fun _ => rfl
+  have he24 : ∀ p, e24 p = (p.1, p.2.2.2, p.2.2.1, p.2.1) := fun _ => rfl
+  -- Split the LHS into its two halves at the full-sum level (pure distribution of
+  -- `+`, `*` and `∑`, valid termwise in every index).
+  have hL :
+      (∑ i, ∑ j, Geodesic.chartCoord (E := E) i v * Geodesic.chartCoord (E := E) j w *
+          ∑ k, Geodesic.chartCoord (E := E) k u *
+            ∑ m, (chartGramOnE (I := I) g α m j y * chartChristoffel (I := I) g α k i m y
+                + chartGramOnE (I := I) g α i m y * chartChristoffel (I := I) g α k j m y))
+        = (∑ i, ∑ j, ∑ k, ∑ m, Geodesic.chartCoord (E := E) i v
+              * Geodesic.chartCoord (E := E) j w * Geodesic.chartCoord (E := E) k u
+              * chartGramOnE (I := I) g α m j y * chartChristoffel (I := I) g α k i m y)
+          + (∑ i, ∑ j, ∑ k, ∑ m, Geodesic.chartCoord (E := E) i v
+              * Geodesic.chartCoord (E := E) j w * Geodesic.chartCoord (E := E) k u
+              * chartGramOnE (I := I) g α i m y * chartChristoffel (I := I) g α k j m y) := by
+    rw [← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun k _ => ?_
+    rw [Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun m _ => ?_
+    ring
+  -- Split the RHS into its two halves at the full-sum level.
+  have hR :
+      (∑ i, ∑ j,
+          ((∑ k, ∑ m, chartChristoffel (I := I) g α k m i y * Geodesic.chartCoord (E := E) k u
+                  * Geodesic.chartCoord (E := E) m v)
+                * Geodesic.chartCoord (E := E) j w
+            + Geodesic.chartCoord (E := E) i v
+              * ∑ k, ∑ m, chartChristoffel (I := I) g α k m j y
+                  * Geodesic.chartCoord (E := E) k u * Geodesic.chartCoord (E := E) m w)
+            * chartGramOnE (I := I) g α i j y)
+        = (∑ i, ∑ j, ∑ k, ∑ m, chartChristoffel (I := I) g α k m i y
+              * Geodesic.chartCoord (E := E) k u * Geodesic.chartCoord (E := E) m v
+              * Geodesic.chartCoord (E := E) j w * chartGramOnE (I := I) g α i j y)
+          + (∑ i, ∑ j, ∑ k, ∑ m, Geodesic.chartCoord (E := E) i v
+              * chartChristoffel (I := I) g α k m j y * Geodesic.chartCoord (E := E) k u
+              * Geodesic.chartCoord (E := E) m w * chartGramOnE (I := I) g α i j y) := by
+    rw [← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    simp only [add_mul, Finset.sum_mul, Finset.mul_sum]
+    refine congrArg₂ (· + ·) ?_ ?_
+    · exact Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun m _ => by ring
+    · exact Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun m _ => by ring
+  rw [hL, hR]
+  -- Match the two halves separately, each via the appropriate full-sum reindex.
+  congr 1
+  · -- First halves coincide after the `i ↔ m` swap.
+    rw [reindex (fun i j k m => Geodesic.chartCoord (E := E) i v
+        * Geodesic.chartCoord (E := E) j w * Geodesic.chartCoord (E := E) k u
+        * chartGramOnE (I := I) g α m j y * chartChristoffel (I := I) g α k i m y) e14]
+    refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ =>
+      Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun m _ => ?_
+    rw [he14]
+    ring
+  · -- Second halves coincide after the `j ↔ m` swap.
+    rw [reindex (fun i j k m => Geodesic.chartCoord (E := E) i v
+        * Geodesic.chartCoord (E := E) j w * Geodesic.chartCoord (E := E) k u
+        * chartGramOnE (I := I) g α i m y * chartChristoffel (I := I) g α k j m y) e24]
+    refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ =>
+      Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun m _ => ?_
+    rw [he24]
+    ring
+
+/-! ### Metric-compatibility of the covariant derivative along a curve
+
+The analysis glue assembling `d/dt⟨V,W⟩ = ⟨D_tV,W⟩ + ⟨V,D_tW⟩` from the algebraic
+heart `chartGram_dirDeriv_eq_christoffel_correction`. -/
+
+omit [InnerProductSpace ℝ E] [NeZero (Module.finrank ℝ E)] in
+/-- **Math.** Componentwise derivative of a differentiable `E`-valued curve. If
+`F : ℝ → E` has derivative `F'` at `t₀`, then its `i`-th chart component
+`Geodesic.chartCoord i ∘ F` has derivative `Geodesic.chartCoord i F'` at `t₀`
+(the `i`-th coordinate is a continuous linear functional). -/
+private theorem hasDerivAt_chartCoord_of_hasDerivAt
+    {F : ℝ → E} {F' : E} {t₀ : ℝ} (hF : HasDerivAt F F' t₀)
+    (i : Fin (Module.finrank ℝ E)) :
+    HasDerivAt (fun t => Geodesic.chartCoord (E := E) i (F t))
+      (Geodesic.chartCoord (E := E) i F') t₀ := by
+  have hCLM := ((Module.finBasis ℝ E).coord i).toContinuousLinearMap.hasFDerivAt
+    (x := F t₀)
+  have := hCLM.comp_hasDerivAt t₀ hF
+  simpa only [Function.comp_def, Geodesic.chartCoord, ContinuousLinearMap.coe_coe,
+    LinearMap.coe_toContinuousLinearMap', Module.Basis.coord_apply] using this
+
+/-- **Math.** The Fréchet derivative of `u : E → ℝ` at `y`, applied to a vector
+`a : E`, is the `chartCoord`-weighted sum of its chart partial derivatives:
+`fderiv u y a = Σ_k aᵏ · ∂_k u y`. Expand `a` in the chart basis and use linearity
+of `fderiv u y`. -/
+private theorem fderiv_eq_sum_chartCoord_partialDeriv
+    (u : E → ℝ) (y : E) (a : E) :
+    fderiv ℝ u y a
+      = ∑ k, Geodesic.chartCoord (E := E) k a * partialDeriv (E := E) k u y := by
+  conv_lhs => rw [← (Module.finBasis ℝ E).sum_repr a, map_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [map_smul, smul_eq_mul, partialDeriv, Geodesic.chartCoord_def]
+
+/-- **Math.** Chain rule for the chart Gram factor along a curve. Let `α : M`,
+`c : ℝ → E` differentiable at `t₀` with `c t₀ ∈ (extChartAt I α).target`. Then the
+Gram entry pulled along `c`, `t ↦ chartGramOnE g α i j (c t)`, has derivative
+`Σ_k (deriv c t₀)ᵏ · ∂_k (chartGramOnE g α i j) (c t₀)` at `t₀`. The chart Gram
+entry is `C^∞` on the target (`chartGramOnE_contDiffOn`), hence differentiable at
+`c t₀`; the chain rule then converts to the `chartCoord`-weighted partial
+derivative sum. -/
+private theorem hasDerivAt_chartGramOnE_comp [ModelWithCorners.Boundaryless I]
+    (g : RiemannianMetric I M) (α : M) (i j : Fin (Module.finrank ℝ E))
+    {c : ℝ → E} {t₀ : ℝ} (hc : DifferentiableAt ℝ c t₀)
+    (hmem : c t₀ ∈ (extChartAt I α).target) :
+    HasDerivAt (fun t => chartGramOnE (I := I) g α i j (c t))
+      (∑ k, Geodesic.chartCoord (E := E) k (deriv c t₀)
+        * partialDeriv (E := E) k (chartGramOnE (I := I) g α i j) (c t₀)) t₀ := by
+  have htgt : (extChartAt I α).target ∈ nhds (c t₀) :=
+    (isOpen_extChartAt_target (I := I) α).mem_nhds hmem
+  have hGdiff : DifferentiableAt ℝ (chartGramOnE (I := I) g α i j) (c t₀) :=
+    ((chartGramOnE_contDiffOn (I := I) g α i j).differentiableOn (by simp)
+      _ hmem).differentiableAt htgt
+  have hcomp := hGdiff.hasFDerivAt.comp_hasDerivAt t₀ hc.hasDerivAt
+  rw [← fderiv_eq_sum_chartCoord_partialDeriv (chartGramOnE (I := I) g α i j) (c t₀)
+    (deriv c t₀)]
+  exact hcomp
+
 end Riemannian
