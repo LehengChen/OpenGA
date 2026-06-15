@@ -27,6 +27,7 @@ curve*, which is exactly what those cannot express.
 
 open Bundle
 open scoped Manifold ContDiff
+open Riemannian.Tensor
 
 namespace Riemannian
 
@@ -160,5 +161,29 @@ theorem covDerivAlongCurve_smul_scalar (g : RiemannianMetric I M) (γ : ℝ → 
         + f t₀ • (D + G) := by rw [smul_add]; abel
   rw [hre, map_add, map_smul, map_smul,
     (trivializationAt E (TangentSpace I) (γ t₀)).symmL_continuousLinearMapAt hbase]
+
+/-- **Math.** **Metric inner product in chart coordinates (bilinear form).** The
+inner product of two linear combinations of chart-basis vectors is the Gram-matrix
+bilinear form of the coefficient vectors:
+`⟨Σᵢ aᵢ eᵢ, Σⱼ bⱼ eⱼ⟩_g = Σᵢ Σⱼ aᵢ bⱼ G_{ij}`. The bilinear companion of
+`chartGramMatrix_dotProduct_mulVec` (which is the `a = b` quadratic case); the
+inner-product-in-coordinates bridge feeding the metric-compatibility of `D_t`. -/
+theorem metricInner_chartBasis_combination (g : RiemannianMetric I M) (α : M) (x : M)
+    (a b : Fin (Module.finrank ℝ E) → ℝ) :
+    g.metricInner x (∑ i, a i • chartBasisVecFiber (I := I) α i x)
+        (∑ j, b j • chartBasisVecFiber (I := I) α j x)
+      = ∑ i, ∑ j, a i * b j * chartGramMatrix (I := I) g α x i j := by
+  show g.inner x (∑ i, a i • chartBasisVecFiber (I := I) α i x)
+      (∑ j, b j • chartBasisVecFiber (I := I) α j x)
+    = ∑ i, ∑ j, a i * b j * chartGramMatrix (I := I) g α x i j
+  rw [show g.inner x (∑ i, a i • chartBasisVecFiber (I := I) α i x)
+        = ∑ i, a i • g.inner x (chartBasisVecFiber (I := I) α i x) from by
+    rw [map_sum]; exact Finset.sum_congr rfl fun i _ => by rw [map_smul]]
+  rw [ContinuousLinearMap.sum_apply]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [ContinuousLinearMap.smul_apply, map_sum, smul_eq_mul, Finset.mul_sum]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [map_smul, smul_eq_mul, chartGramMatrix_apply]
+  ring
 
 end Riemannian
