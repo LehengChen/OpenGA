@@ -47,7 +47,10 @@ property. Chart-invariance follows from the same `g' = Jᵀ·g·J` argument
 as in `ChartPullback.lean`. Estimated 80-120 LOC. -/
 noncomputable def volumeFormAt (g : RiemannianMetric I M) (x : M) :
     AlternatingMap ℝ (TangentSpace I x) ℝ (Fin (Module.finrank ℝ E)) :=
-  sorry
+  haveI hrank : Module.finrank ℝ (TangentSpace I x) = Module.finrank ℝ E := rfl
+  letI b : Module.Basis (Fin (Module.finrank ℝ E)) ℝ (TangentSpace I x) :=
+    (Module.finBasis ℝ (TangentSpace I x)).reindex (finCongr hrank)
+  Real.sqrt (Matrix.of fun i j => g.metricInner x (b i) (b j)).det • b.det
 
 @[inherit_doc] scoped[Riemannian]
   notation:max "dV_g[" g ", " x "]" => Riemannian.volumeFormAt g x
