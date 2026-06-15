@@ -53,7 +53,7 @@ open scoped Manifold
 
 namespace Manifold
 
-/-! ## Chart-induced coordinate basis (Proposition 3.15) -/
+/-! ## Chart-induced coordinate basis -/
 
 section ChartBasis
 
@@ -78,7 +78,7 @@ theorem chart_mdifferentiable_of_mem_maximalAtlas
       (show ContMDiffOn I I 1 e.symm e.target from
         contMDiffOn_symm_of_mem_maximalAtlas he).mdifferentiableOn one_ne_zero
 
-/-- **Math.** Proposition 3.15 (2): a smooth chart containing `p` determines the
+/-- **Math.** A smooth chart containing `p` determines the
 coordinate-vector basis of `TangentSpace I p` by transporting the standard basis
 of `EuclideanSpace ℝ (Fin n)` through the inverse chart differential. -/
 noncomputable def chartCoordinateVectorsBasis
@@ -92,7 +92,7 @@ noncomputable def chartCoordinateVectorsBasis
 
 end ChartBasis
 
-/-! ## Tangent coordinate change (Remark 3.15, inlined wrapper)
+/-! ## Tangent coordinate change (inlined wrapper)
 
 `tangent_coordinates_change` is the Mathlib-only thin wrapper from
 `Remark_3_15_extra_4`: it identifies the trivialization coordinate change of the
@@ -111,10 +111,10 @@ variable
   {I : ModelWithCorners 𝕜 E H}
   {M : Type uM} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I 1 M]
 
-/-- **Math.** Remark 3.15-extra-4: changing tangent coordinates from the chart
+/-- **Math.** Changing tangent coordinates from the chart
 centered at `x` to the chart centered at `y` is given by the tangent
 coordinate-change linear map `tangentCoordChange I x y z`, the basis-free form of
-the component transformation law (3.12). -/
+the component transformation law. -/
 theorem tangent_coordinates_change
     {x y z : M} (hxy : z ∈ (chartAt H x).source ∩ (chartAt H y).source) :
     (trivializationAt E (TangentSpace I) x).coordChangeL 𝕜
@@ -126,7 +126,7 @@ theorem tangent_coordinates_change
 
 end CoordChange
 
-/-! ## Coordinate tangent vectors (Definition 3.18-extra-4) -/
+/-! ## Coordinate tangent vectors -/
 
 section Coordinate
 
@@ -141,7 +141,7 @@ variable
 
 variable (I)
 
-/-- **Math.** Definition 3.18-extra-4: a coordinate tangent vector at `p` is a
+/-- **Math.** A coordinate tangent vector at `p` is a
 choice of model-space component in every preferred chart containing `p`,
 compatible under the tangent-coordinate change maps on overlaps. This is the
 coordinate-family view of the canonical tangent space `TangentSpace I p`, not a
