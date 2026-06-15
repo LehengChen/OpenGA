@@ -20,7 +20,7 @@ This file packages:
 
 * `chartChristoffelContraction g α v w y` — the `E`-valued contraction
   `(v^i, w^j) ↦ ∑_k (∑_{ij} Γ^k_{ij}(g, α)(y) · v^i · w^j) e_k`, where
-  `e_k = chartModelBasis E k` is the fixed model-space basis used
+  `e_k = Module.finBasis ℝ E k` is the fixed model-space basis used
   consistently throughout the project's chart-local pipeline.
 
 * `geodesicVectorField g p` — the second-order vector field on the tangent
@@ -82,12 +82,12 @@ variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M
 
 
 /-- The `i`-th chart-basis coordinate of a vector `v : E`, taken with respect
-to the canonical chart-model basis `chartModelBasis E`. -/
+to the canonical chart-model basis `Module.finBasis ℝ E`. -/
 def chartCoord (i : Fin (Module.finrank ℝ E)) (v : E) : ℝ :=
-  (chartModelBasis E).repr v i
+  (Module.finBasis ℝ E).repr v i
 
 @[simp] lemma chartCoord_def (i : Fin (Module.finrank ℝ E)) (v : E) :
-    chartCoord (E := E) i v = (chartModelBasis E).repr v i := rfl
+    chartCoord (E := E) i v = (Module.finBasis ℝ E).repr v i := rfl
 
 lemma chartCoord_smul (i : Fin (Module.finrank ℝ E)) (a : ℝ) (v : E) :
     chartCoord (E := E) i (a • v) = a * chartCoord (E := E) i v := by
@@ -108,7 +108,7 @@ def chartChristoffelContraction (g : RiemannianMetric I M) (α : M)
     (∑ i : Fin (Module.finrank ℝ E), ∑ j : Fin (Module.finrank ℝ E),
         chartChristoffel (I := I) g α i j k y *
           chartCoord (E := E) i v * chartCoord (E := E) j w) •
-      chartModelBasis E k
+      Module.finBasis ℝ E k
 
 @[simp] lemma chartChristoffelContraction_def
     (g : RiemannianMetric I M) (α : M) (v w : E) (y : E) :
@@ -117,7 +117,7 @@ def chartChristoffelContraction (g : RiemannianMetric I M) (α : M)
         (∑ i : Fin (Module.finrank ℝ E), ∑ j : Fin (Module.finrank ℝ E),
             chartChristoffel (I := I) g α i j k y *
               chartCoord (E := E) i v * chartCoord (E := E) j w) •
-          chartModelBasis E k := rfl
+          Module.finBasis ℝ E k := rfl
 
 /-- The Christoffel contraction is symmetric in its vector arguments,
 inherited from the symmetry of `chartChristoffel` in its lower indices. -/
@@ -707,11 +707,11 @@ lemma chartChristoffelContraction_scalarCoeff_contMDiffOn
       (chartFiberCoord (I := I) (α := α)) (geodesicChartDomain (I := I) α) :=
     chartFiberCoord_contMDiffOn (I := I) α
   have hCLM_i : ContMDiff 𝓘(ℝ, E) 𝓘(ℝ) ∞
-      (((chartModelBasis E).coord i).toContinuousLinearMap) :=
-    (((chartModelBasis E).coord i).toContinuousLinearMap).contMDiff
+      (((Module.finBasis ℝ E).coord i).toContinuousLinearMap) :=
+    (((Module.finBasis ℝ E).coord i).toContinuousLinearMap).contMDiff
   have hCLM_j : ContMDiff 𝓘(ℝ, E) 𝓘(ℝ) ∞
-      (((chartModelBasis E).coord j).toContinuousLinearMap) :=
-    (((chartModelBasis E).coord j).toContinuousLinearMap).contMDiff
+      (((Module.finBasis ℝ E).coord j).toContinuousLinearMap) :=
+    (((Module.finBasis ℝ E).coord j).toContinuousLinearMap).contMDiff
   have hci : ContMDiffOn I.tangent 𝓘(ℝ) ∞
       (fun p : TangentBundle I M => chartCoord (E := E) i (chartFiberCoord (I := I) α p))
       (geodesicChartDomain (I := I) α) := by
@@ -740,7 +740,7 @@ lemma chartChristoffelContraction_chartFiber_contMDiffOn
   refine contMDiffOn_finset_sum (fun k _ => ?_)
   have hscalar := chartChristoffelContraction_scalarCoeff_contMDiffOn (I := I) g α k
   have hconst : ContMDiffOn I.tangent 𝓘(ℝ, E) ∞
-      (fun _ : TangentBundle I M => (chartModelBasis E) k)
+      (fun _ : TangentBundle I M => (Module.finBasis ℝ E) k)
       (geodesicChartDomain (I := I) α) := contMDiffOn_const
   exact hscalar.smul hconst
 

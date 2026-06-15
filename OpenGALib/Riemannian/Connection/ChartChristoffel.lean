@@ -1,4 +1,4 @@
-import OpenGALib.Riemannian.Metric.ChartGram
+import OpenGALib.Riemannian.TensorBundle.MusicalIso
 
 /-!
 # Chart-coordinate Christoffel symbols
@@ -8,8 +8,11 @@ computed directly from the metric Gram matrix in coordinates via the textbook
 formula `Γᵏ_{ij} = ½ Gᵏˡ (∂ᵢG_{lj} + ∂ⱼG_{li} − ∂_lG_{ij})`. These coordinate
 symbols are what the geodesic equation `γ'' = −Γ(γ', γ')` is written against.
 
-Migrated from `external/differential-geometry` (reference only) onto OpenGALib's
-own `RiemannianMetric`; self-contained on `Metric/ChartGram` + Mathlib.
+Built on OpenGALib's existing chart-Gram foundation (`TensorBundle/MusicalIso`:
+`chartGramMatrix`, `chartInvGramMatrix` and their smoothness, in the
+`Module.finBasis ℝ E` chart frame). Migrated from `external/differential-geometry`
+(reference only) and **rebased onto the existing Gram infrastructure** rather
+than duplicating it.
 
 Reference: do Carmo Ch.2; Lee, *Riemannian Manifolds* Ch.5.
 -/
@@ -21,23 +24,21 @@ open scoped Manifold Topology ContDiff Matrix
 
 namespace Riemannian
 
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+open Riemannian.Tensor
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [NeZero (Module.finrank ℝ E)]
 variable {H : Type*} [TopologicalSpace H] {I : ModelWithCorners ℝ E H}
 variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
 
-/-- The partial derivative of `u : E → ℝ` at `y` along the `i`-th model-basis
-vector `(chartModelBasis E) i`. -/
+/-- **Math.** The partial derivative of `u : E → ℝ` at `y` along the `i`-th
+chart-frame basis vector `(Module.finBasis ℝ E) i` (the same basis underlying
+`chartGramMatrix`). -/
 def partialDeriv (i : Fin (Module.finrank ℝ E)) (u : E → ℝ) (y : E) : ℝ :=
-  fderiv ℝ u y ((chartModelBasis E) i)
+  fderiv ℝ u y ((Module.finBasis ℝ E) i)
 
-/-- The inverse Gram matrix at `(α, x)`: the matrix inverse of the
-positive-definite Gram matrix on the chart base set (default off it). -/
-def chartInvGramMatrix (g : RiemannianMetric I M) (α : M) (x : M) :
-    Matrix (Fin (Module.finrank ℝ E)) (Fin (Module.finrank ℝ E)) ℝ :=
-  (chartGramMatrix (I := I) g α x)⁻¹
-
-/-- The chart Gram entry `G_{ij}(α, ·)` pulled back to the chart target via the
-chart inverse. -/
+/-- **Math.** The chart Gram entry `G_{ij}(α, ·)` pulled back to the chart target
+via the chart inverse. -/
 def chartGramOnE (g : RiemannianMetric I M) (α : M)
     (i j : Fin (Module.finrank ℝ E)) : E → ℝ :=
   fun y => chartGramMatrix (I := I) g α ((extChartAt I α).symm y) i j
@@ -48,7 +49,7 @@ def chartGramOnE (g : RiemannianMetric I M) (α : M)
     chartGramOnE (I := I) g α i j y =
       chartGramMatrix (I := I) g α ((extChartAt I α).symm y) i j := rfl
 
-/-- Symmetry of the chart Gram entries pulled back to `E`. -/
+/-- **Math.** Symmetry of the chart Gram entries pulled back to `E`. -/
 lemma chartGramOnE_symm
     (g : RiemannianMetric I M) (α : M)
     (i j : Fin (Module.finrank ℝ E)) (y : E) :
@@ -57,9 +58,10 @@ lemma chartGramOnE_symm
   rw [chartGramMatrix_apply, chartGramMatrix_apply]
   exact g.symm _ _ _
 
-/-- The chart-coordinate **Christoffel symbol** of the second kind at `α`:
-`Γᵏ_{ij}(g, α)(y) = ½ Σ_l Gᵏˡ(α, x_y) (∂ᵢG_{lj} + ∂ⱼG_{li} − ∂_lG_{ij})(y)`,
-with `x_y := (extChartAt I α).symm y`. -/
+/-- **Math.** The chart-coordinate **Christoffel symbol** of the second kind at
+`α`: `Γᵏ_{ij}(g, α)(y) = ½ Σ_l Gᵏˡ(α, x_y) (∂ᵢG_{lj} + ∂ⱼG_{li} − ∂_lG_{ij})(y)`,
+with `x_y := (extChartAt I α).symm y`, using the existing `chartGramMatrix` /
+`chartInvGramMatrix`. -/
 def chartChristoffel (g : RiemannianMetric I M) (α : M)
     (i j k : Fin (Module.finrank ℝ E)) (y : E) : ℝ :=
   (1 / 2 : ℝ) * ∑ l : Fin (Module.finrank ℝ E),
@@ -78,7 +80,7 @@ def chartChristoffel (g : RiemannianMetric I M) (α : M)
            partialDeriv (E := E) j (chartGramOnE (I := I) g α l i) y -
            partialDeriv (E := E) l (chartGramOnE (I := I) g α i j) y) := rfl
 
-/-- **Symmetry of the Christoffel symbol** in the lower indices — the
+/-- **Math.** **Symmetry of the Christoffel symbol** in the lower indices — the
 torsion-free property of the Levi-Civita connection, read off the coordinate
 formula. -/
 theorem chartChristoffel_symm
