@@ -39,9 +39,28 @@ the chart helpers (`extChartAt_source_eq_chartAt_source`,
 reparametrization (shift / time-reversal), chart-fixed smoothness. v4.30 deriv
 drift fixed via `import Mathlib.Analysis.Calculus.Deriv.{Add,Shift}`.
 
+**⚠ Dedup lesson (2026-06-14):** the first geodesic-foundation pass *duplicated*
+existing OpenGALib infrastructure. OpenGALib already had the full chart-Gram
+stack — `TensorBundle/MusicalIso` (`chartGramMatrix`, `chartInvGramMatrix`,
+Hermitian/posDef/det/adjugate/inverse **smoothness**) and `SmoothOrthoFrame/
+ChartBasis` (`chartBasisVecFiber`, on `Module.finBasis ℝ E`). The migrated
+`Metric/ChartGram.lean` and the adjugate/inverse smoothness in
+`ChartChristoffelSmooth` were duplicates on a parallel `chartModelBasis` frame.
+**Fixed**: deleted `ChartGram.lean`, rebased `ChartChristoffel{,Smooth}` and
+`Geodesic/Equation` onto the existing `MusicalIso` Gram + `Module.finBasis`
+frame. **Rule going forward: before lifting any external file, grep OpenGALib
+for the symbols it defines; reuse, don't duplicate.**
+
+**Deduped state (committed, 0 sorry):** genuinely-new content only —
+`Connection/ChartChristoffel` (`chartGramOnE`, `chartChristoffel` +symm,
+`partialDeriv`), `Connection/ChartChristoffelSmooth` (pulled-back smoothness +
+`chartChristoffel_contDiffOn_interior` + chart helpers), `Geodesic/Equation`
+(`IsGeodesic`, `HasGeodesicEquationAt`, …), all on existing OpenGALib foundation.
+
 **Next:** rest of `Geometry/Geodesic` bottom-up — `Existence`, `Uniqueness`,
 `MaximalInterval`, `SmoothFlow` (consumes the migrated `Analysis.ODE.Flow`),
-then the `Geometry/Exponential` layer (`expMap`, smoothness, Gauss lemma).
+then the `Geometry/Exponential` layer (`expMap`, smoothness, Gauss lemma) —
+**grepping OpenGALib for each file's symbols first.**
 
 ---
 
