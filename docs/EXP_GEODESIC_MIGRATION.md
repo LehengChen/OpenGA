@@ -1,5 +1,38 @@
 # Exponential-map / geodesic layer migration — scope, cone, staged plan
 
+## Target: the COMPLETE Bishop–Gromov volume-comparison proof (Moqian, 2026-06-14)
+
+Full formalization, no interface shortcuts. **Verified critical fact:** external
+provides the exp map + geodesics + the *metric* Gauss lemma (minimizing
+geodesics / normal balls) + ODE & chart-Jacobian smoothness — but **does NOT
+contain** the actual BG-key steps (a full-library grep found none): the smooth
+eikonal `|∇r|²=1`, the volume Jacobian `∂_t log J = Δr`, the geodesic-polar
+volume formula, or Bishop–Gromov itself. So those are **build-ourselves** on top
+of the migrated exp foundation.
+
+**Critical path to `bishopGromov_volume_comparison`:**
+
+| Step | Source |
+|---|---|
+| ODE smooth-dependence bedrock | migrate external — **DONE** |
+| geodesic equation `γ''=−Γ(γ',γ')` | migrate external — **DONE** |
+| geodesic existence / uniqueness / smoothness | migrate external (dedup-checked) |
+| `expMap` def + smoothness + local diffeo | migrate external (dedup-checked) |
+| metric Gauss lemma (radial minimizer, normal ball) | migrate external (dedup-checked) |
+| **smooth eikonal `\|∇r\|²=1`** | **build ourselves** (from Gauss lemma) |
+| `d(expₚ)` = Jacobi field, **volume Jacobian `J(t,ξ)`** | **build ourselves** |
+| **Laplacian comparison `Δr ≤ m_K`** | eikonal + `bochner_radial_riccati` ✅ + `riccati_le_model` ✅ |
+| **`∂_t log J = Δr`** and `J ≤ J_K` | **build ourselves** |
+| **geodesic-polar volume + ratio monotonicity** | **build ourselves** + migrated divergence thm |
+| `bishopGromov_volume_comparison` | assemble |
+
+The Riccati/analytic core (`riccati_le_model`, `bochner_radial_riccati`,
+`RefinedCauchySchwarz`) is already proved (0 sorry). chartChristoffel and the
+geodesic/exp foundation are *necessary scaffolding* below these — not BG-key
+steps themselves; the BG-key steps are the **build-ourselves** rows.
+
+---
+
 **Status (2026-06-14):** scoping complete. **Stage 2 (ODE bedrock) DONE** —
 `OpenGALib/Analysis/ODE/Flow/` (8 files, 0 sorry, 0 version drift): the
 Picard–Lindelöf variational equation + C1/Ck flow regularity, self-contained on
