@@ -1,7 +1,7 @@
 # `scripts/`
 
 Reusable codemods + dev helpers for OpenGALib refactor workflows.
-Sister to `docs/REFACTOR_PLAYBOOK.md` (which documents the decision
+Sister to `docs/archive/REFACTOR_PLAYBOOK.md` (archived; documents the decision
 tree for *which* tool to reach for).
 
 ## Available scripts

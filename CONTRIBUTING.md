@@ -25,7 +25,7 @@ merged contributions but liberally relaxable for sketches / WIP / drafts.
 
 1. **Read `docs/NAMING_CONVENTION.md`** before opening a PR. It's
    enforced by reviewers.
-2. **Skim `docs/REFACTOR_PLAYBOOK.md`** if your change touches more
+2. **Skim `docs/archive/REFACTOR_PLAYBOOK.md`** if your change touches more
    than one file. The playbook describes the verifiable-object
    consolidation pattern, programmatic bulk-edit recipes, and the
    pitfalls we've encountered.
@@ -71,7 +71,7 @@ merged contributions but liberally relaxable for sketches / WIP / drafts.
 | File / namespace structure | `docs/NAMING_CONVENTION.md` §7-§9 |
 | `@[simp]` / `@[ext]` policy | `docs/NAMING_CONVENTION.md` (Phase 5 deferred — apply conservatively) |
 | Engineering hiding | `docs/NAMING_CONVENTION.md` §7 (`private`, `where`-aux) |
-| Bulk codemods | `docs/REFACTOR_PLAYBOOK.md` + `scripts/` |
+| Bulk codemods | `docs/archive/REFACTOR_PLAYBOOK.md` + `scripts/` |
 
 In short: **textbook-clean math API at the surface, engineering
 hidden underneath**. If a reader of the API has to scroll past
