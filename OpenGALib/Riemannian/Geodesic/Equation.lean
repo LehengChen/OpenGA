@@ -97,6 +97,10 @@ lemma chartCoord_zero (i : Fin (Module.finrank ℝ E)) :
     chartCoord (E := E) i (0 : E) = 0 := by
   simp [chartCoord]
 
+lemma chartCoord_add (i : Fin (Module.finrank ℝ E)) (v w : E) :
+    chartCoord (E := E) i (v + w) = chartCoord (E := E) i v + chartCoord (E := E) i w := by
+  simp [chartCoord, map_add]
+
 /-- **Math.** The chart-coordinate Christoffel contraction. As a function of the
 vector arguments `v, w : E`, this is the bilinear expression
 $$\Gamma(g, \alpha)(v, w)(y) = \sum_k \Big(\sum_{i, j}
@@ -199,6 +203,45 @@ lemma chartChristoffelContraction_neg
   have hneg : (-v : E) = ((-1 : ℝ) • v) := (neg_one_smul ℝ v).symm
   rw [hneg, chartChristoffelContraction_smul_smul (I := I) g α (-1 : ℝ) v y]
   norm_num
+
+/-- **Math.** Additivity of the Christoffel contraction in its second vector slot:
+`Γ(u, v + w)(y) = Γ(u, v)(y) + Γ(u, w)(y)`. -/
+lemma chartChristoffelContraction_add_right (g : RiemannianMetric I M) (α : M)
+    (u v w : E) (y : E) :
+    chartChristoffelContraction (I := I) g α u (v + w) y =
+      chartChristoffelContraction (I := I) g α u v y
+      + chartChristoffelContraction (I := I) g α u w y := by
+  classical
+  unfold chartChristoffelContraction
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl (fun k _ => ?_)
+  rw [← add_smul]
+  congr 1
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl (fun i _ => ?_)
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl (fun j _ => ?_)
+  rw [chartCoord_add]
+  ring
+
+/-- **Math.** Homogeneity of the Christoffel contraction in its second vector slot:
+`Γ(u, a • w)(y) = a • Γ(u, w)(y)`. -/
+lemma chartChristoffelContraction_smul_right (g : RiemannianMetric I M) (α : M)
+    (u : E) (a : ℝ) (w : E) (y : E) :
+    chartChristoffelContraction (I := I) g α u (a • w) y =
+      a • chartChristoffelContraction (I := I) g α u w y := by
+  classical
+  unfold chartChristoffelContraction
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun k _ => ?_)
+  rw [smul_smul]
+  congr 1
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun i _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun j _ => ?_)
+  rw [chartCoord_smul]
+  ring
 
 /-- **Math.** The geodesic vector field on the tangent bundle, written in the
 canonical chart at the foot point `p.proj`. The first component is the
