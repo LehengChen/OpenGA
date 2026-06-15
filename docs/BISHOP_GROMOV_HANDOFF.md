@@ -32,6 +32,15 @@ Precise CH21 line map is in `docs/EXP_GEODESIC_MIGRATION.md`.
   - `Comparison/BishopGromov/VolumeMonotone.lean` — `ratio_intervalIntegral_le`:
     `A/B` antitone + `B>0` ⟹ `(∫₀ᴿA)/(∫₀ᴿB)` antitone. CH21 "monotone average
     integral", weighted form, pivot on `q(r)` (no double integral).
+  - `Comparison/BishopGromov/PolarVolumeReduction.lean` — `ratio_spaceFormBallVolume_le`
+    (**step 1 done, 0 sorry**): adapts the monotonicity engine to the model ball
+    volume. Unfolds `spaceFormBallVolume n K R = (n·ωₙ)·∫₀ᴿ B_K`, splits off the
+    dimensional constant `n·ωₙ ≥ 0` (via the private `div_mul_const_le`, keeping
+    the constant an opaque parameter so `div_mul_eq_div_div_swap` cannot re-split
+    it), and discharges `B_K = max(0,s_K)^(n-1) > 0` (`snakeFunction_pos` +
+    `mem_spaceFormAdmissibleRadii_of_le`, the new downward-closure lemma added to
+    `SnakeCalculus`) and `B_K` interval-integrable (continuity). Pure analysis,
+    no geometry — the analytic glue feeding the headline.
 
 ### Geometry foundation (migration from `external/differential-geometry`, reference-only)
 - **ODE smooth-dependence bedrock**: `OpenGALib/Analysis/ODE/Flow/` (8 files) —
@@ -79,14 +88,17 @@ expMap (✅ def + local diffeo at 0)
 
 ## RECOMMENDED NEXT STEPS (in order)
 
-1. **Small reachable 0-sorry adapter (was mid-flight, not started):** in a new
-   `Comparison/BishopGromov/PolarVolumeReduction.lean`, prove that
-   `(∫₀ᴿ A)/(spaceFormBallVolume n K R)` is antitone given `A / (model area
-   density)` antitone — by unfolding `spaceFormBallVolume n K R =
-   n·ωₙ·∫₀ᴿ max(0,s_K)^(n-1) = ∫₀ᴿ B_K` (`intervalIntegral.integral_const_mul`)
-   and applying `ratio_intervalIntegral_le`. Needs `snakeFunction_pos`
-   (have, `SnakeCalculus`) for `B_K>0` on the window. This is the headline's
-   analytic glue, reachable now, no geometry. (See `SpaceForm.spaceFormBallVolume`.)
+1. ~~**Small reachable 0-sorry adapter:**~~ **DONE** — `ratio_spaceFormBallVolume_le`
+   in `Comparison/BishopGromov/PolarVolumeReduction.lean`. Implementation notes
+   for the next consumer: the model density `B_K` divides out *with* the constant
+   `n·ωₙ` already inside `spaceFormBallVolume`, so the lemma's hypotheses are
+   exactly `r,R ∈ spaceFormAdmissibleRadii K`, `r ≤ R`,
+   `IntervalIntegrable A volume 0 R`, and `AntitoneOn (A / B_K) (Ioc 0 R)`; it
+   concludes `(∫₀ᴿA)/V_K^n(R) ≤ (∫₀ʳA)/V_K^n(r)`. Step [C] must supply the radial
+   density `A(t)` (geodesic-sphere area), prove it integrable, and prove the
+   pointwise `A/B_K` antitonicity (from `laplacian_comparison`); then this lemma
+   closes the analytic side and `bishopGromov_volume_comparison` only needs the
+   polar volume identity `vol B(p,R) = ∫₀ᴿ A`.
 2. **The big chunk — migrate `ExpVariationSmooth` + its `Comparison/Variation`
    cone** (~25k new lines, bottom-up: parallel-transport-along-curve →
    first/second variation → IntrinsicExp → ExpVariationSmooth). This unblocks

@@ -149,6 +149,15 @@ theorem snakeFunction_pos {K r : ℝ} (hr : r ∈ spaceFormAdmissibleRadii K) :
     rw [if_neg hK] at hr
     exact hr
 
+/-- **Math.** The admissible radius window is downward closed toward `0`: if `R`
+is admissible and `0 < s ≤ R`, then `s` is admissible. -/
+theorem mem_spaceFormAdmissibleRadii_of_le {K s R : ℝ} (hs : 0 < s) (hsR : s ≤ R)
+    (hR : R ∈ spaceFormAdmissibleRadii K) : s ∈ spaceFormAdmissibleRadii K := by
+  unfold spaceFormAdmissibleRadii at hR ⊢
+  split_ifs at hR ⊢ with hK
+  · exact ⟨hs, lt_of_le_of_lt hsR hR.2⟩
+  · exact hs
+
 /-- **Math.** The admissible radius window is convex. -/
 theorem convex_spaceFormAdmissibleRadii (K : ℝ) :
     Convex ℝ (spaceFormAdmissibleRadii K) := by

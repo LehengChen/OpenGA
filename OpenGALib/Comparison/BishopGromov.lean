@@ -1,6 +1,8 @@
 import OpenGALib.Comparison.BishopGromov.RiccatiComparison
 import OpenGALib.Comparison.BishopGromov.RadialRiccati
 import OpenGALib.Comparison.BishopGromov.LaplacianComparison
+import OpenGALib.Comparison.BishopGromov.VolumeMonotone
+import OpenGALib.Comparison.BishopGromov.PolarVolumeReduction
 import OpenGALib.Comparison.BishopGromov.VolumeComparison
 
 /-!
@@ -28,6 +30,14 @@ Proof chain (each layer reduces the next):
   geometric reading of the Riccati comparison (mean curvature of geodesic
   spheres = `Δ_g r`), turning the Ricci bound into volume-element growth.
   *Stated; proof pending.*
+* `VolumeMonotone.lean` — `ratio_intervalIntegral_le`: the purely analytic
+  volume-ratio monotonicity engine (`A/B ↓` and `B>0` ⟹ `(∫₀ᴿA)/(∫₀ᴿB) ↓`).
+  *Proved (0 sorry).*
+* `PolarVolumeReduction.lean` — `ratio_spaceFormBallVolume_le`: adapts the
+  monotonicity engine to the model ball volume `spaceFormBallVolume`, splitting
+  off the dimensional constant `n · ωₙ` and discharging positivity/integrability
+  of the model area density `B_K = max(0,s_K)^(n-1)` on the admissible window.
+  This is the analytic glue feeding the headline; no geometry. *Proved (0 sorry).*
 * `VolumeComparison.lean` — the headline `bishopGromov_volume_comparison`,
   obtained by integrating the Laplacian comparison in geodesic polar
   coordinates (uses the migrated closed-manifold divergence theorem).
