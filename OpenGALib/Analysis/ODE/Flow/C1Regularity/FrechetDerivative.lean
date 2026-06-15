@@ -1,6 +1,8 @@
 import OpenGALib.Analysis.ODE.Flow.C1Regularity.VariationalSolutionOperator
 import Mathlib.Analysis.Calculus.MeanValue
 
+set_option linter.unusedSectionVars false
+
 /-!
 # Fréchet differentiability of the flow in the initial condition
 

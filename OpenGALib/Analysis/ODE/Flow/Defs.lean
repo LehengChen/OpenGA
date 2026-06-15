@@ -1,5 +1,7 @@
 import OpenGALib.Analysis.ODE.Flow.Variational
 
+set_option linter.unusedSectionVars false
+
 /-!
 # The $C^1$ flow of a Banach-space ODE
 

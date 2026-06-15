@@ -39,7 +39,7 @@ section Homogeneity
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- The maximal geodesic with initial velocity `c • v` evaluated at time
+/-- **Math.** The maximal geodesic with initial velocity `c • v` evaluated at time
 `0` is the base point `p`. Specialisation of `maximalGeodesic_zero` to
 the scaled velocity. -/
 theorem maximalGeodesic_smul_zero_time
@@ -47,7 +47,7 @@ theorem maximalGeodesic_smul_zero_time
     maximalGeodesic (I := I) g p (c • v) 0 = p :=
   maximalGeodesic_zero (I := I) g p (c • v)
 
-/-- Replacing the initial velocity `v` by `1 • v` leaves the maximal
+/-- **Math.** Replacing the initial velocity `v` by `1 • v` leaves the maximal
 geodesic unchanged. Direct from `one_smul`. -/
 theorem maximalGeodesic_one_velocity
     (g : RiemannianMetric I M) (p : M) (v : TangentSpace I p) (t : ℝ) :

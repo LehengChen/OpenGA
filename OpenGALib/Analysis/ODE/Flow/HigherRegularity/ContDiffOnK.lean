@@ -1,5 +1,7 @@
 import OpenGALib.Analysis.ODE.Flow.C1Regularity.ContDiffOnOne
 
+set_option linter.unusedSectionVars false
+
 /-!
 # `ContDiffOn ℝ k` regularity of the local flow
 

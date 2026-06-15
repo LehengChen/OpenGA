@@ -3,6 +3,8 @@ import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.Analysis.ODE.Basic
 import Mathlib.Analysis.Calculus.ContDiff.RCLike
 
+set_option linter.unusedSectionVars false
+
 /-!
 # The variational ODE on a Banach space
 

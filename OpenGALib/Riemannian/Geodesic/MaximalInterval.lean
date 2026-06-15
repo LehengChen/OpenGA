@@ -74,7 +74,7 @@ variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M
 variable [I.Boundaryless] [CompleteSpace E]
 
 
-/-- `γ` is a geodesic on `s` with initial datum `(p, v)` at time `0` if
+/-- **Math.** `γ` is a geodesic on `s` with initial datum `(p, v)` at time `0` if
 the velocity lift `f` projects to `γ`, satisfies `f 0 = ⟨p, v⟩`, and is an
 integral curve of the chart-fixed geodesic vector field at the chart
 basepoint `p`. The chart basepoint is fixed to be the initial point `p`,
@@ -88,7 +88,7 @@ def IsGeodesicOnWithInitial
     f 0 = (⟨p, v⟩ : TangentBundle I M) ∧
     IsMIntegralCurveOn f (geodesicVectorFieldChart (I := I) g p) s
 
-/-- An initial-data geodesic on `s` is, at every interior point `t` of `s`
+/-- **Math.** An initial-data geodesic on `s` is, at every interior point `t` of `s`
 (i.e. `s ∈ 𝓝 t`) whose foot `γ t` still lies in the base chart-source
 `(chartAt H p).source`, a local spray geodesic `IsGeodesicAt g γ t` with
 chart basepoint `p`. This is the spray-side projection used to feed the
@@ -110,7 +110,7 @@ lemma IsGeodesicOnWithInitial.isGeodesicAt
   refine ⟨p, f, hproj, ?_, hf.isMIntegralCurveAt ht⟩
   rw [hproj t]; exact ht_src
 
-/-- The starting point is forced: if `IsGeodesicOnWithInitial g γ s p v`
+/-- **Math.** The starting point is forced: if `IsGeodesicOnWithInitial g γ s p v`
 holds, then `γ 0 = p`. -/
 lemma IsGeodesicOnWithInitial.start_eq
     {g : RiemannianMetric I M} {γ : ℝ → M} {s : Set ℝ}
@@ -122,7 +122,7 @@ lemma IsGeodesicOnWithInitial.start_eq
   simp [hf0] at h
   exact h.symm
 
-/-- `IsGeodesicOnWithInitial` is monotone in the set. -/
+/-- **Math.** `IsGeodesicOnWithInitial` is monotone in the set. -/
 lemma IsGeodesicOnWithInitial.mono
     {g : RiemannianMetric I M} {γ : ℝ → M} {s s' : Set ℝ}
     {p : M} {v : TangentSpace I p}
@@ -131,7 +131,7 @@ lemma IsGeodesicOnWithInitial.mono
   obtain ⟨f, hproj, hf0, hf⟩ := hγ
   exact ⟨f, hproj, hf0, hf.mono hs⟩
 
-/-- The "membership witness" predicate for the maximal interval: at time
+/-- **Math.** The "membership witness" predicate for the maximal interval: at time
 `t`, there exists a connected open `J ∋ 0, t` and a geodesic with initial
 data `(p, v)` on `J`. Preconnectedness of `J` (i.e., `J` is an interval in
 `ℝ`) is required to enable interval-propagation arguments, e.g.
@@ -145,7 +145,7 @@ def MaximalGeodesicWitness
     IsOpen J ∧ IsPreconnected J ∧ (0 : ℝ) ∈ J ∧ t ∈ J ∧
       IsGeodesicOnWithInitial (I := I) g γ J p v
 
-/-- The maximal interval of definition of a geodesic with initial data
+/-- **Math.** The maximal interval of definition of a geodesic with initial data
 `(p, v)`: the set of times `t : ℝ` admitting an open interval `J ∋ 0, t`
 on which a geodesic with initial data `(p, v)` is defined. -/
 def maximalGeodesicInterval
@@ -153,7 +153,7 @@ def maximalGeodesicInterval
     Set ℝ :=
   {t : ℝ | MaximalGeodesicWitness (I := I) g p v t}
 
-/-- Membership unfolding. -/
+/-- **Math.** Membership unfolding. -/
 lemma mem_maximalGeodesicInterval_iff
     {g : RiemannianMetric I M} {p : M} {v : TangentSpace I p}
     {t : ℝ} :
@@ -161,7 +161,7 @@ lemma mem_maximalGeodesicInterval_iff
       MaximalGeodesicWitness (I := I) g p v t :=
   Iff.rfl
 
-/-- `maximalGeodesicInterval g p v` is open. The key observation: if
+/-- **Math.** `maximalGeodesicInterval g p v` is open. The key observation: if
 `MaximalGeodesicWitness g p v t` holds with witness `(γ, J)`, then for
 every `t' ∈ J` we also have `MaximalGeodesicWitness g p v t'` (with the
 same `(γ, J)`). Hence the maximal interval is locally a superset of an
@@ -179,7 +179,7 @@ theorem maximalGeodesicInterval_isOpen
 section LocalExistence
 
 
-/-- The local geodesic produced by `exists_geodesic_with_initial_velocity_at` provides an open
+/-- **Math.** The local geodesic produced by `exists_geodesic_with_initial_velocity_at` provides an open
 interval `J ∋ 0` on which a geodesic with initial data `(p, v)` exists.
 This is the basic witness for membership of `0` in the maximal interval. -/
 lemma exists_maximalGeodesicWitness_zero
@@ -194,13 +194,13 @@ lemma exists_maximalGeodesicWitness_zero
   · exact (convex_ball (0 : ℝ) ε).isPreconnected
   exact ⟨f, fun _ => rfl, hf0, hf_on⟩
 
-/-- `0` belongs to the maximal interval. -/
+/-- **Math.** `0` belongs to the maximal interval. -/
 theorem zero_mem_maximalGeodesicInterval
     (g : RiemannianMetric I M) (p : M) (v : TangentSpace I p) :
     (0 : ℝ) ∈ maximalGeodesicInterval (I := I) g p v :=
   exists_maximalGeodesicWitness_zero (I := I) g p v
 
-/-- The maximal interval is nonempty. -/
+/-- **Math.** The maximal interval is nonempty. -/
 theorem maximalGeodesicInterval_nonempty
     (g : RiemannianMetric I M) (p : M) (v : TangentSpace I p) :
     (maximalGeodesicInterval (I := I) g p v).Nonempty :=
@@ -211,7 +211,7 @@ end LocalExistence
 section MaximalGeodesicDefinition
 
 
-/-- A local geodesic witness at time `t`, taken via `Classical.choose`
+/-- **Math.** A local geodesic witness at time `t`, taken via `Classical.choose`
 when `t ∈ maximalGeodesicInterval g p v`. -/
 def maximalGeodesicChosenCurve
     (g : RiemannianMetric I M) (p : M) (v : TangentSpace I p)
@@ -227,7 +227,7 @@ lemma maximalGeodesicChosenCurve_spec
         (maximalGeodesicChosenCurve (I := I) g p v h) J p v :=
   Classical.choose_spec h
 
-/-- The canonical maximal geodesic with initial data `(p, v)`. On the
+/-- **Math.** The canonical maximal geodesic with initial data `(p, v)`. On the
 maximal interval, it equals some local geodesic with the prescribed
 initial data, chosen by `Classical.choose`; outside, it is the constant
 `p`. -/
@@ -239,7 +239,7 @@ def maximalGeodesic
     maximalGeodesicChosenCurve (I := I) g p v h t
   else p
 
-/-- Outside the maximal interval, `maximalGeodesic` takes the value `p`. -/
+/-- **Math.** Outside the maximal interval, `maximalGeodesic` takes the value `p`. -/
 lemma maximalGeodesic_of_not_mem
     {g : RiemannianMetric I M} {p : M} {v : TangentSpace I p}
     {t : ℝ} (ht : t ∉ maximalGeodesicInterval (I := I) g p v) :
@@ -248,7 +248,7 @@ lemma maximalGeodesic_of_not_mem
   letI : Decidable (MaximalGeodesicWitness (I := I) g p v t) := Classical.dec _
   exact dif_neg ht
 
-/-- On the maximal interval, `maximalGeodesic g p v` equals the chosen
+/-- **Math.** On the maximal interval, `maximalGeodesic g p v` equals the chosen
 local geodesic. -/
 lemma maximalGeodesic_of_mem
     {g : RiemannianMetric I M} {p : M} {v : TangentSpace I p}
@@ -264,7 +264,7 @@ end MaximalGeodesicDefinition
 section MaximalGeodesicValue
 
 
-/-- `maximalGeodesic g p v` starts at `p`. -/
+/-- **Math.** `maximalGeodesic g p v` starts at `p`. -/
 theorem maximalGeodesic_zero
     (g : RiemannianMetric I M) (p : M) (v : TangentSpace I p) :
     maximalGeodesic (I := I) g p v 0 = p := by
@@ -279,7 +279,7 @@ end MaximalGeodesicValue
 section MaximalGeodesicAtTime
 
 
-/-- The witness `γ` chosen at `t ∈ maximalGeodesicInterval g p v` is a
+/-- **Math.** The witness `γ` chosen at `t ∈ maximalGeodesicInterval g p v` is a
 local geodesic at `t` with the prescribed initial data, provided every
 witness curve covering `t` keeps its foot `γ t` in the base chart-source
 `(chartAt H p).source`. The headline statement we produce records the
@@ -302,7 +302,7 @@ theorem exists_isGeodesicAt_of_mem_maximalGeodesicInterval
   refine ⟨γ, J, hJ, h0, ht, hγ, ?_⟩
   exact hγ.isGeodesicAt (hJ.mem_nhds ht) (ht_src γ J hγ)
 
-/-- For every `t` in the maximal interval, there exists a geodesic
+/-- **Math.** For every `t` in the maximal interval, there exists a geodesic
 witness producing `IsGeodesicAt g (witness) t` with starting point `p`,
 provided every witness curve keeps its foot `γ t` in the base chart-source
 `(chartAt H p).source` (the chart-validity clause; see
@@ -327,7 +327,7 @@ end MaximalGeodesicAtTime
 section MaximalGeodesicMain
 
 
-/-- Structural properties of the canonical maximal geodesic with initial
+/-- **Math.** Structural properties of the canonical maximal geodesic with initial
 datum `(p, v)`: writing `I_max := maximalGeodesicInterval g p v` and
 `γ_max := maximalGeodesic g p v`, the set `I_max` is open and contains `0`,
 `γ_max 0 = p`, `γ_max` takes the junk value `p` outside `I_max`, and at

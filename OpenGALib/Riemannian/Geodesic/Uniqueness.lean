@@ -58,7 +58,7 @@ section ChartFixedUniqueness
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- **Uniqueness of integral curves of the chart-fixed geodesic vector
+/-- **Math.** **Uniqueness of integral curves of the chart-fixed geodesic vector
 field.** Two `IsMIntegralCurveAt` witnesses `f₁, f₂` for the chart-fixed
 geodesic vector field `geodesicVectorFieldChart g α` at `t₀` that agree
 at `t₀` agree on a neighbourhood of `t₀`, provided the common base point
@@ -94,7 +94,7 @@ theorem isMIntegralCurveAt_geodesicVectorFieldChart_eventuallyEq
       (γ := f₁) (γ' := f₂) (t₀ := t₀)
       hsmooth1 hf₁ hf₂ h0
 
-/-- **Projected uniqueness.** Under the same hypotheses, the base curves
+/-- **Math.** **Projected uniqueness.** Under the same hypotheses, the base curves
 agree on a neighbourhood of `t₀`. -/
 theorem projectCurve_eventuallyEq_of_isMIntegralCurveAt_geodesicVectorFieldChart
     {g : RiemannianMetric I M} {α : M} {t₀ : ℝ}
@@ -118,7 +118,7 @@ section GeodesicUniqueness
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- **Uniqueness of geodesics with a fixed chart basepoint.** If two
+/-- **Math.** **Uniqueness of geodesics with a fixed chart basepoint.** If two
 curves are local geodesics at `t₀` witnessed by the same chart basepoint
 `α : M` and lifts `f₁, f₂` with `f₁ t₀ = f₂ t₀`, and the common starting
 point lies in `(chartAt H α).source`, then the two base curves agree on a
@@ -144,7 +144,7 @@ theorem isGeodesicAt_eventuallyEq
   rw [projectCurve_apply, projectCurve_apply] at ht
   rw [← hproj₁ t, ← hproj₂ t]; exact ht
 
-/-- **Uniqueness of geodesics with matching initial data.** If the base
+/-- **Math.** **Uniqueness of geodesics with matching initial data.** If the base
 curves `γ₁, γ₂` are projections of integral curves `f₁, f₂` of the
 chart-fixed geodesic vector field for the chart basepoint `γ₁ t₀`, and the
 lifts agree at `t₀` (`f₁ t₀ = f₂ t₀`, which encodes matching initial point

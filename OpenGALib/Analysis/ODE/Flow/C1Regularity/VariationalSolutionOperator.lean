@@ -1,5 +1,7 @@
 import OpenGALib.Analysis.ODE.Flow.Defs
 
+set_option linter.unusedSectionVars false
+
 /-!
 # Fréchet differentiability of the flow in the initial condition
 

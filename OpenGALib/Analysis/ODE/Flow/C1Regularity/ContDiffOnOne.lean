@@ -1,5 +1,7 @@
 import OpenGALib.Analysis.ODE.Flow.C1Regularity.JointFrechetDerivative
 
+set_option linter.unusedSectionVars false
+
 /-!
 # `ContDiffOn ℝ 1` upgrade for the local flow
 

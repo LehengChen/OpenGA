@@ -48,7 +48,7 @@ variable {H : Type*} [TopologicalSpace H] {I : ModelWithCorners ℝ E H}
 variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
 
 
-/-- **Picard-Lindelöf lift.** For a smooth Riemannian metric `g`, point
+/-- **Math.** **Picard-Lindelöf lift.** For a smooth Riemannian metric `g`, point
 `p : M`, and tangent vector `v : T_p M`, on a boundaryless smooth manifold
 modelled on a complete inner-product space, there exists a curve
 `f : ℝ → TangentBundle I M` with `f 0 = ⟨p, v⟩` that is a local integral
@@ -80,14 +80,14 @@ theorem exists_isMIntegralCurveAt_geodesicVectorFieldChart
       (v := geodesicVectorFieldChart (I := I) g p)
       (t₀ := (0 : ℝ)) (x₀ := (⟨p, v⟩ : TangentBundle I M)) hsmooth1
 
-/-- The base projection of a curve `f : ℝ → TangentBundle I M` to a curve
+/-- **Math.** The base projection of a curve `f : ℝ → TangentBundle I M` to a curve
 `γ : ℝ → M`, namely `γ t := (f t).proj`. -/
 def projectCurve (f : ℝ → TangentBundle I M) : ℝ → M := fun t => (f t).proj
 
 @[simp] lemma projectCurve_apply (f : ℝ → TangentBundle I M) (t : ℝ) :
     projectCurve (I := I) f t = (f t).proj := rfl
 
-/-- If the lifted curve starts at `⟨p, v⟩`, its projection starts at `p`. -/
+/-- **Math.** If the lifted curve starts at `⟨p, v⟩`, its projection starts at `p`. -/
 lemma projectCurve_zero_of_lift {f : ℝ → TangentBundle I M} {p : M} {v : E}
     (hf0 : f 0 = (⟨p, v⟩ : TangentBundle I M)) :
     projectCurve (I := I) f 0 = p := by
@@ -97,7 +97,7 @@ section ChartedPicardLindelof
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- **Local existence of geodesics with prescribed initial velocity.** For
+/-- **Math.** **Local existence of geodesics with prescribed initial velocity.** For
 a smooth Riemannian metric `g`, an initial point `p : M`, and an initial
 velocity `v : T_p M`, there exists a curve `γ : ℝ → M` through `p`, together
 with a lift `f : ℝ → TangentBundle I M`, such that
@@ -130,7 +130,7 @@ theorem exists_geodesic_with_initial_velocity_at
   have h0 : (f 0).proj = p := projectCurve_zero_of_lift (I := I) hf0
   rw [h0]; exact mem_chart_source H p
 
-/-- The manifold derivative of the lifted curve at `0`. -/
+/-- **Math.** The manifold derivative of the lifted curve at `0`. -/
 theorem hasMFDerivAt_lift_zero
     {g : RiemannianMetric I M} {f : ℝ → TangentBundle I M}
     (hf : IsMIntegralCurveAt f (geodesicVectorFieldChart (I := I) g

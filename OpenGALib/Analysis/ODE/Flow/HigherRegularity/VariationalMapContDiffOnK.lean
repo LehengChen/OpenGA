@@ -1,5 +1,7 @@
 import OpenGALib.Analysis.ODE.Flow.HigherRegularity.ContDiffOnK
 
+set_option linter.unusedSectionVars false
+
 /-!
 # Parametric `C^k` smoothness of the variational linear map
 

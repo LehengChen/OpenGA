@@ -81,7 +81,7 @@ variable {H : Type*} [TopologicalSpace H] {I : ModelWithCorners ℝ E H}
 variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
 
 
-/-- The `i`-th chart-basis coordinate of a vector `v : E`, taken with respect
+/-- **Math.** The `i`-th chart-basis coordinate of a vector `v : E`, taken with respect
 to the canonical chart-model basis `Module.finBasis ℝ E`. -/
 def chartCoord (i : Fin (Module.finrank ℝ E)) (v : E) : ℝ :=
   (Module.finBasis ℝ E).repr v i
@@ -97,7 +97,7 @@ lemma chartCoord_zero (i : Fin (Module.finrank ℝ E)) :
     chartCoord (E := E) i (0 : E) = 0 := by
   simp [chartCoord]
 
-/-- The chart-coordinate Christoffel contraction. As a function of the
+/-- **Math.** The chart-coordinate Christoffel contraction. As a function of the
 vector arguments `v, w : E`, this is the bilinear expression
 $$\Gamma(g, \alpha)(v, w)(y) = \sum_k \Big(\sum_{i, j}
     \Gamma^k{}_{ij}(g, \alpha)(y) \cdot v^i \cdot w^j\Big) \cdot e_k.$$
@@ -119,7 +119,7 @@ def chartChristoffelContraction (g : RiemannianMetric I M) (α : M)
               chartCoord (E := E) i v * chartCoord (E := E) j w) •
           Module.finBasis ℝ E k := rfl
 
-/-- The Christoffel contraction is symmetric in its vector arguments,
+/-- **Math.** The Christoffel contraction is symmetric in its vector arguments,
 inherited from the symmetry of `chartChristoffel` in its lower indices. -/
 lemma chartChristoffelContraction_symm
     (g : RiemannianMetric I M) (α : M) (v w : E) (y : E) :
@@ -138,7 +138,7 @@ lemma chartChristoffelContraction_symm
   rw [chartChristoffel_symm (I := I) g α j i k y]
   ring
 
-/-- Linearity of the Christoffel contraction in its first argument. -/
+/-- **Math.** Linearity of the Christoffel contraction in its first argument. -/
 lemma chartChristoffelContraction_zero_left
     (g : RiemannianMetric I M) (α : M) (w : E) (y : E) :
     chartChristoffelContraction (I := I) g α (0 : E) w y = 0 := by
@@ -156,7 +156,7 @@ lemma chartChristoffelContraction_zero_left
     simp
   rw [this, zero_smul]
 
-/-- The Christoffel contraction scales like a `(2, 0)`-tensor on its vector
+/-- **Math.** The Christoffel contraction scales like a `(2, 0)`-tensor on its vector
 slots: `Γ(a v, a v)(y) = a^2 · Γ(v, v)(y)`. -/
 lemma chartChristoffelContraction_smul_smul
     (g : RiemannianMetric I M) (α : M) (a : ℝ) (v : E) (y : E) :
@@ -188,7 +188,7 @@ lemma chartChristoffelContraction_smul_smul
         intro j _
         ring
 
-/-- The Christoffel contraction is even in its (repeated) velocity slot:
+/-- **Math.** The Christoffel contraction is even in its (repeated) velocity slot:
 negating the velocity vector leaves `Γ(v, v)(y)` unchanged. This is the
 key sign cancellation behind time-reversal invariance of the geodesic
 equation, where the velocity flips sign but the acceleration does not. -/
@@ -200,7 +200,7 @@ lemma chartChristoffelContraction_neg
   rw [hneg, chartChristoffelContraction_smul_smul (I := I) g α (-1 : ℝ) v y]
   norm_num
 
-/-- The geodesic vector field on the tangent bundle, written in the
+/-- **Math.** The geodesic vector field on the tangent bundle, written in the
 canonical chart at the foot point `p.proj`. The first component is the
 fibre vector `p.2`, the second component is the negation of the
 Christoffel contraction of `p.2` with itself at the chart image of
@@ -210,20 +210,20 @@ def geodesicVectorField (g : RiemannianMetric I M)
   (p.2, - chartChristoffelContraction (I := I) g p.proj p.2 p.2
       (extChartAt I p.proj p.proj))
 
-/-- Unfolding lemma for `geodesicVectorField`. -/
+/-- **Math.** Unfolding lemma for `geodesicVectorField`. -/
 @[simp] lemma geodesicVectorField_def
     (g : RiemannianMetric I M) (p : TangentBundle I M) :
     geodesicVectorField (I := I) g p =
       (p.2, - chartChristoffelContraction (I := I) g p.proj p.2 p.2
           (extChartAt I p.proj p.proj)) := rfl
 
-/-- First component: the projection of `geodesicVectorField` onto the
+/-- **Math.** First component: the projection of `geodesicVectorField` onto the
 horizontal `T_α M` factor returns the fibre coordinate of `p`. -/
 @[simp] lemma geodesicVectorField_fst
     (g : RiemannianMetric I M) (p : TangentBundle I M) :
     (geodesicVectorField (I := I) g p).1 = p.2 := rfl
 
-/-- Second component: the projection onto the vertical factor returns
+/-- **Math.** Second component: the projection onto the vertical factor returns
 `-Γ(p.proj)(p.2, p.2)(φ_{p.proj}(p.proj))`. -/
 @[simp] lemma geodesicVectorField_snd
     (g : RiemannianMetric I M) (p : TangentBundle I M) :
@@ -231,7 +231,7 @@ horizontal `T_α M` factor returns the fibre coordinate of `p`. -/
       - chartChristoffelContraction (I := I) g p.proj p.2 p.2
           (extChartAt I p.proj p.proj) := rfl
 
-/-- At the zero section, the geodesic vector field reduces to the zero
+/-- **Math.** At the zero section, the geodesic vector field reduces to the zero
 vector in the vertical factor. The horizontal factor is still zero
 because the fibre coordinate at the zero section is zero. -/
 lemma geodesicVectorField_zero_section
@@ -243,7 +243,7 @@ lemma geodesicVectorField_zero_section
   rw [chartChristoffelContraction_zero_left]
   simp
 
-/-- Auxiliary: the chart-local curve `s ↦ φ_{γ t}(γ s)` for a fixed
+/-- **Math.** Auxiliary: the chart-local curve `s ↦ φ_{γ t}(γ s)` for a fixed
 "base time" `t`. The chart is centred at `γ t` so the predicate below
 checks the second-derivative equation in the canonical chart at the
 point traversed at time `t`. -/
@@ -253,7 +253,7 @@ def chartLocalCurve (γ : ℝ → M) (t : ℝ) : ℝ → E :=
 @[simp] lemma chartLocalCurve_def (γ : ℝ → M) (t s : ℝ) :
     chartLocalCurve (I := I) γ t s = extChartAt I (γ t) (γ s) := rfl
 
-/-- The geodesic equation, expressed at a single base time `t`. There
+/-- **Math.** The geodesic equation, expressed at a single base time `t`. There
 exist a velocity vector `v : E` and an acceleration vector `a : E` such
 that, in the chart at `γ t`:
 * the chart curve `s ↦ φ_{γ t}(γ s)` has derivative `v` at `s = t`;
@@ -270,7 +270,7 @@ def HasGeodesicEquationAt (g : RiemannianMetric I M) (γ : ℝ → M)
     a + chartChristoffelContraction (I := I) g (γ t) v v
         (extChartAt I (γ t) (γ t)) = 0
 
-/-- The chart-α coordinate of the fibre vector of `p : TangentBundle I M`. -/
+/-- **Math.** The chart-α coordinate of the fibre vector of `p : TangentBundle I M`. -/
 def chartFiberCoord (α : M) (p : TangentBundle I M) : E :=
   (trivializationAt E (TangentSpace I) α p).2
 
@@ -278,7 +278,7 @@ def chartFiberCoord (α : M) (p : TangentBundle I M) : E :=
     chartFiberCoord (I := I) α p =
       (trivializationAt E (TangentSpace I) α p).2 := rfl
 
-/-- The fiber-coordinate expression of the geodesic vector field at `p`,
+/-- **Math.** The fiber-coordinate expression of the geodesic vector field at `p`,
 written in the chart at the FIXED basepoint `α`. The first factor is the
 chart-α coordinate of the fibre vector; the second is the negation of the
 Christoffel contraction of that coordinate with itself, evaluated at the
@@ -296,7 +296,7 @@ def geodesicVectorFieldChartFiber (g : RiemannianMetric I M) (α : M)
       (v, - chartChristoffelContraction (I := I) g α v v
         (extChartAt I α p.proj)) := rfl
 
-/-- The geodesic vector field in chart-fixed form, viewed as a section of
+/-- **Math.** The geodesic vector field in chart-fixed form, viewed as a section of
 `T(TM)`. By construction, the value at `p` lies in `TangentSpace I.tangent p`
 (which is definitionally `E × E`); it is built so that the trivialisation of
 `T(TM)` at `⟨α, (0 : E)⟩` sends it back to `geodesicVectorFieldChartFiber g α p`.
@@ -307,7 +307,7 @@ def geodesicVectorFieldChart (g : RiemannianMetric I M) (α : M)
       (⟨α, (0 : E)⟩ : TangentBundle I M)).symm p
     (geodesicVectorFieldChartFiber (I := I) g α p)
 
-/-- The open set in `TangentBundle I M` on which the chart-fixed geodesic
+/-- **Math.** The open set in `TangentBundle I M` on which the chart-fixed geodesic
 vector field is smooth: the preimage of `(chartAt H α).source` under the
 projection. -/
 def geodesicChartDomain (α : M) : Set (TangentBundle I M) :=
@@ -325,7 +325,7 @@ lemma proj_mem_chartAt_source_of_mem_geodesicChartDomain {α : M}
     {p : TangentBundle I M} (hp : p ∈ geodesicChartDomain (I := I) α) :
     p.proj ∈ (chartAt H α).source := hp
 
-/-- The chart-α domain coincides with the base set of the trivialisation of
+/-- **Math.** The chart-α domain coincides with the base set of the trivialisation of
 `T(TM)` at `⟨α, 0⟩`: both are the set of `p : TM` with `p.proj` in
 `(chartAt H α).source`. -/
 lemma geodesicChartDomain_eq_trivBaseSet (α : M) :
@@ -341,7 +341,7 @@ lemma geodesicChartDomain_eq_trivBaseSet (α : M) :
   exact (TangentBundle.mem_chart_source_iff (I := I) (M := M) p
     (⟨α, (0 : E)⟩ : TangentBundle I M)).symm
 
-/-- At the zero section, `chartFiberCoord α ⟨α, 0⟩ = 0`: the fibre coordinate
+/-- **Math.** At the zero section, `chartFiberCoord α ⟨α, 0⟩ = 0`: the fibre coordinate
 in the chart at `α` of the zero vector at `α` is the zero of `E`. -/
 lemma chartFiberCoord_self_zero (α : M) :
     chartFiberCoord (I := I) α
@@ -356,7 +356,7 @@ lemma chartFiberCoord_self_zero (α : M) :
       (⟨α, (0 : TangentSpace I α)⟩ : TangentBundle I M)).2 = 0
   rw [hzero']
 
-/-- The chart-fixed geodesic vector field at `⟨α, 0⟩` (chart basepoint = foot
+/-- **Math.** The chart-fixed geodesic vector field at `⟨α, 0⟩` (chart basepoint = foot
 point, zero velocity) is the zero element of `TangentSpace I.tangent ⟨α, 0⟩`. -/
 lemma geodesicVectorFieldChart_zero_section
     (g : RiemannianMetric I M) (α : M) :
@@ -386,7 +386,7 @@ lemma geodesicVectorFieldChart_zero_section
     exact map_zero _
   exact this
 
-/-- Local geodesic at time `t₀`: there is a basepoint `α : M` and a lifted
+/-- **Math.** Local geodesic at time `t₀`: there is a basepoint `α : M` and a lifted
 curve `f : ℝ → TangentBundle I M` with `(f t).proj = γ t` for all `t`,
 whose foot at `t₀` lies in the basepoint chart-source
 `(chartAt H α).source`, such that `f` is a local integral curve of the
@@ -407,7 +407,7 @@ def IsGeodesicAt (g : RiemannianMetric I M) (γ : ℝ → M)
     (f t₀).proj ∈ (chartAt H α).source ∧
     IsMIntegralCurveAt f (geodesicVectorFieldChart (I := I) g α) t₀
 
-/-- A curve `γ : ℝ → M` is a geodesic of `g` if it satisfies the intrinsic
+/-- **Math.** A curve `γ : ℝ → M` is a geodesic of `g` if it satisfies the intrinsic
 moving-foot geodesic equation `HasGeodesicEquationAt g γ t` at every time
 `t`. This is the chart-independent definition: at each time `t` the
 equation is read in the canonical chart centred at the foot point `γ t`,
@@ -415,21 +415,21 @@ so it remains meaningful for geodesics leaving any single chart. -/
 def IsGeodesic (g : RiemannianMetric I M) (γ : ℝ → M) : Prop :=
   ∀ t : ℝ, HasGeodesicEquationAt (I := I) g γ t
 
-/-- A global geodesic satisfies the moving-foot geodesic equation at every
+/-- **Math.** A global geodesic satisfies the moving-foot geodesic equation at every
 time (definitional projection). -/
 lemma IsGeodesic.hasGeodesicEquationAt {g : RiemannianMetric I M}
     {γ : ℝ → M} (hγ : IsGeodesic (I := I) g γ) (t : ℝ) :
     HasGeodesicEquationAt (I := I) g γ t :=
   hγ t
 
-/-- `γ : ℝ → M` is a geodesic of `g` on `s : Set ℝ` if it satisfies the
+/-- **Math.** `γ : ℝ → M` is a geodesic of `g` on `s : Set ℝ` if it satisfies the
 intrinsic moving-foot geodesic equation `HasGeodesicEquationAt g γ t` at
 every time `t ∈ s`. The set-relativised analogue of `IsGeodesic`. -/
 def IsGeodesicOn (g : RiemannianMetric I M) (γ : ℝ → M)
     (s : Set ℝ) : Prop :=
   ∀ t ∈ s, HasGeodesicEquationAt (I := I) g γ t
 
-/-- A geodesic on a set satisfies the moving-foot geodesic equation at
+/-- **Math.** A geodesic on a set satisfies the moving-foot geodesic equation at
 every time of the set (definitional projection). -/
 lemma IsGeodesicOn.hasGeodesicEquationAt {g : RiemannianMetric I M}
     {γ : ℝ → M} {s : Set ℝ} {t : ℝ}
@@ -437,20 +437,20 @@ lemma IsGeodesicOn.hasGeodesicEquationAt {g : RiemannianMetric I M}
     HasGeodesicEquationAt (I := I) g γ t :=
   hγ t ht
 
-/-- `IsGeodesicOn` is monotone in the set. -/
+/-- **Math.** `IsGeodesicOn` is monotone in the set. -/
 lemma IsGeodesicOn.mono {g : RiemannianMetric I M}
     {γ : ℝ → M} {s s' : Set ℝ}
     (hγ : IsGeodesicOn (I := I) g γ s) (hs : s' ⊆ s) :
     IsGeodesicOn (I := I) g γ s' :=
   fun t ht => hγ t (hs ht)
 
-/-- A global geodesic, restricted to any set, is a geodesic on that set. -/
+/-- **Math.** A global geodesic, restricted to any set, is a geodesic on that set. -/
 lemma IsGeodesic.isGeodesicOn {g : RiemannianMetric I M}
     {γ : ℝ → M} (hγ : IsGeodesic (I := I) g γ) (s : Set ℝ) :
     IsGeodesicOn (I := I) g γ s :=
   fun t _ => hγ t
 
-/-- The constant curve `fun _ => p` is a geodesic. In the chart at `p`,
+/-- **Math.** The constant curve `fun _ => p` is a geodesic. In the chart at `p`,
 the chart-local curve `s ↦ φ_p p` is constant, so both its velocity and
 acceleration vanish, and the Christoffel contraction of the zero velocity
 with itself vanishes by `chartChristoffelContraction_zero_left`. -/
@@ -474,7 +474,7 @@ theorem isGeodesic_const (g : RiemannianMetric I M) (p : M) :
   · rw [chartChristoffelContraction_zero_left]
     simp
 
-/-- A constant curve is a local geodesic at every time (spray formulation).
+/-- **Math.** A constant curve is a local geodesic at every time (spray formulation).
 The constant lift `fun _ => ⟨p, 0⟩` is an integral curve of the chart-fixed
 geodesic vector field, which vanishes at the zero section. -/
 theorem IsGeodesicAt.const (g : RiemannianMetric I M) (p : M) (t : ℝ) :
@@ -485,7 +485,7 @@ theorem IsGeodesicAt.const (g : RiemannianMetric I M) (p : M) (t : ℝ) :
   refine (isMIntegralCurve_const ?_).isMIntegralCurveAt t
   exact geodesicVectorFieldChart_zero_section (I := I) g p
 
-/-- Time-translation reparametrisation preserves the geodesic property.
+/-- **Math.** Time-translation reparametrisation preserves the geodesic property.
 At time `t`, the chart-local curve of `s ↦ γ (s + b)` is the chart-local
 curve of `γ` at the shifted base time `t + b`, precomposed with the shift
 `s ↦ s + b`; the geodesic equation transfers under the shift since
@@ -528,7 +528,7 @@ theorem isGeodesic_comp_add
     exact ha.comp_add_const t b
   · exact hgeo
 
-/-- The chart-local curve of the time-reversed curve `s ↦ γ (-s)` at base
+/-- **Math.** The chart-local curve of the time-reversed curve `s ↦ γ (-s)` at base
 time `τ` equals the chart-local curve of `γ` at the reflected base time
 `-τ`, precomposed with negation: `chartLocalCurve (γ ∘ neg) τ = u ∘ neg`
 where `u = chartLocalCurve γ (-τ)`. Holds definitionally. -/
@@ -536,7 +536,7 @@ lemma chartLocalCurve_comp_neg (γ : ℝ → M) (τ : ℝ) :
     chartLocalCurve (I := I) (fun s => γ (-s)) τ =
       (fun s => chartLocalCurve (I := I) γ (-τ) (-s)) := rfl
 
-/-- **Pointwise time-reversal of the geodesic equation.** If `γ` satisfies
+/-- **Math.** **Pointwise time-reversal of the geodesic equation.** If `γ` satisfies
 the moving-foot geodesic equation at `-τ`, then the time-reversed curve
 `s ↦ γ (-s)` satisfies it at `τ`. The reversed-curve velocity is the
 negation of the original velocity at `-τ`; the acceleration is unchanged;
@@ -576,7 +576,7 @@ theorem hasGeodesicEquationAt_comp_neg
   · rw [chartChristoffelContraction_neg (I := I) g _ v]
     exact hgeo
 
-/-- **Time-reversal of a global geodesic.** If `γ` is a geodesic, so is its
+/-- **Math.** **Time-reversal of a global geodesic.** If `γ` is a geodesic, so is its
 time reversal `s ↦ γ (-s)`. -/
 theorem isGeodesic_comp_neg
     {g : RiemannianMetric I M} {γ : ℝ → M}
@@ -585,7 +585,7 @@ theorem isGeodesic_comp_neg
   intro τ
   exact hasGeodesicEquationAt_comp_neg (I := I) (hγ (-τ))
 
-/-- **Time-reversal of a geodesic on a set.** If `γ` is a geodesic on
+/-- **Math.** **Time-reversal of a geodesic on a set.** If `γ` is a geodesic on
 `s : Set ℝ`, then the time reversal `t ↦ γ (-t)` is a geodesic on the
 preimage `Neg.neg ⁻¹' s = {τ | -τ ∈ s}`. -/
 theorem isGeodesicOn_comp_neg
@@ -599,14 +599,14 @@ section ChartFixedSmoothness
 
 variable [I.Boundaryless]
 
-/-- The trivialisation source is the preimage of the chart base set under the
+/-- **Math.** The trivialisation source is the preimage of the chart base set under the
 projection. Specialised to the tangent bundle at `α`. -/
 lemma trivializationAt_source_eq (α : M) :
     (trivializationAt E (TangentSpace I) α).source =
       geodesicChartDomain (I := I) (M := M) α := by
   rw [Trivialization.source_eq]; rfl
 
-/-- The chart-α coordinate `chartFiberCoord α : TangentBundle I M → E` is smooth
+/-- **Math.** The chart-α coordinate `chartFiberCoord α : TangentBundle I M → E` is smooth
 on `geodesicChartDomain α`. Equivalent to: the second component of the
 trivialisation of `TM` at `α` is smooth on the chart base set. -/
 lemma chartFiberCoord_contMDiffOn (α : M) :
@@ -627,14 +627,14 @@ lemma chartFiberCoord_contMDiffOn (α : M) :
       (geodesicChartDomain (I := I) α) := contMDiffOn_id
   exact (hiff.mp hid).2
 
-/-- Projection `TangentBundle I M → M` is globally smooth (Mathlib fact, repeated
+/-- **Math.** Projection `TangentBundle I M → M` is globally smooth (Mathlib fact, repeated
 here in a `ContMDiffOn` form for convenience). -/
 lemma proj_contMDiffOn (s : Set (TangentBundle I M)) :
     ContMDiffOn I.tangent I ∞
       (Bundle.TotalSpace.proj : TangentBundle I M → M) s :=
   (Bundle.contMDiff_proj (TangentSpace I) (n := (∞ : WithTop ℕ∞))).contMDiffOn
 
-/-- The composition `extChartAt I α ∘ proj : TangentBundle I M → E` is smooth on
+/-- **Math.** The composition `extChartAt I α ∘ proj : TangentBundle I M → E` is smooth on
 the chart domain. -/
 lemma extChartAt_proj_contMDiffOn (α : M) :
     ContMDiffOn I.tangent 𝓘(ℝ, E) ∞
@@ -652,7 +652,7 @@ lemma extChartAt_proj_contMDiffOn (α : M) :
     fun _ hp => hp
   exact hchart.comp hproj hsubset
 
-/-- The chart Christoffel symbol entry `chartChristoffel g α i j k`, evaluated at
+/-- **Math.** The chart Christoffel symbol entry `chartChristoffel g α i j k`, evaluated at
 the chart image of `p.proj`, is smooth in `p` on the chart domain. -/
 lemma chartChristoffel_extChartAt_proj_contMDiffOn
     (g : RiemannianMetric I M) (α : M)
@@ -682,7 +682,7 @@ lemma chartChristoffel_extChartAt_proj_contMDiffOn
   have := (hΓ_at.contMDiffAt).comp_contMDiffWithinAt p hbase
   exact this
 
-/-- The Christoffel-contraction scalar
+/-- **Math.** The Christoffel-contraction scalar
 `∑_{ij} Γ^k_{ij}(y) · v_i · v_j` (with `v = chartFiberCoord α p` and
 `y = extChartAt I α p.proj`) is smooth in `p` on the chart domain. -/
 lemma chartChristoffelContraction_scalarCoeff_contMDiffOn
@@ -724,7 +724,7 @@ lemma chartChristoffelContraction_scalarCoeff_contMDiffOn
     exact (hCLM_j.contMDiffAt).comp_contMDiffWithinAt _ (hv p hp)
   exact (hΓ.mul hci).mul hcj
 
-/-- The Christoffel-contraction `Γ_α(v, v)(y)` (with `v = chartFiberCoord α p`,
+/-- **Math.** The Christoffel-contraction `Γ_α(v, v)(y)` (with `v = chartFiberCoord α p`,
 `y = extChartAt I α p.proj`) is smooth in `p` on the chart domain. -/
 lemma chartChristoffelContraction_chartFiber_contMDiffOn
     (g : RiemannianMetric I M) (α : M) :
@@ -744,7 +744,7 @@ lemma chartChristoffelContraction_chartFiber_contMDiffOn
       (geodesicChartDomain (I := I) α) := contMDiffOn_const
   exact hscalar.smul hconst
 
-/-- The chart-fiber expression of the geodesic vector field is smooth as a
+/-- **Math.** The chart-fiber expression of the geodesic vector field is smooth as a
 function `TangentBundle I M → E × E` on the chart domain. -/
 lemma geodesicVectorFieldChartFiber_contMDiffOn
     (g : RiemannianMetric I M) (α : M) :
@@ -772,7 +772,7 @@ lemma geodesicVectorFieldChartFiber_contMDiffOn
       (geodesicChartDomain (I := I) α) := hΓ.neg
   exact hfst.prodMk_space hsnd
 
-/-- The trivialisation of `T(TM)` at `⟨α, 0⟩` is in the canonical atlas, allowing
+/-- **Math.** The trivialisation of `T(TM)` at `⟨α, 0⟩` is in the canonical atlas, allowing
 us to apply `Bundle.Trivialization.contMDiffOn_iff`. -/
 private instance trivializationAt_tangent_tangent_isAtlas (α : M) :
     MemTrivializationAtlas
@@ -780,7 +780,7 @@ private instance trivializationAt_tangent_tangent_isAtlas (α : M) :
         (⟨α, (0 : E)⟩ : TangentBundle I M)) :=
   ⟨FiberBundle.trivialization_mem_atlas (E × E) (TangentSpace I.tangent) _⟩
 
-/-- By construction (using the inverse trivialisation), applying the
+/-- **Math.** By construction (using the inverse trivialisation), applying the
 trivialisation of `T(TM)` at `⟨α, 0⟩` to `⟨p, geodesicVectorFieldChart g α p⟩`
 returns `(p, geodesicVectorFieldChartFiber g α p)` on the chart domain. -/
 lemma trivializationAt_apply_geodesicVectorFieldChart
@@ -798,7 +798,7 @@ lemma trivializationAt_apply_geodesicVectorFieldChart
     (⟨α, (0 : E)⟩ : TangentBundle I M)).apply_mk_symm hp'
       (geodesicVectorFieldChartFiber (I := I) g α p)
 
-/-- **G.1.2 smoothness theorem**: the chart-fixed geodesic vector field, viewed
+/-- **Math.** **G.1.2 smoothness theorem**: the chart-fixed geodesic vector field, viewed
 as a section of `T(TM)`, is `C^∞` on the chart domain. -/
 theorem geodesicVectorFieldChart_contMDiffOn
     (g : RiemannianMetric I M) (α : M) :
@@ -839,7 +839,7 @@ theorem geodesicVectorFieldChart_contMDiffOn
       geodesicVectorFieldChartFiber_contMDiffOn (I := I) g α
     exact hsmooth.congr heq
 
-/-- `ContMDiffAt`-form, suitable for Mathlib's
+/-- **Math.** `ContMDiffAt`-form, suitable for Mathlib's
 `exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless`. At every `p₀` with
 `p₀.proj ∈ (chartAt H α).source`, the chart-fixed geodesic vector field is
 `C^∞` (hence `C^1`). -/

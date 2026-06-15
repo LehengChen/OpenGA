@@ -1,5 +1,7 @@
 import OpenGALib.Riemannian.TensorBundle.MusicalIso
 
+set_option linter.unusedSectionVars false
+
 /-!
 # Chart-coordinate Christoffel symbols
 

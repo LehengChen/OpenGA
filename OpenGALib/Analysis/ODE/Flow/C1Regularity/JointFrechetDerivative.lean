@@ -1,5 +1,7 @@
 import OpenGALib.Analysis.ODE.Flow.C1Regularity.FrechetDerivative
 
+set_option linter.unusedSectionVars false
+
 /-!
 # Joint Fréchet differentiability of the flow at the central orbit
 

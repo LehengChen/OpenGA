@@ -70,7 +70,7 @@ variable {M : Type*} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M
 
 section LiftContinuity
 
-/-- A local integral curve of the chart-fixed geodesic vector field at
+/-- **Math.** A local integral curve of the chart-fixed geodesic vector field at
 `t₀` is continuous at `t₀`. Direct restatement of
 `IsMIntegralCurveAt.continuousAt`. -/
 lemma IsMIntegralCurveAt.continuousAt_lift
@@ -80,7 +80,7 @@ lemma IsMIntegralCurveAt.continuousAt_lift
     ContinuousAt f t₀ :=
   hf.continuousAt
 
-/-- A global integral curve of the chart-fixed geodesic vector field is
+/-- **Math.** A global integral curve of the chart-fixed geodesic vector field is
 globally continuous. Direct restatement of `IsMIntegralCurve.continuous`. -/
 lemma IsMIntegralCurve.continuous_lift
     {g : RiemannianMetric I M} {α : M}
@@ -93,13 +93,13 @@ end LiftContinuity
 
 section BaseContinuity
 
-/-- Continuity of the bundle projection on the tangent bundle, restated
+/-- **Math.** Continuity of the bundle projection on the tangent bundle, restated
 for use below. -/
 lemma continuous_tangentBundle_proj :
     Continuous (Bundle.TotalSpace.proj : TangentBundle I M → M) :=
   FiberBundle.continuous_proj E (TangentSpace I)
 
-/-- **Continuity of a local geodesic.** A local geodesic at `t₀` is
+/-- **Math.** **Continuity of a local geodesic.** A local geodesic at `t₀` is
 continuous at `t₀`. -/
 theorem IsGeodesicAt.continuousAt
     {g : RiemannianMetric I M} {γ : ℝ → M} {t₀ : ℝ}
@@ -121,7 +121,7 @@ section ChartPushedDerivative
 
 variable [I.Boundaryless]
 
-/-- The chart-pushed lift: the lift `f : ℝ → TangentBundle I M`
+/-- **Math.** The chart-pushed lift: the lift `f : ℝ → TangentBundle I M`
 post-composed with the chart on the tangent bundle of `M` at `f t₀`.
 This is the analytic curve in `E × E` (the model space of `I.tangent`)
 that solves the chart-local geodesic ODE in phase-space (position,
@@ -132,7 +132,7 @@ def chartPushLift (f : ℝ → TangentBundle I M) (t₀ : ℝ) :
 @[simp] lemma chartPushLift_apply (f : ℝ → TangentBundle I M) (t₀ t : ℝ) :
     chartPushLift (I := I) f t₀ t = extChartAt I.tangent (f t₀) (f t) := rfl
 
-/-- The chart-pushed geodesic vector field at `(f t₀, f t)`: the value of
+/-- **Math.** The chart-pushed geodesic vector field at `(f t₀, f t)`: the value of
 `geodesicVectorFieldChart g α` at `f t`, transported through the
 tangent-chart change `f t → f t₀` and read off as a vector in `E × E`.
 This is the RHS of the chart-pushed geodesic ODE. -/
@@ -148,7 +148,7 @@ def chartPushVF (g : RiemannianMetric I M) (α : M)
       tangentCoordChange I.tangent (f t) (f t₀) (f t)
         (geodesicVectorFieldChart (I := I) g α (f t)) := rfl
 
-/-- **Chart-pushed derivative formula.** On a neighbourhood of `t₀`,
+/-- **Math.** **Chart-pushed derivative formula.** On a neighbourhood of `t₀`,
 the chart-pushed lift `chartPushLift f t₀` has derivative
 `chartPushVF g α f t₀ t` at `t`. This is the geodesic specialisation of
 `IsMIntegralCurveAt.eventually_hasDerivAt`, providing the analytic
@@ -169,7 +169,7 @@ theorem chartPushLift_eventually_hasDerivAt
   filter_upwards [h] with t ht
   exact ht
 
-/-- **Chart-pushed first-order regularity.** On a neighbourhood of `t₀`,
+/-- **Math.** **Chart-pushed first-order regularity.** On a neighbourhood of `t₀`,
 the chart-pushed lift has a derivative — in particular, it is
 differentiable (and hence continuous) there. -/
 lemma chartPushLift_eventually_differentiableAt
@@ -181,7 +181,7 @@ lemma chartPushLift_eventually_differentiableAt
     (g := g) (α := α) (t₀ := t₀) hf] with t ht
   exact ht.differentiableAt
 
-/-- The chart-pushed lift is continuous at `t₀`. (Combines `f` continuous
+/-- **Math.** The chart-pushed lift is continuous at `t₀`. (Combines `f` continuous
 at `t₀` with chart continuity at `f t₀`.) -/
 lemma chartPushLift_continuousAt
     {f : ℝ → TangentBundle I M} {t₀ : ℝ}
@@ -191,7 +191,7 @@ lemma chartPushLift_continuousAt
     continuousAt_extChartAt (I := I.tangent) (f t₀)
   exact hchart_cont.comp hf_cont
 
-/-- The chart-pushed lift evaluated at the base time `t₀` is the chart
+/-- **Math.** The chart-pushed lift evaluated at the base time `t₀` is the chart
 image of `f t₀`. -/
 @[simp] lemma chartPushLift_self
     (f : ℝ → TangentBundle I M) (t₀ : ℝ) :
@@ -203,7 +203,7 @@ section IsGeodesicAtChartPush
 
 variable [I.Boundaryless] [CompleteSpace E]
 
-/-- **`IsGeodesicAt` chart-pushed derivative formula.** A local geodesic
+/-- **Math.** **`IsGeodesicAt` chart-pushed derivative formula.** A local geodesic
 at `t₀` admits a lift `f` and a chart basepoint `α` such that the
 chart-pushed lift satisfies the chart-local geodesic ODE in `E × E`
 phase space on a neighbourhood of `t₀`. -/

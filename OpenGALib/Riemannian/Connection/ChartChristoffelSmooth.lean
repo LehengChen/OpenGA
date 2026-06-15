@@ -1,5 +1,7 @@
 import OpenGALib.Riemannian.Connection.ChartChristoffel
 
+set_option linter.unusedSectionVars false
+
 /-!
 # Smoothness of the chart Christoffel symbols
 
