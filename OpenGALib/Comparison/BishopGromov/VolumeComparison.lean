@@ -3,6 +3,7 @@ import OpenGALib.Comparison.Util.SpaceForm
 import OpenGALib.Riemannian.Curvature.RicciTensorBundle
 import OpenGALib.Riemannian.Volume.ChartPullback
 import OpenGALib.Riemannian.Volume.ChartPullbackFormula
+import OpenGALib.Riemannian.Volume.ExpBridge
 
 /-!
 # Bishop–Gromov volume comparison
