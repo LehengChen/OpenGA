@@ -90,10 +90,17 @@ for the symbols it defines; reuse, don't duplicate.**
 `chartChristoffel_contDiffOn_interior` + chart helpers), `Geodesic/Equation`
 (`IsGeodesic`, `HasGeodesicEquationAt`, …), all on existing OpenGALib foundation.
 
-**Next:** rest of `Geometry/Geodesic` bottom-up — `Existence`, `Uniqueness`,
-`MaximalInterval`, `SmoothFlow` (consumes the migrated `Analysis.ODE.Flow`),
-then the `Geometry/Exponential` layer (`expMap`, smoothness, Gauss lemma) —
-**grepping OpenGALib for each file's symbols first.**
+**Geodesic layer DONE** (committed, 0 sorry, all dedup-checked): `Equation`,
+`Existence`, `Uniqueness`, `Smoothness`, `MaximalInterval` (trimmed its auxiliary
+arc-length lemmas + a vestigial ~53k-line `SecondVariation` cone), `SmoothFlow`
+(geodesic flow smoothness via `Analysis.ODE.Flow` — the key input to exp
+smoothness), `Homogeneity`.
+
+**Next:** `Geometry/Exponential` layer — `expMap` def (`expₚ v = γ_v(1)`),
+smoothness (from `SmoothFlow`), local diffeomorphism at 0; then the metric Gauss
+lemma. After that, the **build-ourselves** BG-key rows: smooth eikonal `|∇r|²=1`,
+volume Jacobian, polar volume, and the final assembly with the proved Riccati
+core. **Grep OpenGALib for each file's symbols first** (the dedup lesson).
 
 ---
 
