@@ -243,9 +243,10 @@ CH21-aligned (Jacobi-determinant) leg.
 
 ## 5. Owners & roles
 
-- **Engineering** (build the Lean on `feat/bishop-gromov`): Leheng Chen `@LehengChen`.
+- **Engineering** (build the Lean on `feat/bishop-gromov`): Leheng Chen
+  `@LehengChen`, PrinChern `@imathwy`.
 - **Math** (verify references accurate, pin sections, resolve B1 finite-order
-  shortcut & B2 $\ge 1$ Gauss route): Zhifei Zhu `@imathwy` / `@zhifeizhu92`,
+  shortcut & B2 $\ge 1$ Gauss route): Zhifei Zhu `@zhifeizhu92`,
   Chunlei Liu `@Spring-1211`.
 
 *Generated 2026-06-15. Route A = Bochner. Branch `feat/bishop-gromov`.*
