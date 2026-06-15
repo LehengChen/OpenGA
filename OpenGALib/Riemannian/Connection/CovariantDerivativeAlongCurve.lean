@@ -119,4 +119,46 @@ theorem covDerivAlongCurve_smul (g : RiemannianMetric I M) (γ : ℝ → M) (a :
   rw [hcoord, (hV.hasDerivAt.const_smul a).deriv, harg,
     Geodesic.chartChristoffelContraction_smul_right, ← smul_add, map_smul]
 
+/-- **Math.** **Leibniz rule** for the covariant derivative along a curve:
+`D_t (f • V) = f' • V + f • D_t V` for a scalar function `f : ℝ → ℝ`, where `f`
+and the chart coordinates of `V` are differentiable at `t₀`. The product rule for
+`deriv` on the chart coordinates produces the `f' • V` term; the chart coordinate
+of `V` at the basepoint `γ t₀` is recovered by the trivialization being an inverse
+pair there (`symmL_continuousLinearMapAt`). -/
+theorem covDerivAlongCurve_smul_scalar (g : RiemannianMetric I M) (γ : ℝ → M) (f : ℝ → ℝ)
+    (V : (t : ℝ) → TangentSpace I (γ t)) (t₀ : ℝ)
+    (hf : DifferentiableAt ℝ f t₀)
+    (hV : DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t) (V t)) t₀) :
+    covDerivAlongCurve (I := I) g γ (fun t => f t • V t) t₀
+      = deriv f t₀ • V t₀ + f t₀ • covDerivAlongCurve (I := I) g γ V t₀ := by
+  have hbase : γ t₀ ∈ (trivializationAt E (TangentSpace I) (γ t₀)).baseSet :=
+    mem_chart_source H (γ t₀)
+  rw [covDerivAlongCurve, covDerivAlongCurve]
+  have hcoord : (fun t => (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ
+      (γ t) ((fun t => f t • V t) t))
+      = f • (fun t => (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ
+          (γ t) (V t)) := by
+    funext t; exact map_smul _ _ _
+  have harg : (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t₀)
+      ((fun t => f t • V t) t₀)
+      = f t₀ • (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t₀) (V t₀) :=
+    map_smul _ _ _
+  rw [hcoord, (hf.hasDerivAt.smul hV.hasDerivAt).deriv, harg,
+    Geodesic.chartChristoffelContraction_smul_right]
+  set D := deriv (fun t => (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ
+    (γ t) (V t)) t₀ with hD
+  set G := Geodesic.chartChristoffelContraction (I := I) g (γ t₀)
+    (deriv (fun t => extChartAt I (γ t₀) (γ t)) t₀)
+    ((trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t₀) (V t₀))
+    (extChartAt I (γ t₀) (γ t₀)) with hG
+  have hre : (f t₀ • D + deriv f t₀ •
+        (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t₀) (V t₀))
+        + f t₀ • G
+      = deriv f t₀ •
+          (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t₀) (V t₀)
+        + f t₀ • (D + G) := by rw [smul_add]; abel
+  rw [hre, map_add, map_smul, map_smul,
+    (trivializationAt E (TangentSpace I) (γ t₀)).symmL_continuousLinearMapAt hbase]
+
 end Riemannian
