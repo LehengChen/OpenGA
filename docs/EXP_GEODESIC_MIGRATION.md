@@ -100,6 +100,17 @@ smoothness), `Homogeneity`.
 
 ## Stage 2 (ExpVariationSmooth cone) — measured plan (2026-06-14)
 
+> **⛔ SUPERSEDED (2026-06-14, confirmed with Moqian).** This external-migration
+> route is abandoned. Bishop–Gromov is finished on OpenGALib's OWN foundation —
+> it already has `Util/CovDeriv`, `Connection/{Koszul,LeviCivita}`,
+> `Operators/{Bochner,Hessian,...}`, `Riemannian/Exponential/` (expMap + local
+> diffeo), and `Volume/Util/*` (0 sorry). The analytic core takes the Bochner
+> route (no Jacobi fields), so external's variation cone is off the critical path.
+> Real remaining work = fill OpenGALib's own Volume/exp/eikonal sorries; keystone
+> is `volumeMeasure_chart_pullback_eq`. The audit below is kept only as a record
+> of what external contains. See `project_bishop_gromov_self_build` (memory) and
+> the **Self-build route** section at the end of this file.
+
 Step 1 (`PolarVolumeReduction`, `ratio_spaceFormBallVolume_le`) is **done, 0 sorry**.
 
 Dependency audit of `ExpVariationSmooth`'s transitive cone (full cone = 158 files /
