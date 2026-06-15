@@ -42,6 +42,33 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [InnerProductSpa
 private local instance : MeasurableSpace E := borel E
 private local instance : BorelSpace E := ⟨rfl⟩
 
+/-- **Math.** **Fréchet derivative of the chart-pushed exponential.** Where
+`exp_p` is `C¹` (`ContMDiffOn`) into a single chart source, its chart
+representation `T = extChartAt p ∘ exp_p : E → E` is Fréchet-differentiable: it
+`HasFDerivWithinAt` its `fderivWithin`. This is the differentiability input the
+exp-volume change of variables (`volumeMeasure_expImage_eq_setLIntegral_jacobian`)
+consumes; combined with the chart smoothness `contMDiffOn_extChartAt` it converts
+manifold smoothness of `exp_p` into a genuine `E`-level Fréchet derivative. -/
+theorem chartExp_hasFDerivWithinAt
+    {g : RiemannianMetric I M} {p : M} {W : Set E}
+    (hexp : ContMDiffOn 𝓘(ℝ, E) I 1
+      (fun w : E => (expMap (I := I) g p (show TangentSpace I p from w) : M)) W)
+    (hsub : ∀ w ∈ W,
+      (expMap (I := I) g p (show TangentSpace I p from w) : M) ∈ (chartAt H p).source)
+    {w : E} (hw : w ∈ W) :
+    HasFDerivWithinAt
+      (fun w : E => extChartAt I p (expMap (I := I) g p (show TangentSpace I p from w)))
+      (fderivWithin ℝ
+        (fun w : E => extChartAt I p (expMap (I := I) g p (show TangentSpace I p from w)))
+        W w) W w := by
+  have hcomp : ContMDiffOn 𝓘(ℝ, E) 𝓘(ℝ, E) 1
+      (fun w : E => extChartAt I p (expMap (I := I) g p (show TangentSpace I p from w))) W :=
+    (contMDiffOn_extChartAt (I := I) (n := 1) (x := p)).comp hexp hsub
+  have hcd : ContDiffOn ℝ 1
+      (fun w : E => extChartAt I p (expMap (I := I) g p (show TangentSpace I p from w))) W :=
+    contMDiffOn_iff_contDiffOn.mp hcomp
+  exact (hcd.differentiableOn_one w hw).hasFDerivWithinAt
+
 /-- **Math.** **Exp-volume bridge (change-of-variables core).** For a measurable
 `W ⊆ T_p M` whose exponential image is open and contained in a single chart
 source, on which the chart-pushed exponential `T = φ ∘ exp_p` (`φ = extChartAt p`)
