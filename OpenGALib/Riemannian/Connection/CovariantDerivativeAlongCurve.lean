@@ -162,6 +162,39 @@ theorem covDerivAlongCurve_smul_scalar (g : RiemannianMetric I M) (γ : ℝ → 
   rw [hre, map_add, map_smul, map_smul,
     (trivializationAt E (TangentSpace I) (γ t₀)).symmL_continuousLinearMapAt hbase]
 
+omit [InnerProductSpace ℝ E] [NeZero (Module.finrank ℝ E)] in
+/-- **Math.** **Chart-coordinate expansion of a tangent vector.** On the
+trivialization base set, any `v : T_b M` is the chart-basis combination of its
+trivialization coordinates: `v = Σᵢ (φ v)ᵢ eᵢ(b)`, where the coefficients
+`(φ v)ᵢ` are the `Module.finBasis ℝ E` components of the fibre coordinate
+`(trivializationAt …).continuousLinearMapAt ℝ b v` and `eᵢ(b)` is
+`chartBasisVecFiber α i b`. This is the inverse-trivialization side of the
+inner-product-in-coordinates bridge: composed with `metricInner_chartBasis_combination`
+(the bilinear Gram form) it expresses `⟨v,w⟩_g` as the Gram bilinear form of the
+coordinate vectors — the input to the metric-compatibility of `D_t`. -/
+theorem eq_sum_repr_smul_chartBasisVecFiber (α : M) {b : M}
+    (hb : b ∈ (trivializationAt E (TangentSpace I) α).baseSet)
+    (v : TangentSpace I b) :
+    v = ∑ i, (Module.finBasis ℝ E).repr
+        ((trivializationAt E (TangentSpace I) α).continuousLinearMapAt ℝ b v) i
+        • chartBasisVecFiber (I := I) α i b := by
+  classical
+  set T := trivializationAt E (TangentSpace I) α with hT
+  have hbasis : ∀ i, chartBasisVecFiber (I := I) α i b
+      = T.symmL ℝ b ((Module.finBasis ℝ E) i) := by
+    intro i
+    unfold chartBasisVecFiber
+    rw [Bundle.Trivialization.symmL_apply]
+  calc v = T.symmL ℝ b (T.continuousLinearMapAt ℝ b v) :=
+        (T.symmL_continuousLinearMapAt hb v).symm
+    _ = T.symmL ℝ b (∑ i, (Module.finBasis ℝ E).repr (T.continuousLinearMapAt ℝ b v) i
+          • (Module.finBasis ℝ E) i) := by rw [(Module.finBasis ℝ E).sum_repr]
+    _ = ∑ i, (Module.finBasis ℝ E).repr (T.continuousLinearMapAt ℝ b v) i
+          • chartBasisVecFiber (I := I) α i b := by
+        rw [map_sum]
+        refine Finset.sum_congr rfl fun i _ => ?_
+        rw [map_smul, hbasis]
+
 /-- **Math.** **Metric inner product in chart coordinates (bilinear form).** The
 inner product of two linear combinations of chart-basis vectors is the Gram-matrix
 bilinear form of the coefficient vectors:
@@ -185,5 +218,33 @@ theorem metricInner_chartBasis_combination (g : RiemannianMetric I M) (α : M) (
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [map_smul, smul_eq_mul, chartGramMatrix_apply]
   ring
+
+/-- **Math.** **Inner product of two tangent vectors in chart coordinates.** On
+the trivialization base set, `⟨v,w⟩_g` is the Gram bilinear form of the
+trivialization-coordinate vectors of `v` and `w`:
+`⟨v,w⟩_g = Σᵢ Σⱼ (φ v)ᵢ (φ w)ⱼ G_{ij}`. This closes the
+inner-product-in-coordinates bridge — `eq_sum_repr_smul_chartBasisVecFiber`
+(expand each vector in the chart basis) composed with
+`metricInner_chartBasis_combination` (the bilinear Gram form). The basepoint `α`
+of the frame is decoupled from the evaluation point `x`, which is exactly the
+setup for `D_t` metric-compatibility: the chart is centred at `γ t₀` while the
+metric is read at the moving point `γ t`. -/
+theorem metricInner_eq_chartGram_bilinear (g : RiemannianMetric I M) (α : M) {x : M}
+    (hx : x ∈ (trivializationAt E (TangentSpace I) α).baseSet)
+    (v w : TangentSpace I x) :
+    g.metricInner x v w
+      = ∑ i, ∑ j,
+          (Module.finBasis ℝ E).repr
+              ((trivializationAt E (TangentSpace I) α).continuousLinearMapAt ℝ x v) i
+            * (Module.finBasis ℝ E).repr
+              ((trivializationAt E (TangentSpace I) α).continuousLinearMapAt ℝ x w) j
+            * chartGramMatrix (I := I) g α x i j := by
+  conv_lhs => rw [eq_sum_repr_smul_chartBasisVecFiber (I := I) α hx v,
+    eq_sum_repr_smul_chartBasisVecFiber (I := I) α hx w]
+  exact metricInner_chartBasis_combination (I := I) g α x
+    (fun i => (Module.finBasis ℝ E).repr
+      ((trivializationAt E (TangentSpace I) α).continuousLinearMapAt ℝ x v) i)
+    (fun j => (Module.finBasis ℝ E).repr
+      ((trivializationAt E (TangentSpace I) α).continuousLinearMapAt ℝ x w) j)
 
 end Riemannian
