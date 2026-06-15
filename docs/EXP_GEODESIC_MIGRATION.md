@@ -96,6 +96,81 @@ arc-length lemmas + a vestigial ~53k-line `SecondVariation` cone), `SmoothFlow`
 (geodesic flow smoothness via `Analysis.ODE.Flow` — the key input to exp
 smoothness), `Homogeneity`.
 
+---
+
+## Stage 2 (ExpVariationSmooth cone) — measured plan (2026-06-14)
+
+Step 1 (`PolarVolumeReduction`, `ratio_spaceFormBallVolume_le`) is **done, 0 sorry**.
+
+Dependency audit of `ExpVariationSmooth`'s transitive cone (full cone = 158 files /
+89.8k lines; the rest is dedup-able foundation OpenGALib already has, or already
+migrated Geodesic/Exponential/ODE). **Genuinely-new remainder = 30 files /
+25,210 lines**, in 19 bottom-up tiers (intra-cone topo sort; already-migrated +
+dedup foundation are leaves). Lift order:
+
+- **TIER 0** (7, no new-deps): `Comparison.NormalCoordinates` (559),
+  `Comparison.TangentNormDiamond` (75), `Comparison.Variation.ParallelLocalODE`
+  (929), `Exponential.ChartFlow.ChainedFlowContinuity` (164),
+  `Exponential.ChartFlow.SmallVelocityRescaling` (278),
+  `Geodesic.ChartTransitionMap` (334), `Geodesic.ProjDerivative` (643).
+- **TIER 1**: `Comparison.InjectivityRadius` (310), `Exponential.Smoothness.OffZero`
+  (1489), `Geodesic.ChartTransitionJacobian` (214).
+- **TIER 2**: `Geodesic.ChartTransition` (1901).
+- **TIER 3**: `Comparison.Variation.ParallelTransport` (1210),
+  `Geodesic.CrossVFReduction` (907).
+- **TIER 4**: `Comparison.Variation.FixedChartIdentities` (1264).
+- **TIER 5**: `Comparison.Variation.ArcLength` (398).
+- **TIER 6**: `Comparison.Variation.SpeedDerivative` (504).
+- **TIER 7**: `Comparison.Variation.FirstVariation` (1062).
+- **TIER 8**: `Comparison.Variation.CovariantCommutationCurvature` (1272).
+- **TIER 9**: `Comparison.Variation.RegularParameterFirstVariation` (372).
+- **TIER 10**: `Comparison.Variation.SecondVariation` (1139).
+- **TIER 11**: `Exponential.GaussLemmaPullback` (1690),
+  `Exponential.RadialSeminormFencing` (276).
+- **TIER 12**: `Exponential.GaussLemma` (2154).
+- **TIER 13**: `Comparison.GeodesicSpeedBound` (836),
+  `Comparison.LocalGeodesicSeed` (184).
+- **TIER 14**: `Comparison.ChartVelocityConvergence` (613).
+- **TIER 15**: `Comparison.EndpointContinuation` (590).
+- **TIER 16**: `Comparison.HopfRinow` (1123).
+- **TIER 17**: `Exponential.IntrinsicExp` (1682).
+- **TIER 18**: `Exponential.ExpVariationSmooth` (1038) — the unlock.
+
+Homing: `Geometry.Comparison.*` → `OpenGALib/Riemannian/Comparison/*`
+(ns `Riemannian.Comparison`); `Geometry.Geodesic/Exponential.*` → existing
+`OpenGALib/Riemannian/{Geodesic,Exponential}` homes. Per-file: dedup-grep the
+symbols first, remap foundation imports onto OpenGALib (reuse the map the
+already-migrated Exponential/Geodesic files established), fix v4.30 drift,
+linter-clean, build per-file (LSP), full build + commit per tier.
+
+### ⚠ Refinement (2026-06-14): foundation reconciliation gates TIER 0
+
+The 30-file tier plan above is the **geometry-layer** new content. But even the
+TIER-0 files import dedup-able-vs-new *foundation* that the directory split
+hides — the dedup boundary does NOT follow directories. Verified by symbol grep:
+
+- **Dedup-able foundation** (OpenGALib already has the symbols → just remap the
+  import; do NOT lift): `Connection/MetricCompatibility/ChartGramChristoffel`
+  (≈ our `Connection/ChartChristoffel` `chartGramOnE`), `Analysis/Integration/
+  Measure/ChartDensity` (≈ `TensorBundle/MusicalIso`), most of `Measure/Invariance`
+  + `Measure/Family*` (≈ our `Riemannian/Volume/`). The import-remap dictionary
+  for these is still TO BE BUILT (the already-migrated geodesic/exp files only
+  exercised trivial 1:1 `Geodesic/Exponential` renames, never this foundation).
+- **Genuinely-new foundation** (OpenGALib lacks it → migrate as **TIER −1**,
+  below TIER 0): `Connection/ParallelTransport/{AlongCurve (1180),
+  CovariantDerivativeAlong (883), MFDerivAlongCurve (375)}` (~2.4k — this is the
+  handoff's "parallel-transport-along-curve") and `Connection/Chart/
+  NablaComponents/{Basic (459), OneForm (920), TwoTensor (422)}` (~1.8k; grep
+  confirms OpenGALib has only `chartChristoffel`, not the nabla-components cone).
+
+**Immediate next sub-step (before any geometry-layer lift):** a foundation
+dedup/remap pass — (a) for each foundation module a TIER-0/1 file imports, decide
+remap-to-OpenGALib vs migrate, producing the import-rewrite dictionary; (b)
+migrate the TIER −1 genuinely-new foundation (parallel-transport-along-curve +
+NablaComponents, ~4.2k lines, bottom-up). Only then does TIER 0 compile.
+
+---
+
 **Next:** `Geometry/Exponential` layer — `expMap` def (`expₚ v = γ_v(1)`),
 smoothness (from `SmoothFlow`), local diffeomorphism at 0; then the metric Gauss
 lemma. After that, the **build-ourselves** BG-key rows: smooth eikonal `|∇r|²=1`,
