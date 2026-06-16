@@ -101,7 +101,6 @@ $$\mathrm{Hess}\,(|\nabla f|^2)(B, B)(x) = 2\bigl(
    + \|\nabla_B \nabla f\|_g^2\bigr)(x).$$
 Section-form analog of `hessian_gradientNormSq_apply_chartFrame`. -/
 theorem hessian_gradientNormSq_apply_section
-    [IsManifold I 2 M]
     (f : M → ℝ) (B : SmoothVectorField I M) (x : M)
     (h_grad : ContMDiff I (I.prod 𝓘(ℝ, E)) ∞
               (fun y => (⟨y, manifoldGradient (I := I) g f y⟩ : TangentBundle I M))) :
@@ -244,7 +243,6 @@ $$\mathrm{Hess}\,g(v, v)(x) = 2\bigl(\langle (\nabla^2 \nabla f)(v, v), \nabla f
 Combines `hessian_eq_mDirDeriv_iterate_sub_chris`,
 `mfderiv_gradientNormSq_apply`, and a level-2 metric-compat. -/
 theorem hessian_gradientNormSq_apply_chartFrame
-    [IsManifold I 2 M]
     (f : M → ℝ) (x : M) (v : TangentSpace I x)
     (h_grad : ContMDiff I (I.prod 𝓘(ℝ, E)) ∞
               (fun y => (⟨y, manifoldGradient (I := I) g f y⟩ : TangentBundle I M))) :

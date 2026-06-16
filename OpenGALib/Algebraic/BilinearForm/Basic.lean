@@ -1,4 +1,5 @@
 import Mathlib.LinearAlgebra.BilinearForm.Basic
+import Mathlib.LinearAlgebra.BilinearForm.Properties
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Order.Ring.Defs
 
@@ -18,20 +19,21 @@ positive-definite forms in optimisation, matrix calculus.
 
 namespace BilinearForm
 
-/-- A bilinear form on `V` over field `𝕜`: a linear map
-`V →ₗ[𝕜] V →ₗ[𝕜] 𝕜`. -/
-abbrev Form (𝕜 : Type*) [Field 𝕜]
-    (V : Type*) [AddCommGroup V] [Module 𝕜 V] :=
-  V →ₗ[𝕜] V →ₗ[𝕜] 𝕜
+/-- A bilinear form on `V` over `𝕜`: a linear map
+`V →ₗ[𝕜] V →ₗ[𝕜] 𝕜`. Definitionally Mathlib's `LinearMap.BilinForm`. -/
+abbrev Form (𝕜 : Type*) [CommSemiring 𝕜]
+    (V : Type*) [AddCommMonoid V] [Module 𝕜 V] :=
+  LinearMap.BilinForm 𝕜 V
 
 section Algebra
 
 variable {𝕜 : Type*} [Field 𝕜]
   {V : Type*} [AddCommGroup V] [Module 𝕜 V]
 
-/-- The bilinear form is symmetric. -/
-def IsSymm (B : Form 𝕜 V) : Prop :=
-  ∀ v w, B v w = B w v
+/-- The bilinear form is symmetric. Alias of Mathlib's
+`LinearMap.BilinForm.IsSymm`. -/
+abbrev IsSymm (B : Form 𝕜 V) : Prop :=
+  LinearMap.BilinForm.IsSymm B
 
 /-- The **inner product** $\langle v, w \rangle_B$ via a bilinear form. -/
 def inner (B : Form 𝕜 V) (v w : V) : 𝕜 :=
@@ -50,7 +52,7 @@ generic version of the framework's `metricInner_*` lemmas. -/
 /-- **Symmetry** (when the form is symmetric). -/
 theorem inner_comm {B : Form 𝕜 V} (hB : IsSymm B) (v w : V) :
     inner B v w = inner B w v :=
-  hB v w
+  hB.eq v w
 
 /-- **Additivity in left argument**. -/
 theorem inner_add_left (B : Form 𝕜 V) (v₁ v₂ w : V) :
@@ -100,13 +102,13 @@ theorem inner_neg_right (B : Form 𝕜 V) (v w : V) :
 @[simp]
 theorem inner_sub_left (B : Form 𝕜 V) (v₁ v₂ w : V) :
     inner B (v₁ - v₂) w = inner B v₁ w - inner B v₂ w := by
-  rw [sub_eq_add_neg, inner_add_left, inner_neg_left, sub_eq_add_neg]
+  simp [inner_def, map_sub, LinearMap.sub_apply]
 
 /-- **Subtraction in right argument**. -/
 @[simp]
 theorem inner_sub_right (B : Form 𝕜 V) (v w₁ w₂ : V) :
     inner B v (w₁ - w₂) = inner B v w₁ - inner B v w₂ := by
-  rw [sub_eq_add_neg, inner_add_right, inner_neg_right, sub_eq_add_neg]
+  simp [inner_def, map_sub]
 
 end Algebra
 
