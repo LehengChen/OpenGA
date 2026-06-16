@@ -72,11 +72,15 @@ External reference: `riemannSec_smul_third` in
 theorem riemannCurvature_smul_third_scalar_field
     [IsManifold I 2 M]
     (f : M → ℝ) (X Y Z : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I)))
     (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f) :
     riemannCurvature g X.toFun Y.toFun (f • Z.toFun) x
       = f x • riemannCurvature g X.toFun Y.toFun Z.toFun x := by
   classical
+  -- `[I.Boundaryless]` makes `range I = univ`, so the chart-interior hypothesis
+  -- is automatic and can be discharged internally.
+  have h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
+    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
+    exact Set.mem_univ _
   have hf_at : ∀ y, MDifferentiableAt I 𝓘(ℝ, ℝ) f y :=
     fun y => (hf y).mdifferentiableAt (by simp)
   have hf_C2_at : ContMDiffAt I 𝓘(ℝ, ℝ) 2 f x :=
@@ -313,7 +317,6 @@ global sections `X, Y, Z`. -/
 theorem riemannCurvature_eq_zero_of_Z_eq_zero_field
     [IsManifold I 2 M] [T2Space M]
     (X Y Z : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I)))
     (hZx : Z.toFun x = 0) :
     riemannCurvature g X.toFun Y.toFun Z.toFun x = 0 := by
   classical
@@ -478,7 +481,7 @@ theorem riemannCurvature_eq_zero_of_Z_eq_zero_field
       show riemannCurvature g X.toFun Y.toFun (c j • (s' j).toFun) x
         = c j x • riemannCurvature g X.toFun Y.toFun (s' j).toFun x
       exact riemannCurvature_smul_third_scalar_field
-        g (c j) X Y (s' j) x h_interior (hc_smooth j)
+        g (c j) X Y (s' j) x (hc_smooth j)
     rw [h_add, h_smul, IH, Finset.sum_insert hjs]
 
 /-! ## Z-slot pointwise dependence
@@ -491,7 +494,6 @@ Z-slot vanishing on `τ := Z - Z'` combined with Z-slot additivity. -/
 theorem riemannCurvature_eq_of_Z_eq_at
     [IsManifold I 2 M] [T2Space M]
     (X Y Z Z' : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I)))
     (hZZ' : Z.toFun x = Z'.toFun x) :
     riemannCurvature g X.toFun Y.toFun Z.toFun x
       = riemannCurvature g X.toFun Y.toFun Z'.toFun x := by
@@ -501,7 +503,7 @@ theorem riemannCurvature_eq_of_Z_eq_at
     show Z.toFun x - Z'.toFun x = 0
     rw [hZZ']; abel
   have hτ_vanish : riemannCurvature g X.toFun Y.toFun τ.toFun x = 0 :=
-    riemannCurvature_eq_zero_of_Z_eq_zero_field g X Y τ x h_interior hτ_zero
+    riemannCurvature_eq_zero_of_Z_eq_zero_field g X Y τ x hτ_zero
   -- `Z = Z' + τ` pointwise; transfer to `(Z' + τ).toFun = Z.toFun` via the
   -- SmoothVectorField `Add` instance (defn-equality `(Z' + τ).toFun y = Z'.toFun y + τ.toFun y`).
   have h_pi : (Z' + τ).toFun = Z.toFun := by
@@ -918,7 +920,6 @@ Chained through the X-, Y-, and Z-slot `eq_at` lemmas. Used to define
 theorem riemannCurvature_eq_of_pointwise_eq
     [IsManifold I 2 M] [T2Space M]
     (X X' Y Y' Z Z' : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I)))
     (hX_eq : X.toFun x = X'.toFun x)
     (hY_eq : Y.toFun x = Y'.toFun x)
     (hZ_eq : Z.toFun x = Z'.toFun x) :
@@ -926,6 +927,6 @@ theorem riemannCurvature_eq_of_pointwise_eq
       = riemannCurvature g X'.toFun Y'.toFun Z'.toFun x := by
   rw [riemannCurvature_eq_of_X_eq_at g X X' Y Z x hX_eq,
       riemannCurvature_eq_of_Y_eq_at g X' Y Y' Z x hY_eq,
-      riemannCurvature_eq_of_Z_eq_at g X' Y' Z Z' x h_interior hZ_eq]
+      riemannCurvature_eq_of_Z_eq_at g X' Y' Z Z' x hZ_eq]
 
 end Riemannian
