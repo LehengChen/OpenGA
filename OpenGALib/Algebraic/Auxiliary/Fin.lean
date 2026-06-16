@@ -33,22 +33,9 @@ theorem finAddFlip_finSumFinEquiv {m n : ℕ} (a : Fin m ⊕ Fin n) :
 /-- `Fin (m + n) ≃ Fin (n + m)`. -/
 def finAddCongr : Fin (m + n) ≃ Fin (n + m) := finCongr (add_comm m n)
 
-@[simp]
-lemma finAddCongr_finAddCongr (i : Fin (m + n)) :
-    finAddCongr (finAddCongr i) = i :=
-  rfl
-
-@[simp]
-lemma finAddCongr_symm_finAddCongr_symm (i : Fin (m + n)) :
-    finAddCongr.symm (finAddCongr.symm i) = i :=
-  rfl
-
-/-- `Fin m ⊕ Fin n ≃ Fin n ⊕ Fin m` via `Sum.swap`. -/
-def finSumCongr : Fin m ⊕ Fin n ≃ Fin n ⊕ Fin m where
-  toFun x := x.swap
-  invFun x := x.swap
-  left_inv := Sum.swap_swap
-  right_inv := Sum.swap_swap
+/-- `Fin m ⊕ Fin n ≃ Fin n ⊕ Fin m` via `Sum.swap`.
+Thin wrapper over Mathlib `Equiv.sumComm`. -/
+def finSumCongr : Fin m ⊕ Fin n ≃ Fin n ⊕ Fin m := Equiv.sumComm (Fin m) (Fin n)
 
 @[simp]
 lemma finSumCongr_symm_inl_inr (x : Fin m) :
