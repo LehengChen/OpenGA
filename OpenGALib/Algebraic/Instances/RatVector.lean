@@ -1,15 +1,19 @@
 import OpenGALib.Algebraic.BilinearForm.Basic
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Rat.Defs
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.LinearAlgebra.Matrix.DotProduct
+import Mathlib.Algebra.Order.Ring.Rat
+import Mathlib.Tactic.NormNum.Ineq
 
 /-!
 # Concrete instance: rational vectors
 
 A fully `#eval`-able `BilinearForm` on `Fin n → ℚ`. `#eval inner`
-produces a `Rat`; `native_decide` closes concrete equalities like
-`inner ![1,2,3] ![4,5,6] = 32`. The same operations on the abstract
+produces a `Rat`; concrete equalities like
+`inner ![1,2,3] ![4,5,6] = 32` are closed by kernel-checked
+`simp`/`norm_num` proofs. The same operations on the abstract
 `Form ℚ V` API give the same numerical results, demonstrating
 algebraic-core ↔ concrete-instance consistency.
 
@@ -78,24 +82,32 @@ open BilinearForm RatVector
 
 #eval inner (stdForm 3) ![1, 0, 0] ![1, 0, 0]    -- 1
 
-/-! ## `native_decide`-closed equalities — proof by execution
+/-! ## Kernel-checked equalities — proof by computation
 
-The same equations that `#eval` produces are closed as theorems via
-`native_decide`, which compiles the term to native code and uses the
-result as a proof. -/
+The same equations that `#eval` produces are closed as theorems by
+unfolding `inner` to the concrete sum (`stdForm_apply`,
+`Fin.sum_univ_two`/`Fin.sum_univ_three`) and discharging the rational
+arithmetic with `norm_num`. Each proof is checked by the kernel — no
+native code or compiler trust. -/
 
-example : inner (stdForm 3) ![1, 2, 3] ![4, 5, 6] = 32 := by native_decide
+example : inner (stdForm 3) ![1, 2, 3] ![4, 5, 6] = 32 := by
+  simp [stdForm_apply, Fin.sum_univ_three]; norm_num
 
-example : inner (stdForm 2) ![3, 4] ![3, 4] = 25 := by native_decide
+example : inner (stdForm 2) ![3, 4] ![3, 4] = 25 := by
+  simp [stdForm_apply, Fin.sum_univ_two]; norm_num
 
-example : inner (stdForm 3) ![1, 0, 0] ![0, 1, 0] = 0 := by native_decide
+example : inner (stdForm 3) ![1, 0, 0] ![0, 1, 0] = 0 := by
+  simp [stdForm_apply, Fin.sum_univ_three]
 
-example : inner (stdForm 3) ![1, 0, 0] ![1, 0, 0] = 1 := by native_decide
+example : inner (stdForm 3) ![1, 0, 0] ![1, 0, 0] = 1 := by
+  simp [stdForm_apply, Fin.sum_univ_three]
 
-/-- Cauchy–Schwarz on a concrete pair, verified by execution. -/
+/-- Cauchy–Schwarz on a concrete pair, kernel-checked. -/
 example :
     let v : Fin 3 → ℚ := ![1, 2, 3]
     let w : Fin 3 → ℚ := ![4, 5, 6]
     (inner (stdForm 3) v w) ^ 2
       ≤ inner (stdForm 3) v v * inner (stdForm 3) w w := by
-  native_decide
+  norm_num [inner_def, stdForm_apply, Fin.sum_univ_three,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.tail_cons]
