@@ -36,23 +36,13 @@ local notation "MLF" s => ContinuousMultilinearMap 𝕜 (fun _ : Fin s => F) �
 
 /-! ## Finite-dimensionality instances -/
 
-/-- Multilinear maps from `s` copies of a finite-dimensional space `F` to `𝕜`
-form a finite-dimensional space. -/
-noncomputable instance multilinearMap_finiteDimensional (s : ℕ) :
-    FiniteDimensional 𝕜 (MultilinearMap 𝕜 (fun _ : Fin s => F) 𝕜) := by
-  haveI : Module.Finite 𝕜 F := inferInstance
-  haveI : Module.Free 𝕜 F := inferInstance
-  haveI : Module.Finite 𝕜 𝕜 := inferInstance
-  haveI : Module.Free 𝕜 𝕜 := inferInstance
-  infer_instance
-
 /-- Continuous multilinear maps from `s` copies of a finite-dimensional `F` to
-`𝕜` form a finite-dimensional space. -/
+`𝕜` form a finite-dimensional space. Finite-dimensionality of the underlying
+algebraic `MultilinearMap` space is supplied by Mathlib's
+`Module.Finite.multilinearMap` instance. -/
 noncomputable instance continuousMultilinearMap_finiteDimensional (s : ℕ) :
-    FiniteDimensional 𝕜 (MLF s) := by
-  haveI : FiniteDimensional 𝕜 (MultilinearMap 𝕜 (fun _ : Fin s => F) 𝕜) :=
-    multilinearMap_finiteDimensional s
-  exact FiniteDimensional.of_injective
+    FiniteDimensional 𝕜 (MLF s) :=
+  FiniteDimensional.of_injective
     ContinuousMultilinearMap.toMultilinearMapLinear
     ContinuousMultilinearMap.toMultilinearMap_injective
 

@@ -62,7 +62,6 @@ for $\{\varepsilon_i\} = \mathrm{stdOrthonormalBasis}\,\mathbb{R}\,(T_xM)$.
 Unfolds `ricci` via `LinearMap.trace_eq_sum_inner` on the curvature
 endomorphism. -/
 theorem ricciTensor_eq_sum_inner_orthonormal
-    [IsManifold I 2 M]
     (x : M) (V W : TangentSpace I x) :
     ricciTensor g x V W =
       ∑ i, ⟪(stdOrthonormalBasis ℝ (TangentSpace I x)) i,
@@ -101,7 +100,6 @@ Christoffel terms.
 
 Ported from do Carmo §6 / Petersen Ch 7 §1 Prop 33. -/
 theorem metricInner_secondCovDerivAt_grad_swap_of_hess_eventual_sym
-    [IsManifold I 2 M]
     (f : M → ℝ) (x : M) (v w z : TangentSpace I x)
     (h_interior : extChartAt I x x ∈ closure (interior (Set.range I)))
     (hf_2 : ContMDiffAt I 𝓘(ℝ, ℝ) 2 f x)
@@ -231,42 +229,11 @@ theorem metricInner_secondCovDerivAt_grad_swap_of_hess_eventual_sym
   -- ⇒ A - hA = (P - hB') - hA = (Q - hB) - hA' = (B + hA' - hB) - hA' = B - hB ✓
   linear_combination -h_compat_W + h_compat_Z + h_eq_at_v + h_sym_zΓvw - h_sym_wΓvz
 
-/-- **Math.** Discharge of `h_eventual_sym` from `[I.Boundaryless]`.
-Propagates the strict-interior fact (vacuous under `[I.Boundaryless]`) to
-a nbhd via `extChartAt_self_eventually_mem_closure_interior_range` and
-applies pointwise `hessianBilin_symm` to feed
-`HasMetric.metric.metricInner_secondCovDerivAt_grad_swap_of_hess_eventual_sym`. -/
-theorem hessianBilin_eventually_symm_of_strict_interior
-    [IsManifold I 2 M]
-    (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f) (x : M)
-    (w z : TangentSpace I x) :
-    (fun y : M => hessianBilin (I := I) g f y w z)
-      =ᶠ[𝓝 x] (fun y : M => hessianBilin (I := I) g f y z w) := by
-  subst hg
-  have h_strict : extChartAt I x x ∈ interior (Set.range I) := by
-    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ]; exact Set.mem_univ _
-  have h_grad := manifoldGradient_smooth_of_smooth HasMetric.metric f hf
-  have h_interior_nbhd :=
-    extChartAt_self_eventually_mem_closure_interior_range (I := I) (M := M) h_strict
-  filter_upwards [h_interior_nbhd] with y hy_interior
-  -- C² of f at y from global C∞.
-  have hf_2_y : ContMDiffAt I 𝓘(ℝ, ℝ) 2 f y :=
-    (hf y).of_le (by
-      show ((2 : ℕ∞) : ℕ∞ω) ≤ ∞
-      exact_mod_cast (le_top : (2 : ℕ∞) ≤ ⊤))
-  -- Smoothness of ∇f at y from global smoothness.
-  have h_grad_y : TangentSmoothAt (manifoldGradient (I := I) HasMetric.metric f) y :=
-    (h_grad y).mdifferentiableAt (by simp)
-  -- Pointwise Hess-sym at y. The `w z : TangentSpace I x` args are def-eq to
-  -- `TangentSpace I y = E` arguments under `IsLocallyConstantChartedSpace`.
-  exact hessianBilin_symm (I := I) HasMetric.metric f y hy_interior hf_2_y h_grad_y w z
-
 /-- **Math.** Section-level Hessian symmetry on smooth vector fields,
 discharged from strict interior. Variant with smooth varying sections
 $X, Y$ instead of constant lifts: at every $y$ near $x$,
 $\mathrm{Hess}\,f\,(X(y), Y(y))(y) = \mathrm{Hess}\,f\,(Y(y), X(y))(y)$. -/
 theorem hessianBilin_section_eventually_symm_of_strict_interior
-    [IsManifold I 2 M]
     (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f)
     (X Y : VectorFieldSection I M) (x : M) :
     (fun y : M => hessianBilin (I := I) g f y (X y) (Y y))
@@ -340,7 +307,6 @@ $(W, \nabla f, B_i)$ equals the Ricci bilinear at $(\nabla f x, W x)$:
 $$\sum_i g_x\bigl(R(B_i, W)\,\nabla f,\, B_i\bigr) \;=\;
   \mathrm{Ric}_g(\nabla f, W)(x).$$ -/
 theorem heart_curvature_orthonormal_sum_eq_ricci
-    [IsManifold I 2 M] [T2Space M]
     (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f)
     (W : SmoothVectorField I M) (x : M) :
     ∑ i, g.metricInner x
@@ -401,7 +367,7 @@ theorem heart_curvature_orthonormal_sum_eq_ricci
             WV.toFun GV.toFun x
       exact riemannCurvature_eq_of_pointwise_eq HasMetric.metric
         (Bi i) (SmoothVectorField.const ((Bi i).toFun x : E))
-        W WV gradF GV x h_interior rfl rfl rfl
+        W WV gradF GV x rfl rfl rfl
     rw [hR_eq]; rfl
   -- Step 2 + 3 + 4: rewrite via h_per_i, Stage 7, identify with Ric, ricci_symm.
   calc ∑ i, HasMetric.metric.metricInner x
@@ -463,7 +429,6 @@ $$g_x(\nabla_v B_i, B_j x) + g_x(B_i x, \nabla_v B_j) = 0.$$
 Differentiate $g(B_i, B_j) = \delta_{ij}$ on `smoothOrthoFrameNbhd x`
 and apply metric compatibility. -/
 theorem smoothOrthoFrame_cov_skew
-    [T2Space M]
     (x : M) (i j : Fin (Module.finrank ℝ E)) (v : TangentSpace I x) :
     g.metricInner x
         ((leviCivitaConnection (I := I) (M := M) g).toFun
@@ -530,7 +495,6 @@ the orthonormal frame, factoring into $\sum_{i,j} a_{ij} h_{ij}$ with
 $a_{ij}$ antisymmetric (`smoothOrthoFrame_cov_skew`) and $h_{ij}$
 symmetric (`hessianBilin_symm`). -/
 theorem sum_hessianBilin_smoothOrthoFrame_cov_eq_zero
-    [IsManifold I 2 M] [T2Space M]
     (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f)
     (W : SmoothVectorField I M) (x : M) :
     ∑ i, hessianBilin (I := I) g f x
@@ -660,7 +624,6 @@ Eng: Riesz-style specialisation plus bilinearity packages the four-step
 algebraic chain (Hess-sym swap, D.3, Ricci identification, smooth-trace
 identification) into the form consumed by the Bochner–Weitzenböck assembly. -/
 theorem sum_inner_secondCovDerivAt_grad_smoothOrthoFrame_of_inner_form
-    [IsManifold I 2 M] [T2Space M]
     (f : M → ℝ) (x : M)
     (hInner : ∀ w : TangentSpace I x,
       g.metricInner x

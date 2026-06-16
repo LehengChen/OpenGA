@@ -174,11 +174,8 @@ lemma directionalDeriv_mul
     (hf : MDifferentiableAt I 𝓘(ℝ, ℝ) f x)
     (hg : MDifferentiableAt I 𝓘(ℝ, ℝ) g x) :
     directionalDeriv (fun y => f y * g y) x v
-      = f x * directionalDeriv g x v + g x * directionalDeriv f x v := by
-  unfold directionalDeriv
-  have heq : (fun y : M => f y * g y) = f * g := rfl
-  rw [heq, (hf.hasMFDerivAt.mul hg.hasMFDerivAt).mfderiv]
-  rfl
+      = f x * directionalDeriv g x v + g x * directionalDeriv f x v :=
+  congrArg (fun L => L v) (hf.hasMFDerivAt.mul hg.hasMFDerivAt).mfderiv
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsManifold I ∞ M]
   [hm : HasMetric I M] in
@@ -186,9 +183,8 @@ omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsManifold I ∞ M]
 $X_{a \cdot v}(f) = a \cdot X_v(f)$. Wraps `ContinuousLinearMap.map_smul`. -/
 lemma directionalDeriv_smul_arg
     (g : M → ℝ) (x : M) (a : ℝ) (v : TangentSpace I x) :
-    directionalDeriv g x (a • v) = a * directionalDeriv g x v := by
-  unfold directionalDeriv
-  exact (mfderiv I 𝓘(ℝ, ℝ) g x).map_smul a v
+    directionalDeriv g x (a • v) = a * directionalDeriv g x v :=
+  (mfderiv I 𝓘(ℝ, ℝ) g x).map_smul a v
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsManifold I ∞ M]
   [hm : HasMetric I M] in
@@ -199,11 +195,8 @@ lemma directionalDeriv_add_fun
     (hf : MDifferentiableAt I 𝓘(ℝ, ℝ) f x)
     (hg : MDifferentiableAt I 𝓘(ℝ, ℝ) g x) :
     directionalDeriv (fun y => f y + g y) x v
-      = directionalDeriv f x v + directionalDeriv g x v := by
-  unfold directionalDeriv
-  have heq : (fun y : M => f y + g y) = f + g := rfl
-  rw [heq, mfderiv_add hf hg]
-  rfl
+      = directionalDeriv f x v + directionalDeriv g x v :=
+  congrArg (fun L => L v) (mfderiv_add hf hg)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsManifold I ∞ M]
   [hm : HasMetric I M] in
@@ -212,9 +205,8 @@ $X_{v_1 + v_2}(f) = X_{v_1}(f) + X_{v_2}(f)$. Wraps `map_add`. -/
 lemma directionalDeriv_add_arg
     (f : M → ℝ) (x : M) (v₁ v₂ : TangentSpace I x) :
     directionalDeriv f x (v₁ + v₂)
-      = directionalDeriv f x v₁ + directionalDeriv f x v₂ := by
-  unfold directionalDeriv
-  exact (mfderiv I 𝓘(ℝ, ℝ) f x).map_add v₁ v₂
+      = directionalDeriv f x v₁ + directionalDeriv f x v₂ :=
+  (mfderiv I 𝓘(ℝ, ℝ) f x).map_add v₁ v₂
 
 omit [FiniteDimensional ℝ E] hm in
 /-- **Math.** **Koszul $C^\infty(M)$-linearity in $Z$**:

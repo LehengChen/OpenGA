@@ -87,16 +87,12 @@ theorem riemannCurvature_jacobi_self_adjoint_const
     (g : RiemannianMetric I M) (x : M) (u v w : TangentSpace I x) :
     g.metricInner x (riemannCurvature g (fun _ => u) (fun _ => v) (fun _ => v) x) w
       = g.metricInner x (riemannCurvature g (fun _ => w) (fun _ => v) (fun _ => v) x) u := by
-  have h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
-    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
-    exact Set.mem_univ _
   have hpair := riemannCurvature_pair_symm g
     (SmoothVectorField.const (I := I) (M := M) u) (SmoothVectorField.const (I := I) (M := M) v)
     (SmoothVectorField.const (I := I) (M := M) v) (SmoothVectorField.const (I := I) (M := M) w) x
   have hskew := riemannCurvature_metric_skew g
     (SmoothVectorField.const (I := I) (M := M) v) (SmoothVectorField.const (I := I) (M := M) w)
     (SmoothVectorField.const (I := I) (M := M) u) (SmoothVectorField.const (I := I) (M := M) v) x
-    h_interior
   have hanti := riemannCurvature_antisymm g
     (fun _ => v) (fun _ => w) (fun _ => v) x
   have hc : ∀ a : TangentSpace I x,

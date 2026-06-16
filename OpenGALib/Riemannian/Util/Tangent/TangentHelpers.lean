@@ -90,20 +90,7 @@ theorem mdifferentiableAt_continuousLinearMap_of_components
       (fun y : M => T y (basis i)) x) :
     MDifferentiableAt I 𝓘(ℝ, F₁ →L[ℝ] F₂) T x := by
   classical
-  have h_decomp : T = fun y =>
-      ∑ i, (basis.coord i).toContinuousLinearMap.smulRight (T y (basis i)) := by
-    funext y
-    ext v
-    rw [ContinuousLinearMap.sum_apply]
-    have hv : v = ∑ i, basis.repr v i • basis i := by simp
-    conv_lhs => rw [hv]
-    rw [map_sum]
-    refine Finset.sum_congr rfl ?_
-    intro i _
-    simp [ContinuousLinearMap.smulRight_apply,
-      LinearMap.coe_toContinuousLinearMap', Module.Basis.coord_apply,
-      (T y).map_smul]
-  rw [h_decomp]
+  rw [TangentBundle.continuousLinearMap_of_components_decomp T basis]
   -- Convert (fun y => ∑ i, f i y) to (∑ i, fun y => f i y) for MDifferentiableAt.sum.
   have h_swap : (fun y : M => ∑ i,
       (basis.coord i).toContinuousLinearMap.smulRight (T y (basis i)))

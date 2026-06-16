@@ -118,13 +118,10 @@ theorem riemannCurvature_inner_self_zero_const
     (g : RiemannianMetric I M) (x : M) (u v : TangentSpace I x) :
     g.metricInner x
         (riemannCurvature g (fun _ => u) (fun _ => v) (fun _ => v) x) v = 0 := by
-  have h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
-    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
-    exact Set.mem_univ _
   have h := riemannCurvature_inner_self_zero g
     (SmoothVectorField.const (I := I) (M := M) u)
     (SmoothVectorField.const (I := I) (M := M) v)
-    (SmoothVectorField.const (I := I) (M := M) v) x h_interior
+    (SmoothVectorField.const (I := I) (M := M) v) x
   simpa only [SmoothVectorField.const_apply] using h
 
 /-- **Math.** **Gauss orthogonality of a Jacobi field.** Along a geodesic `γ`, a
