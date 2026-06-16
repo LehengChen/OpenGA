@@ -413,17 +413,25 @@ private lemma half_mDirDeriv_iterate_eq_metricInner_iterCovDeriv
   rw [h_compat_ℝ]; ring
 
 /-- **Math.** $\langle R(X, Y) Z, Z \rangle_g(x) = 0$ for smooth vector fields
-$X, Y, Z$, with $x$ in the closure of the interior of $\mathrm{range}\,I$
-(required by the Hessian–Lie identity for boundary-aware models).
+$X, Y, Z$.
+
+The Hessian–Lie identity used internally requires $\mathrm{extChartAt}\,I\,x\,x$
+to lie in the closure of the interior of $\mathrm{range}\,I$; this holds
+unconditionally here because `I.Boundaryless` makes `Set.range I = univ`,
+so the hypothesis is discharged inside the proof rather than exposed.
 
 Reference: do Carmo §4 Proposition 2.5(iii). -/
 theorem riemannCurvature_inner_self_zero
     (g : RiemannianMetric I M)
     [IsManifold I 2 M]
-    (X Y Z : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I))) :
+    (X Y Z : SmoothVectorField I M) (x : M) :
     g.metricInner x (riemannCurvature g X.toFun Y.toFun Z.toFun x) (Z x) = 0 := by
   classical
+  -- `I.Boundaryless` makes `Set.range I = univ`, so the interior-closure
+  -- membership required by the Hessian–Lie identity holds unconditionally.
+  have h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
+    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
+    exact Set.mem_univ _
   -- Setup: f := g(Z, Z), the self-norm-squared scalar function.
   set f : M → ℝ := fun y' => g.metricInner y' (Z y') (Z y') with hf_def
   -- f is C∞ globally, hence C² at x.
@@ -582,13 +590,12 @@ Reference: do Carmo §4 Proposition 2.5(iv). -/
 theorem riemannCurvature_metric_skew
     [IsManifold I 2 M]
     (g : RiemannianMetric I M)
-    (X Y Z W : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I))) :
+    (X Y Z W : SmoothVectorField I M) (x : M) :
     g.metricInner x (riemannCurvature g X.toFun Y.toFun Z.toFun x) (W x)
       + g.metricInner x (riemannCurvature g X.toFun Y.toFun W.toFun x) (Z x) = 0 := by
-  have h_ZW := riemannCurvature_inner_self_zero g X Y (Z + W) x h_interior
-  have h_Z := riemannCurvature_inner_self_zero g X Y Z x h_interior
-  have h_W := riemannCurvature_inner_self_zero g X Y W x h_interior
+  have h_ZW := riemannCurvature_inner_self_zero g X Y (Z + W) x
+  have h_Z := riemannCurvature_inner_self_zero g X Y Z x
+  have h_W := riemannCurvature_inner_self_zero g X Y W x
   have h_add := riemannCurvature_add_third g X Y Z W x
   have h_ZW_x : (Z + W) x = Z x + W x := rfl
   rw [h_add, h_ZW_x, g.metricInner_add_left, g.metricInner_add_right,
@@ -613,9 +620,6 @@ theorem riemannCurvature_pair_symm
     (X Y Z W : SmoothVectorField I M) (x : M) :
     g.metricInner x (riemannCurvature g X Y Z x) (W x)
       = g.metricInner x (riemannCurvature g Z W X x) (Y x) := by
-  have h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
-    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
-    exact Set.mem_univ _
   have bianchi_inner : ∀ (A B C D : SmoothVectorField I M),
       g.metricInner x (riemannCurvature g A B C x) (D x)
         + g.metricInner x (riemannCurvature g B C A x) (D x)
@@ -641,7 +645,7 @@ theorem riemannCurvature_pair_symm
       g.metricInner x (riemannCurvature g A B C x) (D x)
         = -g.metricInner x (riemannCurvature g A B D x) (C x) := by
     intro A B C D
-    have h := riemannCurvature_metric_skew g A B C D x h_interior
+    have h := riemannCurvature_metric_skew g A B C D x
     linarith
   -- Combine: sum of b1..b4 with the antisymmetries gives 2·σ(X,Y,Z,W) - 2·σ(Z,W,X,Y) = 0.
   -- Specialise antisym to the 12 σ-instances appearing in b1..b4 and feed to linarith.
@@ -730,13 +734,16 @@ Closure via:
 * `riemannCurvature_inner_self_zero` on $(X, Y, \mathrm{const}\,b_i)$ to kill
   every summand.
 
-The hypothesis `h_interior` is required by `riemannCurvature_inner_self_zero`
-(via the Hessian-Lie identity on boundary-aware models). -/
+The interior-closure hypothesis previously threaded into
+`riemannCurvature_inner_self_zero` is now discharged there internally
+from `I.Boundaryless`, so no boundary side-condition is exposed here. -/
 theorem ricci_symm
     [IsManifold I 2 M]
     (g : RiemannianMetric I M) (hg : g = hm.metric)
     (X Y : SmoothVectorField I M) (x : M)
-    (h_interior : extChartAt I x x ∈ closure (interior (Set.range I))) :
+    (_h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
+      rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
+      exact Set.mem_univ _) :
     ricci g X Y x = ricci g Y X x := by
   subst hg
   classical
@@ -758,7 +765,7 @@ theorem ricci_symm
   rw [inner_neg_right, neg_eq_zero]
   rw [real_inner_comm]
   exact riemannCurvature_inner_self_zero hm.metric X Y
-    (SmoothVectorField.const (I := I) (M := M) (b i : E)) x h_interior
+    (SmoothVectorField.const (I := I) (M := M) (b i : E)) x
 
 
 /-! ## Special metric predicates: flat manifold
@@ -1012,9 +1019,7 @@ theorem IsKilling.second_covDeriv_eq_curvature
     have h_antisym34 :
         g.metricInner x (riemannCurvature g Y X W x) (Z x)
           = -g.metricInner x (riemannCurvature g Y X Z x) (W x) := by
-      have h := riemannCurvature_metric_skew g Y X W Z x (by
-        rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
-        exact Set.mem_univ _)
+      have h := riemannCurvature_metric_skew g Y X W Z x
       linarith
     rw [h_pair₁, h_pair₂, h_pair₃]
     linarith [h_inner, h_antisym12, h_antisym34]
