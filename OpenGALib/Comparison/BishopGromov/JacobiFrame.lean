@@ -71,7 +71,42 @@ theorem hasDerivAt_metricInner_parallel_right
 
 section JacobiRow
 
-variable [CompleteSpace E] [T2Space M] [IsLocallyConstantChartedSpace H M] [HasMetric I M]
+variable [CompleteSpace E] [IsManifold I 2 M] [T2Space M] [IsLocallyConstantChartedSpace H M]
+  [HasMetric I M]
+
+open Riemannian
+
+/-- **Math.** **Self-adjointness of the Jacobi (directional curvature) operator.**
+For tangent vectors `u, v, w : T_x M`, the operator `R_v : u ↦ R(u,v)v` is
+self-adjoint: `⟨R(u,v)v, w⟩_g = ⟨R(w,v)v, u⟩_g`. This is the algebraic symmetry
+behind the Wronskian-constancy of two Jacobi fields (hence the symmetry of the
+shape operator `S`). Derived from the curvature symmetries — pair symmetry
+`⟨R(u,v)v,w⟩ = ⟨R(v,w)u,v⟩`, the `(3,4)` metric-skew, and `(1,2)`-antisymmetry —
+with the tangent vectors packaged as constant smooth fields. -/
+theorem riemannCurvature_jacobi_self_adjoint_const
+    (g : RiemannianMetric I M) (x : M) (u v w : TangentSpace I x) :
+    g.metricInner x (riemannCurvature g (fun _ => u) (fun _ => v) (fun _ => v) x) w
+      = g.metricInner x (riemannCurvature g (fun _ => w) (fun _ => v) (fun _ => v) x) u := by
+  have h_interior : extChartAt I x x ∈ closure (interior (Set.range I)) := by
+    rw [ModelWithCorners.Boundaryless.range_eq_univ, interior_univ, closure_univ]
+    exact Set.mem_univ _
+  have hpair := riemannCurvature_pair_symm g
+    (SmoothVectorField.const (I := I) (M := M) u) (SmoothVectorField.const (I := I) (M := M) v)
+    (SmoothVectorField.const (I := I) (M := M) v) (SmoothVectorField.const (I := I) (M := M) w) x
+  have hskew := riemannCurvature_metric_skew g
+    (SmoothVectorField.const (I := I) (M := M) v) (SmoothVectorField.const (I := I) (M := M) w)
+    (SmoothVectorField.const (I := I) (M := M) u) (SmoothVectorField.const (I := I) (M := M) v) x
+    h_interior
+  have hanti := riemannCurvature_antisymm g
+    (fun _ => v) (fun _ => w) (fun _ => v) x
+  have hc : ∀ a : TangentSpace I x,
+      (SmoothVectorField.const (I := I) (M := M) a).toFun = fun _ => a := fun _ => rfl
+  simp only [hc, SmoothVectorField.const_apply] at hpair hskew
+  rw [hpair]
+  have h1 : g.metricInner x (riemannCurvature g (fun _ => v) (fun _ => w) (fun _ => u) x) v
+      = -(g.metricInner x (riemannCurvature g (fun _ => v) (fun _ => w) (fun _ => v) x) u) := by
+    linarith [hskew]
+  rw [h1, hanti, g.metricInner_neg_left, neg_neg]
 
 /-- **Math.** **Second component derivative of a Jacobi field against a parallel
 field = minus the curvature term.** For a Jacobi field `J` along `γ` and a field `E`
