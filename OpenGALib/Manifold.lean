@@ -1,3 +1,4 @@
+import OpenGALib.Manifold.Charts.ChartedSpaceCore
 import OpenGALib.Manifold.Charts.CoordinateBall
 import OpenGALib.Manifold.Charts.PrecompactBasis
 import OpenGALib.Manifold.Covering.LiftedStructure
@@ -8,6 +9,10 @@ import OpenGALib.Manifold.Map.LocalDiffeomorph
 import OpenGALib.Manifold.Map.TopologicalImmersionSubmersion
 import OpenGALib.Manifold.Submanifold.Embedded
 import OpenGALib.Manifold.Submanifold.TangentSpace
+import OpenGALib.Manifold.Cutoff.Exhaustion
+import OpenGALib.Manifold.Tangent.CoordinateComponents
+import OpenGALib.Manifold.Tangent.CurveVelocity
+import OpenGALib.Manifold.Tangent.MFDeriv
 
 /-!
 # Manifold
