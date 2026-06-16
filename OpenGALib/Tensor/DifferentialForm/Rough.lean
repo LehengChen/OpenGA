@@ -2,6 +2,7 @@ import OpenGALib.Tensor.Alternating.Bundle
 import OpenGALib.Tensor.Alternating.FDeriv
 import OpenGALib.Tensor.Alternating.Wedge
 import OpenGALib.Tensor.DifferentialForm.Defs
+import Mathlib.Analysis.Calculus.DifferentialForm.Basic
 import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 import Mathlib.Geometry.Manifold.VectorBundle.SmoothSection
 import Mathlib.Geometry.Manifold.VectorBundle.Tangent
@@ -68,156 +69,120 @@ def ofSubsingleton :
 def constOfIsEmpty (x : F) : E → E [⋀^Fin 0]→L[ℝ] F :=
   fun _ ↦ ContinuousAlternatingMap.constOfIsEmpty ℝ E (Fin 0) x
 
-/-- Exterior derivative of a differential form. -/
-def ederiv (ω : E → E [⋀^Fin n]→L[ℝ] F) : E → E [⋀^Fin (n + 1)]→L[ℝ] F :=
-  fun x ↦ .uncurryFin (fderiv ℝ ω x)
+/-- Exterior derivative of a differential form.
 
-/- Exterior derivative of a differential form within a set -/
+Thin wrapper over Mathlib's `ContinuousAlternatingMap.extDeriv`: the two agree
+(`extDeriv ω x = .alternatizeUncurryFin (fderiv ℝ ω x)`), so the whole `ederiv`
+API below is re-derived from the corresponding `extDeriv` lemmas. -/
+def ederiv (ω : E → E [⋀^Fin n]→L[ℝ] F) : E → E [⋀^Fin (n + 1)]→L[ℝ] F :=
+  extDeriv ω
+
+/-- Exterior derivative of a differential form within a set.
+Thin wrapper over Mathlib's `ContinuousAlternatingMap.extDerivWithin`. -/
 def ederivWithin (ω : E → E [⋀^Fin n]→L[ℝ] F) (s : Set E) : E → E [⋀^Fin (n + 1)]→L[ℝ] F :=
-  fun (x : E) ↦ .uncurryFin (fderivWithin ℝ ω s x)
+  extDerivWithin ω s
+
+/-- Bridge between `ederiv` and the local `uncurryFin` packaging used by the
+wedge/Leibniz API: `ederiv ω x = uncurryFin (fderiv ℝ ω x)`. Both sides have the
+same underlying alternating map, so this holds unconditionally. -/
+theorem ederiv_eq_uncurryFin (ω : E → E [⋀^Fin n]→L[ℝ] F) (x : E) :
+    ederiv ω x = ContinuousAlternatingMap.uncurryFin (fderiv ℝ ω x) := by
+  show extDeriv ω x = _
+  ext v
+  rw [ContinuousAlternatingMap.uncurryFin_apply, extDeriv,
+    ContinuousAlternatingMap.alternatizeUncurryFin_apply]
 
 @[simp]
 theorem ederivWithin_univ (ω : E → E [⋀^Fin n]→L[ℝ] F) :
-    ederivWithin ω univ = ederiv ω := by
-  ext1 x
-  rw[ederivWithin, ederiv, fderivWithin_univ]
+    ederivWithin ω univ = ederiv ω :=
+  extDerivWithin_univ ω
 
-theorem ederivWithin_add (ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F) (s : Set E) {x : E} (hsx : UniqueDiffWithinAt ℝ s x)
+theorem ederivWithin_add (ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F) (s : Set E) {x : E}
+    (hsx : UniqueDiffWithinAt ℝ s x)
     (hω₁ : DifferentiableWithinAt ℝ ω₁ s x) (hω₂ : DifferentiableWithinAt ℝ ω₂ s x) :
-    ederivWithin (ω₁ + ω₂) s x = ederivWithin ω₁ s x + ederivWithin ω₂ s x := by
-  simp [ederivWithin, fderivWithin_add hsx hω₁ hω₂, uncurryFin_add]
+    ederivWithin (ω₁ + ω₂) s x = ederivWithin ω₁ s x + ederivWithin ω₂ s x :=
+  extDerivWithin_add hsx hω₁ hω₂
 
 theorem ederivWithin_smul (ω : E → E [⋀^Fin n]→L[ℝ] F) (c : ℝ) (s : Set E) {x : E}
-    (hsx : UniqueDiffWithinAt ℝ s x) (hω : DifferentiableWithinAt ℝ ω s x) :
-      ederivWithin (c • ω) s x = c • ederivWithin ω s x := by
-  simp [ederivWithin, fderivWithin_const_smul hsx hω, uncurryFin_smul]
-
-theorem ederivWithin_constOfIsEmpty (s : Set E) (x : E) (y : F) :
-    ederivWithin (constOfIsEmpty y) s x = .uncurryFin (fderivWithin ℝ (constOfIsEmpty y) s x) :=
-  rfl
+    (hsx : UniqueDiffWithinAt ℝ s x) :
+      ederivWithin (c • ω) s x = c • ederivWithin ω s x :=
+  extDerivWithin_smul c ω hsx
 
 theorem Filter.EventuallyEq.ederivWithin_eq {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
-    (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (hx : ω₁ x = ω₂ x) : ederivWithin ω₁ s x = ederivWithin ω₂ s x := by
-  simp only[ederivWithin, uncurryFin, hs.fderivWithin_eq hx]
+    (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (hx : ω₁ x = ω₂ x) : ederivWithin ω₁ s x = ederivWithin ω₂ s x :=
+  hs.extDerivWithin_eq hx
 
 theorem Filter.EventuallyEq.ederivWithin_eq_of_mem {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
     (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (hx : x ∈ s) : ederivWithin ω₁ s x = ederivWithin ω₂ s x :=
-  hs.ederivWithin_eq (mem_of_mem_nhdsWithin hx hs :)
+  hs.extDerivWithin_eq_of_mem hx
 
 theorem Filter.EventuallyEq.ederivWithin_eq_of_insert {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
-    (hs : ω₁ =ᶠ[𝓝[insert x s] x] ω₂) : ederivWithin ω₁ s x = ederivWithin ω₂ s x := by
-  apply Filter.EventuallyEq.ederivWithin_eq (nhdsWithin_mono _ (subset_insert x s) hs)
-  exact (mem_of_mem_nhdsWithin (mem_insert x s) hs :)
+    (hs : ω₁ =ᶠ[𝓝[insert x s] x] ω₂) : ederivWithin ω₁ s x = ederivWithin ω₂ s x :=
+  hs.extDerivWithin_eq_of_insert
 
 theorem Filter.EventuallyEq.ederivWithin' {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s t : Set E} {x : E}
     (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (ht : t ⊆ s) : ederivWithin ω₁ t =ᶠ[𝓝[s] x] ederivWithin ω₂ t :=
-  (eventually_eventually_nhdsWithin.2 hs).mp <|
-    eventually_mem_nhdsWithin.mono fun _y hys hs =>
-      EventuallyEq.ederivWithin_eq (hs.filter_mono <| nhdsWithin_mono _ ht)
-        (hs.self_of_nhdsWithin hys)
+  hs.extDerivWithin' ht
 
 protected theorem Filter.EverntuallyEq.ederivWithin {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
     (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) : ederivWithin ω₁ s =ᶠ[𝓝[s] x] ederivWithin ω₂ s :=
-  hs.ederivWithin' Subset.rfl
+  hs.extDerivWithin
 
 theorem Filter.EventuallyEq.ederivWithin_eq_nhds {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
     (h : ω₁ =ᶠ[𝓝 x] ω₂) : ederivWithin ω₁ s x = ederivWithin ω₂ s x :=
-  (h.filter_mono nhdsWithin_le_nhds).ederivWithin_eq h.self_of_nhds
+  h.extDerivWithin_eq_nhds
 
 theorem ederivWithin_congr {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
     (hs : EqOn ω₁ ω₂ s) (hx : ω₁ x = ω₂ x) : ederivWithin ω₁ s x = ederivWithin ω₂ s x :=
-  (hs.eventuallyEq.filter_mono inf_le_right).ederivWithin_eq hx
+  extDerivWithin_congr hs hx
 
 theorem ederivWithin_congr' {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {s : Set E} {x : E}
     (hs : EqOn ω₁ ω₂ s) (hx : x ∈ s) : ederivWithin ω₁ s x = ederivWithin ω₂ s x :=
-  ederivWithin_congr hs (hs hx)
+  extDerivWithin_congr' hs hx
 
 theorem ederivWithin_apply (ω : E → E [⋀^Fin n]→L[ℝ] F) {s : Set E} {x : E}
     (h : DifferentiableWithinAt ℝ ω s x) (hs : UniqueDiffWithinAt ℝ s x) (v : Fin (n + 1) → E) :
-      ederivWithin ω s x v = ∑ i, (-1) ^ i.val • fderivWithin ℝ (ω · (i.removeNth v)) s x (v i)
-  := by
-  simp only [ederivWithin, ContinuousAlternatingMap.uncurryFin_apply,
-    ContinuousAlternatingMap.fderivWithin_apply h hs]
+      ederivWithin ω s x v = ∑ i, (-1) ^ i.val • fderivWithin ℝ (ω · (i.removeNth v)) s x (v i) :=
+  extDerivWithin_apply h hs v
 
 theorem ederivWithin_ederivWithin_apply (ω : E → E [⋀^Fin n]→L[ℝ] F) {s : Set E} {x}
     (hxx : x ∈ closure (interior s)) (hx : x ∈ s) (h : ContDiffWithinAt ℝ 2 ω s x)
     (hs : UniqueDiffOn ℝ s) :
-    ederivWithin (ederivWithin ω s) s x = 0 := calc
-  ederivWithin (ederivWithin ω s) s x =
-    uncurryFin (fderivWithin ℝ (fun y ↦ uncurryFin (fderivWithin ℝ ω s y)) s x) := rfl
-  _ = uncurryFin (uncurryFinCLM.comp <| fderivWithin ℝ (fderivWithin ℝ ω s) s x) := by
-    congr 1
-    let t :  Set (E →L[ℝ] E [⋀^Fin n]→L[ℝ] F) := univ
-    let hst : MapsTo (fderivWithin ℝ ω s) s univ := by unfold MapsTo; intro x _; trivial
-    have : DifferentiableWithinAt ℝ (fderivWithin ℝ ω s) s x := (h.fderivWithin_right
-      (hs) (by ring_nf; exact le_of_eq rfl) (hx)).differentiableWithinAt
-      (by simp only [ne_eq, one_ne_zero, not_false_eq_true])
-    let ⟨ω'', h⟩ := this -- ω' has deriv ω''
-    have uncurryDeriv := @ContinuousLinearMap.hasFDerivWithinAt ℝ _ _ _ _ _ _ _ _ _
-      (@uncurryFinCLM ℝ E F _ _ _ _ _ n) (fderivWithin ℝ ω s x) t
-    have chain : HasFDerivWithinAt (uncurryFinCLM ∘ (fderivWithin ℝ ω s)) (uncurryFinCLM ∘L ω'') s x
-      := @HasFDerivWithinAt.comp ℝ _ _ _ _ _ _ _ _ _ _ (fderivWithin ℝ ω s) ω'' x s uncurryFinCLM
-        uncurryFinCLM t uncurryDeriv h hst
-    have := UniqueDiffOn.uniqueDiffWithinAt hs hx
-    rw [h.fderivWithin this]
-    exact chain.fderivWithin this
-  _ = 0 :=
-    uncurryFin_uncurryFinCLM_comp_of_symmetric <| h.isSymmSndFDerivWithinAt
-      (by simp only [minSmoothness_of_isRCLikeNormedField, le_refl]) hs hxx hx
+    ederivWithin (ederivWithin ω s) s x = 0 :=
+  extDerivWithin_extDerivWithin_apply h (by simp [minSmoothness_of_isRCLikeNormedField]) hs hxx hx
 
 theorem ederivWithin_ederivWithin (ω : E → E [⋀^Fin n]→L[ℝ] F) {s : Set E} (h : ContDiffOn ℝ 2 ω s)
     (hs : UniqueDiffOn ℝ s) :
     EqOn (ederivWithin (ederivWithin ω s) s) 0 (s ∩ (closure (interior s))) :=
-  fun _ ⟨ hx, hxx ⟩ => ederivWithin_ederivWithin_apply ω hxx hx (h.contDiffWithinAt hx) hs
+  extDerivWithin_extDerivWithin_eqOn h (by simp [minSmoothness_of_isRCLikeNormedField]) hs
 
 theorem ederiv_add (ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F) {x : E} (hω₁ : DifferentiableAt ℝ ω₁ x)
-    (hω₂ : DifferentiableAt ℝ ω₂ x) : ederiv (ω₁ + ω₂) x = ederiv ω₁ x + ederiv ω₂ x := by
-  simp [ederiv, fderiv_add hω₁ hω₂, uncurryFin_add]
+    (hω₂ : DifferentiableAt ℝ ω₂ x) : ederiv (ω₁ + ω₂) x = ederiv ω₁ x + ederiv ω₂ x :=
+  extDeriv_add hω₁ hω₂
 
-theorem ederiv_smul (ω : E → E [⋀^Fin n]→L[ℝ] F) (c : ℝ) {x : E} (hω : DifferentiableAt ℝ ω x) :
-    ederiv (c • ω) x = c • ederiv ω x := by
-  simp [ederiv, fderiv_const_smul hω, uncurryFin_smul]
-
-theorem ederiv_constOfIsEmpty (x : E) (y : F) :
-    ederiv (constOfIsEmpty y) x = .uncurryFin (fderiv ℝ (constOfIsEmpty y) x) :=
-  rfl
+theorem ederiv_smul (ω : E → E [⋀^Fin n]→L[ℝ] F) (c : ℝ) {x : E} :
+    ederiv (c • ω) x = c • ederiv ω x :=
+  extDeriv_smul c ω
 
 theorem Filter.EventuallyEq.ederiv_eq {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {x : E}
-    (h : ω₁ =ᶠ[𝓝 x] ω₂) : ederiv ω₁ x = ederiv ω₂ x := by
-  ext v
-  simp only [ederiv, ContinuousAlternatingMap.uncurryFin_apply, h.fderiv_eq]
+    (h : ω₁ =ᶠ[𝓝 x] ω₂) : ederiv ω₁ x = ederiv ω₂ x :=
+  h.extDeriv_eq
 
 protected theorem Filter.EventuallyEq.ederiv {ω₁ ω₂ : E → E [⋀^Fin n]→L[ℝ] F} {x : E}
     (h : ω₁ =ᶠ[𝓝 x] ω₂) : ederiv ω₁ =ᶠ[𝓝 x] ederiv ω₂ :=
-  h.eventuallyEq_nhds.mono fun _x hx ↦ hx.ederiv_eq
+  h.extDeriv
 
-theorem ederiv_apply (ω : E → E [⋀^Fin n]→L[ℝ] F) {x : E} (hx : DifferentiableAt ℝ ω x) (v : Fin (n + 1) → E) :
-    ederiv ω x v = ∑ i, (-1) ^ i.val • fderiv ℝ (ω · (i.removeNth v)) x (v i) := by
-  simp only [ederiv, ContinuousAlternatingMap.uncurryFin_apply,
-    ContinuousAlternatingMap.fderiv_apply hx]
+theorem ederiv_apply (ω : E → E [⋀^Fin n]→L[ℝ] F) {x : E} (hx : DifferentiableAt ℝ ω x)
+    (v : Fin (n + 1) → E) :
+    ederiv ω x v = ∑ i, (-1) ^ i.val • fderiv ℝ (ω · (i.removeNth v)) x (v i) :=
+  extDeriv_apply hx v
 
 theorem ederiv_ederiv_apply (ω : E → E [⋀^Fin n]→L[ℝ] F) {x : E} (h : ContDiffAt ℝ 2 ω x) :
-  ederiv (ederiv ω) x = 0 := calc
-  ederiv (ederiv ω) x = uncurryFin (fderiv ℝ (fun y ↦ uncurryFin (fderiv ℝ ω y)) x) := rfl
-  _ = uncurryFin (uncurryFinCLM.comp <| fderiv ℝ (fderiv ℝ ω) x) := by
-    congr 1
-    have : DifferentiableAt ℝ (fderiv ℝ ω) x := (h.fderiv_right
-      (by ring_nf; exact le_of_eq rfl)).differentiableAt
-      (by simp only [ne_eq, one_ne_zero, not_false_eq_true])
-    let ⟨ω'', h⟩ := this -- ω' has deriv ω''
-    have uncurryDeriv := @ContinuousLinearMap.hasFDerivAt ℝ _ _ _ _ _ _ _ _ _
-      (@uncurryFinCLM ℝ E F _ _ _ _ _ n) (fderiv ℝ ω x)
-    have chain : HasFDerivAt (uncurryFinCLM ∘ (fderiv ℝ ω)) (uncurryFinCLM ∘L ω'') x
-      := @HasFDerivAt.comp ℝ _ _ _ _ _ _ _ _ _ _ (fderiv ℝ ω) ω'' x uncurryFinCLM uncurryFinCLM
-        uncurryDeriv h
-    rw [h.fderiv]
-    exact chain.fderiv
-  _ = 0 :=
-    uncurryFin_uncurryFinCLM_comp_of_symmetric <| h.isSymmSndFDerivAt
-      (by simp only [minSmoothness_of_isRCLikeNormedField, le_refl])
+    ederiv (ederiv ω) x = 0 :=
+  extDeriv_extDeriv_apply h (by simp [minSmoothness_of_isRCLikeNormedField])
 
 theorem ederiv_ederiv (ω : E → E [⋀^Fin n]→L[ℝ] F) (h : ContDiff ℝ 2 ω) : ederiv (ederiv ω) = 0 :=
-  funext fun _ ↦ ederiv_ederiv_apply ω h.contDiffAt
+  extDeriv_extDeriv h (by simp [minSmoothness_of_isRCLikeNormedField])
 
 
 
