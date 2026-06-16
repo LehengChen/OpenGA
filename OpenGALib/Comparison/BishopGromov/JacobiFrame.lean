@@ -145,6 +145,99 @@ theorem hasDerivAt_metricInner_covDeriv_jacobi
   rw [h2, g.metricInner_neg_left] at hatom
   exact hatom
 
+/-- **Math.** **Wronskian symmetry of two Jacobi fields ⟹ the shape operator is
+symmetric.** For Jacobi fields `J₁, J₂` along `γ` both vanishing at `0`, the
+"Wronskian" `⟨D_t J₁, J₂⟩_g - ⟨J₁, D_t J₂⟩_g` is identically `0`; equivalently
+`⟨D_t J₁, J₂⟩_g = ⟨J₁, D_t J₂⟩_g` for all `t`.
+
+Differentiating (metric-compatibility, item ①, applied to `(D_t J₁, J₂)` and to
+`(J₁, D_t J₂)`) the two cross terms `⟨D_t J₁, D_t J₂⟩` cancel, leaving
+`W' = ⟨D_t² J₁, J₂⟩ - ⟨J₁, D_t² J₂⟩`. The Jacobi equation turns the second
+covariant derivatives into curvature terms, and self-adjointness of the Jacobi
+operator (`riemannCurvature_jacobi_self_adjoint_const`) makes them cancel, so
+`W' ≡ 0`. The initial conditions `J₁ 0 = J₂ 0 = 0` give `W 0 = 0`, hence `W ≡ 0`.
+When `D_t Jᵢ = S Jᵢ` this is exactly `⟨S J₁, J₂⟩ = ⟨J₁, S J₂⟩` — the symmetry of
+the shape operator consumed by the matrix Riccati trace reduction (RB5). -/
+theorem jacobi_metricInner_covDeriv_symm
+    (g : RiemannianMetric I M) (γ : ℝ → M)
+    (J1 J2 : (t : ℝ) → TangentSpace I (γ t))
+    (hJac1 : Riemannian.IsJacobiFieldAlong (I := I) g γ J1)
+    (hJac2 : Riemannian.IsJacobiFieldAlong (I := I) g γ J2)
+    (hJ1c : ∀ t₀, DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t) (J1 t)) t₀)
+    (hJ2c : ∀ t₀, DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t) (J2 t)) t₀)
+    (hDJ1c : ∀ t₀, DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t)
+        (covDerivAlongCurve (I := I) g γ J1 t)) t₀)
+    (hDJ2c : ∀ t₀, DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t)
+        (covDerivAlongCurve (I := I) g γ J2 t)) t₀)
+    (hγc : ∀ t₀, DifferentiableAt ℝ (fun t => extChartAt I (γ t₀) (γ t)) t₀)
+    (hγcont : ∀ t₀, ContinuousAt γ t₀)
+    (hf : Differentiable ℝ (fun t =>
+      g.metricInner (γ t) (covDerivAlongCurve (I := I) g γ J1 t) (J2 t)))
+    (hg : Differentiable ℝ (fun t =>
+      g.metricInner (γ t) (J1 t) (covDerivAlongCurve (I := I) g γ J2 t)))
+    (hJ10 : J1 0 = 0) (hJ20 : J2 0 = 0) (t : ℝ) :
+    g.metricInner (γ t) (covDerivAlongCurve (I := I) g γ J1 t) (J2 t)
+      = g.metricInner (γ t) (J1 t) (covDerivAlongCurve (I := I) g γ J2 t) := by
+  set F : ℝ → ℝ := fun t => g.metricInner (γ t) (covDerivAlongCurve (I := I) g γ J1 t) (J2 t)
+    with hFdef
+  set G : ℝ → ℝ := fun t => g.metricInner (γ t) (J1 t) (covDerivAlongCurve (I := I) g γ J2 t)
+    with hGdef
+  -- The Wronskian `W = F - G` has vanishing derivative everywhere.
+  have hdW : ∀ s, deriv (fun r => F r - G r) s = 0 := by
+    intro s
+    -- `deriv F`, `deriv G` via metric-compatibility (item ①).
+    have hFd : deriv F s
+        = g.metricInner (γ s)
+            (covDerivAlongCurve (I := I) g γ (fun r => covDerivAlongCurve (I := I) g γ J1 r) s) (J2 s)
+          + g.metricInner (γ s) (covDerivAlongCurve (I := I) g γ J1 s)
+              (covDerivAlongCurve (I := I) g γ J2 s) := by
+      rw [hFdef]
+      exact covDerivAlongCurve_metricInner g γ (fun r => covDerivAlongCurve (I := I) g γ J1 r) J2 s
+        (hDJ1c s) (hJ2c s) (hγc s) (hγcont s)
+    have hGd : deriv G s
+        = g.metricInner (γ s) (covDerivAlongCurve (I := I) g γ J1 s)
+              (covDerivAlongCurve (I := I) g γ J2 s)
+          + g.metricInner (γ s) (J1 s)
+              (covDerivAlongCurve (I := I) g γ (fun r => covDerivAlongCurve (I := I) g γ J2 r) s) := by
+      rw [hGdef]
+      exact covDerivAlongCurve_metricInner g γ J1 (fun r => covDerivAlongCurve (I := I) g γ J2 r) s
+        (hJ1c s) (hDJ2c s) (hγc s) (hγcont s)
+    have hF := hFd ▸ (hf s).hasDerivAt
+    have hG := hGd ▸ (hg s).hasDerivAt
+    show deriv (F - G) s = 0
+    rw [(hF.sub hG).deriv]
+    -- Jacobi equation: `D_t² Jᵢ = -R(Jᵢ,γ')γ'`.
+    have hJ1eq : covDerivAlongCurve (I := I) g γ (fun r => covDerivAlongCurve (I := I) g γ J1 r) s
+        = -(Riemannian.jacobiCurvatureTerm (I := I) g γ J1 s) := by
+      have hj := hJac1 s; rw [Riemannian.covDerivAlongCurve2_def] at hj
+      exact eq_neg_of_add_eq_zero_left hj
+    have hJ2eq : covDerivAlongCurve (I := I) g γ (fun r => covDerivAlongCurve (I := I) g γ J2 r) s
+        = -(Riemannian.jacobiCurvatureTerm (I := I) g γ J2 s) := by
+      have hj := hJac2 s; rw [Riemannian.covDerivAlongCurve2_def] at hj
+      exact eq_neg_of_add_eq_zero_left hj
+    rw [hJ1eq, hJ2eq, g.metricInner_neg_left, g.metricInner_neg_right]
+    -- self-adjointness + symmetry make the two curvature terms equal.
+    have hsa : g.metricInner (γ s) (Riemannian.jacobiCurvatureTerm (I := I) g γ J1 s) (J2 s)
+        = g.metricInner (γ s) (J1 s) (Riemannian.jacobiCurvatureTerm (I := I) g γ J2 s) := by
+      rw [Riemannian.jacobiCurvatureTerm_def, Riemannian.jacobiCurvatureTerm_def,
+        g.metricInner_comm (γ s) (J1 s)]
+      exact riemannCurvature_jacobi_self_adjoint_const g (γ s) (J1 s)
+        (Riemannian.curveVelocity (I := I) γ s) (J2 s)
+    linarith [hsa]
+  -- `W` is constant, equal to its value `0` at `0`.
+  have hWconst : ∀ s, (F s - G s) = (F 0 - G 0) := fun s =>
+    is_const_of_deriv_eq_zero (hf.sub hg) hdW s 0
+  have hW0 : F 0 - G 0 = 0 := by
+    rw [hFdef, hGdef]
+    simp only [hJ10, hJ20, g.metricInner_zero_left, g.metricInner_zero_right, sub_self]
+  have hWt : F t - G t = 0 := (hWconst t).trans hW0
+  rw [sub_eq_zero] at hWt
+  exact hWt
+
 end JacobiRow
 
 end OpenGA.Comparison.BishopGromov
