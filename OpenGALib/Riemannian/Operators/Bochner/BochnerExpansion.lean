@@ -401,7 +401,7 @@ theorem heart_curvature_orthonormal_sum_eq_ricci
             WV.toFun GV.toFun x
       exact riemannCurvature_eq_of_pointwise_eq HasMetric.metric
         (Bi i) (SmoothVectorField.const ((Bi i).toFun x : E))
-        W WV gradF GV x h_interior rfl rfl rfl
+        W WV gradF GV x rfl rfl rfl
     rw [hR_eq]; rfl
   -- Step 2 + 3 + 4: rewrite via h_per_i, Stage 7, identify with Ric, ricci_symm.
   calc ∑ i, HasMetric.metric.metricInner x
