@@ -6,6 +6,7 @@ import OpenGALib.Manifold.Covering.LocalSection
 import OpenGALib.Manifold.Covering.ProperLocalDiffeomorph
 import OpenGALib.Manifold.Covering.SmoothCoveringMap
 import OpenGALib.Manifold.Instances.Pi
+import OpenGALib.Manifold.Instances.RealProjectiveSpace
 import OpenGALib.Manifold.Map.LocalDiffeomorph
 import OpenGALib.Manifold.Map.TopologicalImmersionSubmersion
 import OpenGALib.Manifold.Submanifold.Embedded
