@@ -7,6 +7,8 @@ import OpenGALib.Manifold.Covering.ProperLocalDiffeomorph
 import OpenGALib.Manifold.Covering.SmoothCoveringMap
 import OpenGALib.Manifold.Map.LocalDiffeomorph
 import OpenGALib.Manifold.Map.TopologicalImmersionSubmersion
+import OpenGALib.Manifold.Submanifold.Embedded
+import OpenGALib.Manifold.Submanifold.TangentSpace
 import OpenGALib.Manifold.Cutoff.Exhaustion
 import OpenGALib.Manifold.Tangent.CoordinateComponents
 import OpenGALib.Manifold.Tangent.CurveVelocity
@@ -20,6 +22,7 @@ topological and smooth manifolds, stated directly on Mathlib's
 `ChartedSpace` / `IsManifold` API. Sits below `Riemannian` in the library
 layering. Provides coordinate-ball predicates for charts, the inverse
 function theorem with local-diffeomorphism characterizations for maps, the
-point-set immersion/submersion conditions underlying them, and the smooth
-refinement of topological covering maps.
+point-set immersion/submersion conditions underlying them, the smooth
+refinement of topological covering maps, and immersed/embedded submanifold
+structures with their tangent spaces.
 -/
