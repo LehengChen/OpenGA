@@ -84,23 +84,12 @@ variable {𝕜 ι F₁ F₂ : Type*} [NontriviallyNormedField 𝕜] [CompleteSpa
   [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁] [FiniteDimensional 𝕜 F₁]
   [NormedAddCommGroup F₂] [NormedSpace 𝕜 F₂] [FiniteDimensional 𝕜 F₂]
 
-/-- `CMM 𝕜 E F → MM 𝕜 E F` as a `LinearMap`, used to transport
-finite-dimensionality from the algebraic multilinear-map module to the
-continuous one. -/
-def ContinuousMultilinearMap.toMultilinearMapₗ :
-    ContinuousMultilinearMap 𝕜 (fun _ : ι ↦ F₁) F₂ →ₗ[𝕜]
-      MultilinearMap 𝕜 (fun _ : ι ↦ F₁) F₂ where
-  toFun := ContinuousMultilinearMap.toMultilinearMap
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
 instance ContinuousMultilinearMap.instFiniteDimensional :
     FiniteDimensional 𝕜
-      (ContinuousMultilinearMap 𝕜 (fun _ : ι ↦ F₁) F₂) := by
-  refine FiniteDimensional.of_injective
-    (ContinuousMultilinearMap.toMultilinearMapₗ (𝕜 := 𝕜) (ι := ι)
-      (F₁ := F₁) (F₂ := F₂)) ?_
-  exact ContinuousMultilinearMap.toMultilinearMap_injective
+      (ContinuousMultilinearMap 𝕜 (fun _ : ι ↦ F₁) F₂) :=
+  FiniteDimensional.of_injective
+    ContinuousMultilinearMap.toMultilinearMapLinear
+    ContinuousMultilinearMap.toMultilinearMap_injective
 
 /-- The map `p ↦ compContinuousLinearMapL (fun _ ↦ p)` is `C^∞` when `F₁` and
 `F₂` are finite-dimensional.
