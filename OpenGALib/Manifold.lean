@@ -8,6 +8,7 @@ import OpenGALib.Manifold.Covering.SmoothCoveringMap
 import OpenGALib.Manifold.Map.LocalDiffeomorph
 import OpenGALib.Manifold.Map.TopologicalImmersionSubmersion
 import OpenGALib.Manifold.Submanifold.Embedded
+import OpenGALib.Manifold.Submanifold.SliceCharts
 import OpenGALib.Manifold.Submanifold.TangentSpace
 import OpenGALib.Manifold.Cutoff.Exhaustion
 import OpenGALib.Manifold.Tangent.CoordinateComponents
