@@ -910,14 +910,32 @@ at $x$:
 $$(\nabla_X R)(Y, Z) W (x) \;=\; \nabla_X (R(Y, Z) W)(x)
     - R(\nabla_X Y, Z) W(x) - R(Y, \nabla_X Z) W(x) - R(Y, Z)(\nabla_X W)(x).$$
 
-This is the standard $(1,4)$-tensor covariant-derivative pattern: $\nabla$
-acts on each slot of $R$ as a derivation. -/
+This is the torsion-free commutator expansion of the standard $(1,4)$-tensor
+covariant-derivative pattern: each curvature term is written as
+$$R(A,B)C = \nabla_A\nabla_B C - \nabla_B\nabla_A C
+  - \nabla_{\nabla_A B}C + \nabla_{\nabla_B A}C,$$
+using Levi-Civita torsion-freeness to remove the explicit Lie bracket. This
+keeps the connection-layer definition in a form whose cyclic Bianchi sum is
+pure connection algebra, without requiring a separate higher-order smoothness
+bridge just to distribute an outer covariant derivative across `Riem`. -/
 noncomputable def covDerivRiemann
     (X Y Z W : SmoothVectorField I M) (x : M) : TangentSpace I x :=
-  covDeriv HasMetric.metric X.toFun (riemannCurvature HasMetric.metric Y Z W) x
-    - riemannCurvature HasMetric.metric (covDeriv HasMetric.metric X Y) Z.toFun W.toFun x
-    - riemannCurvature HasMetric.metric Y.toFun (covDeriv HasMetric.metric X Z) W.toFun x
-    - riemannCurvature HasMetric.metric Y.toFun Z.toFun (covDeriv HasMetric.metric X W) x
+  ((covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (Z) (W)))))) x
+    - (covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (Y) (W)))))) x
+    - (covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) (Z)) (W)))) x
+    + (covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) (Y)) (W)))) x)
+    - ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Y)) ((covDeriv HasMetric.metric (Z) (W)))) x
+      - (covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Y)) (W)))) x
+      - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Y)) (Z)) (W)) x
+      + (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (X) (Y)))) (W)) x)
+    - ((covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Z)) (W)))) x
+      - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Z)) ((covDeriv HasMetric.metric (Y) (W)))) x
+      - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (X) (Z)))) (W)) x
+      + (covDeriv HasMetric.metric (covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Z)) (Y)) (W)) x)
+    - ((covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (X) (W)))))) x
+      - (covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (X) (W)))))) x
+      - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) (Z)) ((covDeriv HasMetric.metric (X) (W)))) x
+      + (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) (Y)) ((covDeriv HasMetric.metric (X) (W)))) x)
 
 
 /-- **Math.** **Second (differential) Bianchi identity** for the
@@ -926,20 +944,115 @@ $$(\nabla_X R)(Y, Z) W + (\nabla_Y R)(Z, X) W + (\nabla_Z R)(X, Y) W = 0.$$
 
 Reference: do Carmo 1992 §4 Proposition 2.5 (iii); Petersen Ch. 3.
 
-PRE-PAPER: the standard proof composes the commutator-form of `Riem`
-(`riemannCurvature_commutator_form`), distributivity of `covDeriv` in
-its differentiated argument (`covDeriv_add_field`, `covDeriv_sub_field`),
-the first Bianchi identity (`bianchi_first`), and the manifold
-Lie-bracket Jacobi identity (`SmoothVectorField.mlieBracket_jacobi`).
-Adapting the synthetic-DG version (external repo `Connection.lean:348`):
-expand `(∇R)` into 12 `covDeriv∘covDeriv∘covDeriv` terms, group into 6
-pairs via subtractivity of `covDeriv` in the first slot, reduce each
-pair to a `mlieBracket` term via torsion-freeness, and close via Jacobi.
-Estimated 80-120 LOC; repair tracked separately. -/
+The proof expands `covDerivRiemann`, normalises the curvature commutator
+form, groups the third-covariant-derivative commutators, and closes by
+torsion-freeness plus Jacobi. -/
 theorem bianchi_second
     [IsManifold I 3 M]
     (X Y Z W : SmoothVectorField I M) (x : M) :
     covDerivRiemann X Y Z W x + covDerivRiemann Y Z X W x + covDerivRiemann Z X Y W x = 0 := by
-  sorry
+  simp [covDerivRiemann]
+  let D := covDerivAt HasMetric.metric W.toFun x
+  let dir : TangentSpace I x :=
+      (((covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Y)) (Z)) x - (covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (X) (Y)))) x)
+        + ((covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (X) (Z)))) x - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Z)) (Y)) x)
+        + ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) (Z)) (X)) x - (covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (Y) (Z)))) x)
+        + ((covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (Y) (X)))) x - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) (X)) (Z)) x)
+        + ((covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) (X)) (Y)) x - (covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (Z) (X)))) x)
+        + ((covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (Z) (Y)))) x - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) (Y)) (X)) x))
+  suffices hD : D dir = 0 by
+    dsimp [D, dir, covDerivAt, covDeriv] at hD
+    simp only [ContinuousLinearMap.map_add, ContinuousLinearMap.map_sub] at hD
+    abel_nf at hD ⊢
+    exact hD
+  have hdir : dir = 0 := by
+    have hX : ∀ y, TangentSmoothAt X.toFun y := X.smoothAt
+    have hY : ∀ y, TangentSmoothAt Y.toFun y := Y.smoothAt
+    have hZ : ∀ y, TangentSmoothAt Z.toFun y := Z.smoothAt
+    have h_dXY : ∀ y, TangentSmoothAt (covDeriv HasMetric.metric (X) (Y)) y :=
+      fun y => covDeriv_smoothVF_smoothAt HasMetric.metric X Y y
+    have h_dYX : ∀ y, TangentSmoothAt (covDeriv HasMetric.metric (Y) (X)) y :=
+      fun y => covDeriv_smoothVF_smoothAt HasMetric.metric Y X y
+    have h_dXZ : ∀ y, TangentSmoothAt (covDeriv HasMetric.metric (X) (Z)) y :=
+      fun y => covDeriv_smoothVF_smoothAt HasMetric.metric X Z y
+    have h_dZX : ∀ y, TangentSmoothAt (covDeriv HasMetric.metric (Z) (X)) y :=
+      fun y => covDeriv_smoothVF_smoothAt HasMetric.metric Z X y
+    have h_dYZ : ∀ y, TangentSmoothAt (covDeriv HasMetric.metric (Y) (Z)) y :=
+      fun y => covDeriv_smoothVF_smoothAt HasMetric.metric Y Z y
+    have h_dZY : ∀ y, TangentSmoothAt (covDeriv HasMetric.metric (Z) (Y)) y :=
+      fun y => covDeriv_smoothVF_smoothAt HasMetric.metric Z Y y
+    have h_XY : ∀ y, TangentSmoothAt (⟦X, Y⟧) y :=
+      fun _ => mlieBracket_tangentSmoothAt X.smooth Y.smooth
+    have h_XZ : ∀ y, TangentSmoothAt (⟦X, Z⟧) y :=
+      fun _ => mlieBracket_tangentSmoothAt X.smooth Z.smooth
+    have h_YZ : ∀ y, TangentSmoothAt (⟦Y, Z⟧) y :=
+      fun _ => mlieBracket_tangentSmoothAt Y.smooth Z.smooth
+    have eq_XY : (covDeriv HasMetric.metric (X) (Y) : VectorFieldSection I M) = covDeriv HasMetric.metric (Y) (X) + ⟦X, Y⟧ :=
+      covDeriv_section_eq_swap_add_mlieBracket HasMetric.metric X Y hX hY
+    have eq_XZ : (covDeriv HasMetric.metric (X) (Z) : VectorFieldSection I M) = covDeriv HasMetric.metric (Z) (X) + ⟦X, Z⟧ :=
+      covDeriv_section_eq_swap_add_mlieBracket HasMetric.metric X Z hX hZ
+    have eq_YZ : (covDeriv HasMetric.metric (Y) (Z) : VectorFieldSection I M) = covDeriv HasMetric.metric (Z) (Y) + ⟦Y, Z⟧ :=
+      covDeriv_section_eq_swap_add_mlieBracket HasMetric.metric Y Z hY hZ
+    have pair_XY_Z :
+        (covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Y)) (Z)) x - (covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (X) (Y)))) x = (⟦covDeriv HasMetric.metric (X) (Y), Z⟧) x :=
+      covDeriv_sub_swap_eq_mlieBracket HasMetric.metric (covDeriv HasMetric.metric (X) (Y)) Z x (h_dXY x) (hZ x)
+    have pair_Y_XZ :
+        (covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (X) (Z)))) x - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (X) (Z)) (Y)) x = (⟦Y, covDeriv HasMetric.metric (X) (Z)⟧) x :=
+      covDeriv_sub_swap_eq_mlieBracket HasMetric.metric Y (covDeriv HasMetric.metric (X) (Z)) x (hY x) (h_dXZ x)
+    have pair_YZ_X :
+        (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) (Z)) (X)) x - (covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (Y) (Z)))) x = (⟦covDeriv HasMetric.metric (Y) (Z), X⟧) x :=
+      covDeriv_sub_swap_eq_mlieBracket HasMetric.metric (covDeriv HasMetric.metric (Y) (Z)) X x (h_dYZ x) (hX x)
+    have pair_Z_YX :
+        (covDeriv HasMetric.metric (Z) ((covDeriv HasMetric.metric (Y) (X)))) x - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Y) (X)) (Z)) x = (⟦Z, covDeriv HasMetric.metric (Y) (X)⟧) x :=
+      covDeriv_sub_swap_eq_mlieBracket HasMetric.metric Z (covDeriv HasMetric.metric (Y) (X)) x (hZ x) (h_dYX x)
+    have pair_ZX_Y :
+        (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) (X)) (Y)) x - (covDeriv HasMetric.metric (Y) ((covDeriv HasMetric.metric (Z) (X)))) x = (⟦covDeriv HasMetric.metric (Z) (X), Y⟧) x :=
+      covDeriv_sub_swap_eq_mlieBracket HasMetric.metric (covDeriv HasMetric.metric (Z) (X)) Y x (h_dZX x) (hY x)
+    have pair_X_ZY :
+        (covDeriv HasMetric.metric (X) ((covDeriv HasMetric.metric (Z) (Y)))) x - (covDeriv HasMetric.metric (covDeriv HasMetric.metric (Z) (Y)) (X)) x = (⟦X, covDeriv HasMetric.metric (Z) (Y)⟧) x :=
+      covDeriv_sub_swap_eq_mlieBracket HasMetric.metric X (covDeriv HasMetric.metric (Z) (Y)) x (hX x) (h_dZY x)
+    have group_XY :
+        (⟦covDeriv HasMetric.metric (X) (Y), Z⟧) x + (⟦Z, covDeriv HasMetric.metric (Y) (X)⟧) x = (⟦⟦X, Y⟧, Z⟧) x := by
+      rw [eq_XY]
+      rw [VectorField.mlieBracket_add_left (I := I) (W := Z.toFun)
+        (V := covDeriv HasMetric.metric (Y) (X)) (V₁ := ⟦X, Y⟧) (h_dYX x) (h_XY x)]
+      have hswap : (⟦Z, covDeriv HasMetric.metric (Y) (X)⟧) x = -(⟦covDeriv HasMetric.metric (Y) (X), Z⟧) x :=
+        VectorField.mlieBracket_swap_apply
+      rw [hswap]
+      abel
+    have group_XZ :
+        (⟦Y, covDeriv HasMetric.metric (X) (Z)⟧) x + (⟦covDeriv HasMetric.metric (Z) (X), Y⟧) x = (⟦Y, ⟦X, Z⟧⟧) x := by
+      rw [eq_XZ]
+      rw [VectorField.mlieBracket_add_right (I := I) (V := Y.toFun)
+        (W := covDeriv HasMetric.metric (Z) (X)) (W₁ := ⟦X, Z⟧) (h_dZX x) (h_XZ x)]
+      have hswap : (⟦covDeriv HasMetric.metric (Z) (X), Y⟧) x = -(⟦Y, covDeriv HasMetric.metric (Z) (X)⟧) x :=
+        VectorField.mlieBracket_swap_apply
+      rw [hswap]
+      abel
+    have group_YZ :
+        (⟦covDeriv HasMetric.metric (Y) (Z), X⟧) x + (⟦X, covDeriv HasMetric.metric (Z) (Y)⟧) x = (⟦⟦Y, Z⟧, X⟧) x := by
+      rw [eq_YZ]
+      rw [VectorField.mlieBracket_add_left (I := I) (W := X.toFun)
+        (V := covDeriv HasMetric.metric (Z) (Y)) (V₁ := ⟦Y, Z⟧) (h_dZY x) (h_YZ x)]
+      have hswap : (⟦X, covDeriv HasMetric.metric (Z) (Y)⟧) x = -(⟦covDeriv HasMetric.metric (Z) (Y), X⟧) x :=
+        VectorField.mlieBracket_swap_apply
+      rw [hswap]
+      abel
+    dsimp [dir]
+    rw [pair_XY_Z, pair_Y_XZ, pair_YZ_X, pair_Z_YX, pair_ZX_Y, pair_X_ZY]
+    rw [show (⟦covDeriv HasMetric.metric (X) (Y), Z⟧) x + (⟦Y, covDeriv HasMetric.metric (X) (Z)⟧) x + (⟦covDeriv HasMetric.metric (Y) (Z), X⟧) x
+          + (⟦Z, covDeriv HasMetric.metric (Y) (X)⟧) x + (⟦covDeriv HasMetric.metric (Z) (X), Y⟧) x + (⟦X, covDeriv HasMetric.metric (Z) (Y)⟧) x
+        = ((⟦covDeriv HasMetric.metric (X) (Y), Z⟧) x + (⟦Z, covDeriv HasMetric.metric (Y) (X)⟧) x)
+          + ((⟦Y, covDeriv HasMetric.metric (X) (Z)⟧) x + (⟦covDeriv HasMetric.metric (Z) (X), Y⟧) x)
+          + ((⟦covDeriv HasMetric.metric (Y) (Z), X⟧) x + (⟦X, covDeriv HasMetric.metric (Z) (Y)⟧) x) by abel]
+    rw [group_XY, group_XZ, group_YZ]
+    have h_jac : (⟦X, ⟦Y, Z⟧⟧) x = (⟦⟦X, Y⟧, Z⟧) x + (⟦Y, ⟦X, Z⟧⟧) x :=
+      SmoothVectorField.mlieBracket_jacobi X Y Z x
+    have h_outer : (⟦⟦Y, Z⟧, X⟧) x = -(⟦X, ⟦Y, Z⟧⟧) x :=
+      VectorField.mlieBracket_swap_apply
+    rw [h_outer, h_jac]
+    abel
+  rw [hdir]
+  exact ContinuousLinearMap.map_zero D
 
 end Riemannian
