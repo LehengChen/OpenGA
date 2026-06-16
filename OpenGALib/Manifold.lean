@@ -1,6 +1,7 @@
 import OpenGALib.Manifold.Charts.ChartedSpaceCore
 import OpenGALib.Manifold.Charts.CoordinateBall
 import OpenGALib.Manifold.Charts.PrecompactBasis
+import OpenGALib.Manifold.Covering.LocalSection
 import OpenGALib.Manifold.Covering.SmoothCoveringMap
 import OpenGALib.Manifold.Map.LocalDiffeomorph
 import OpenGALib.Manifold.Map.TopologicalImmersionSubmersion
