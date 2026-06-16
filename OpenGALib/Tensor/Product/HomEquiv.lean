@@ -139,15 +139,6 @@ _root_.TensorProduct.lift (toHomAux (𝕜:=𝕜) (F₁:=F₁) (F₂:=F₂))
 
 
 omit [FiniteDimensional 𝕜 F₂]
-/-- In finite dimensions, finrank of continuous linear maps equals the product of finranks. -/
-lemma finrank_continuousLinearMap :
-    Module.finrank 𝕜 (F₁ →L[𝕜] F₂) = Module.finrank 𝕜 F₁ * Module.finrank 𝕜 F₂ := by
-  -- In finite dimensions, E →L[𝕜] F ≃ₗ E →ₗ[𝕜] F
-  haveI : Module.Free 𝕜 F₁ := inferInstance
-  haveI : Module.Free 𝕜 F₂ := inferInstance
-  have e : (F₁ →L[𝕜] F₂) ≃ₗ[𝕜] (F₁ →ₗ[𝕜] F₂) := LinearMap.toContinuousLinearMap.symm
-  rw [e.finrank_eq]
-  rw [Module.finrank_linearMap 𝕜 𝕜]
 
 /-- The continuous dual `cDual 𝕜 F₁` is linearly equivalent to the algebraic dual
 `Module.Dual 𝕜 F₁`, since all linear maps are continuous in finite dimensions. -/

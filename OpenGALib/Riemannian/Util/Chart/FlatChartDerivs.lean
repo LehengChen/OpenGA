@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Calculus.ContDiff.Comp
+import Mathlib.Geometry.Manifold.Algebra.Monoid
 import Mathlib.Geometry.Manifold.ContMDiff.Defs
 import Mathlib.Geometry.Manifold.MFDeriv.Atlas
 import Mathlib.Geometry.Manifold.VectorBundle.Tangent
@@ -141,39 +142,28 @@ theorem contMDiff_constSection_TangentSpace
 
 /-! ### Layer 2 — finite-dim continuous linear map lift -/
 
-private theorem _root_.ContMDiffOn.add_normed
-    {𝕜 : Type*} [NontriviallyNormedField 𝕜]
-    {EM : Type*} [NormedAddCommGroup EM] [NormedSpace 𝕜 EM]
-    {HM : Type*} [TopologicalSpace HM] {IM : ModelWithCorners 𝕜 EM HM}
-    {M : Type*} [TopologicalSpace M] [ChartedSpace HM M]
-    {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-    {n : ℕ∞ω} {f g : M → F} {s : Set M}
-    (hf : ContMDiffOn IM 𝓘(𝕜, F) n f s) (hg : ContMDiffOn IM 𝓘(𝕜, F) n g s) :
-    ContMDiffOn IM 𝓘(𝕜, F) n (fun x => f x + g x) s := by
-  have h_prod : ContMDiffOn IM 𝓘(𝕜, F × F) n (fun x => (f x, g x)) s :=
-    hf.prodMk_space hg
-  have h_add : ContMDiff 𝓘(𝕜, F × F) 𝓘(𝕜, F) n (fun p : F × F => p.1 + p.2) :=
-    contDiff_add.contMDiff
-  exact h_add.comp_contMDiffOn h_prod
-
-private theorem _root_.ContMDiffOn.finset_sum_normed
-    {𝕜 : Type*} [NontriviallyNormedField 𝕜]
-    {EM : Type*} [NormedAddCommGroup EM] [NormedSpace 𝕜 EM]
-    {HM : Type*} [TopologicalSpace HM] {IM : ModelWithCorners 𝕜 EM HM}
-    {M : Type*} [TopologicalSpace M] [ChartedSpace HM M]
-    {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-    {n : ℕ∞ω} {ι : Type*} (t : Finset ι) {f : ι → M → F} {s : Set M}
-    (h : ∀ i ∈ t, ContMDiffOn IM 𝓘(𝕜, F) n (f i) s) :
-    ContMDiffOn IM 𝓘(𝕜, F) n (fun x => ∑ i ∈ t, f i x) s := by
-  classical
-  induction t using Finset.induction_on with
-  | empty =>
-    simp only [Finset.sum_empty]
-    exact contMDiffOn_const
-  | insert i t' hi IH =>
-    simp_rw [Finset.sum_insert hi]
-    refine (h i (Finset.mem_insert_self _ _)).add_normed
-      (IH (fun j hj => h j (Finset.mem_insert_of_mem hj)))
+/-- **Eng.** Basis decomposition of a continuous linear map-valued family:
+`T y = ∑ i, (basis.coord i).smulRight (T y (basis i))`. Pure linear-algebra
+identity shared by the `ContMDiffOn`/`MDifferentiableAt` componentwise lifts. -/
+theorem continuousLinearMap_of_components_decomp
+    {𝕜 : Type*} [NontriviallyNormedField 𝕜] [CompleteSpace 𝕜]
+    {M : Type*}
+    {F₁ : Type*} [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁] [FiniteDimensional 𝕜 F₁]
+    {F₂ : Type*} [NormedAddCommGroup F₂] [NormedSpace 𝕜 F₂]
+    (T : M → F₁ →L[𝕜] F₂) {ι : Type*} [Fintype ι]
+    (basis : Module.Basis ι 𝕜 F₁) :
+    T = fun y => ∑ i, (basis.coord i).toContinuousLinearMap.smulRight (T y (basis i)) := by
+  funext y
+  ext v
+  rw [ContinuousLinearMap.sum_apply]
+  have hv : v = ∑ i, basis.repr v i • basis i := by simp
+  conv_lhs => rw [hv]
+  rw [map_sum]
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  simp [ContinuousLinearMap.smulRight_apply,
+    LinearMap.coe_toContinuousLinearMap', Module.Basis.coord_apply,
+    (T y).map_smul]
 
 /-- **Eng.** Componentwise smoothness `(y ↦ T y bᵢ) : M → F₂` lifts to continuous linear map-valued
 smoothness `T : M → (F₁ →L[𝕜] F₂)` via basis decomposition. -/
@@ -190,21 +180,8 @@ private theorem contMDiffOn_continuousLinearMap_of_components
     (h_components : ∀ i : ι, ContMDiffOn IM 𝓘(𝕜, F₂) n
       (fun y : M => T y (basis i)) s) :
     ContMDiffOn IM 𝓘(𝕜, F₁ →L[𝕜] F₂) n T s := by
-  have decomp : T = fun y =>
-      ∑ i, (basis.coord i).toContinuousLinearMap.smulRight (T y (basis i)) := by
-    funext y
-    ext v
-    rw [ContinuousLinearMap.sum_apply]
-    have hv : v = ∑ i, basis.repr v i • basis i := by simp
-    conv_lhs => rw [hv]
-    rw [map_sum]
-    refine Finset.sum_congr rfl ?_
-    intro i _
-    simp [ContinuousLinearMap.smulRight_apply,
-      LinearMap.coe_toContinuousLinearMap', Module.Basis.coord_apply,
-      (T y).map_smul]
-  rw [decomp]
-  apply ContMDiffOn.finset_sum_normed
+  rw [continuousLinearMap_of_components_decomp T basis]
+  apply contMDiffOn_finset_sum
   intro i _
   have h_smulRight : ContMDiff 𝓘(𝕜, F₂) 𝓘(𝕜, F₁ →L[𝕜] F₂) n
       (fun w : F₂ => (basis.coord i).toContinuousLinearMap.smulRight w) := by
