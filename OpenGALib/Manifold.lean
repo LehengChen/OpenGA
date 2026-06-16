@@ -1,3 +1,4 @@
+import OpenGALib.Manifold.Charts.ChartedSpaceCore
 import OpenGALib.Manifold.Charts.CoordinateBall
 import OpenGALib.Manifold.Charts.PrecompactBasis
 
