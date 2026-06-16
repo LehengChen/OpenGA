@@ -55,7 +55,6 @@ Combines two `leviCivitaConnection_metric_compatible` applications with
 `Filter.EventuallyEq.mfderiv_eq`, plus pointwise `hessianBilin_symm` for
 the cross-Christoffel terms. -/
 theorem bochner_per_summand_swap
-    [IsManifold I 2 M]
     (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f)
     (B W : SmoothVectorField I M) (x : M) :
     g.metricInner x
@@ -292,7 +291,6 @@ Composes `bochner_per_summand_swap` (step d), `bochner_per_summand_riemann_form`
 $(\nabla_B \nabla f, B)$, with `hessianBilin_symm` collapsing the two
 Christoffel-correction terms. -/
 theorem bochner_per_summand_assembled
-    [IsManifold I 2 M]
     (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f)
     (B W : SmoothVectorField I M) (x : M) :
     g.metricInner x
@@ -470,7 +468,6 @@ Composes `bochner_per_summand_assembled` with the section-form
 `connectionLaplacian` definition; strict-interior `h_strict` feeds the
 Hess-symmetry-on-nbhd used inside `bochner_per_summand_swap`. -/
 theorem bochner_connectionLaplacian_grad_decomposition
-    [IsManifold I 2 M] [T2Space M]
     (f : M → ℝ) (hf : ContMDiff I 𝓘(ℝ, ℝ) ∞ f) (x : M) :
     g.metricInner x
           (connectionLaplacian g (manifoldGradient (I := I) g f) x)
