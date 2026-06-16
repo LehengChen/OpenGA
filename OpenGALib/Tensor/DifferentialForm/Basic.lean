@@ -45,8 +45,8 @@ variable {n m : ℕ} {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 def ederiv (ω : Ω^n⟮E, F⟯) : Ω^(n + 1)⟮E, F⟯ where
   toFun := _root_.ederiv ω.toFun
   smooth := by
-    show ContDiff ℝ ⊤ (uncurryFinCLM ∘ fderiv ℝ ω.toFun)
-    exact uncurryFinCLM.contDiff.comp (ω.smooth.fderiv_right le_top)
+    show ContDiff ℝ ⊤ (alternatizeUncurryFinCLM ℝ E F ∘ fderiv ℝ ω.toFun)
+    exact (alternatizeUncurryFinCLM ℝ E F).contDiff.comp (ω.smooth.fderiv_right le_top)
 
 @[simp]
 theorem ederiv_toFun (ω : Ω^n⟮E, F⟯) :
@@ -58,7 +58,7 @@ theorem ederiv_add (ω₁ ω₂ : Ω^n⟮E, F⟯) {x : E} :
 
 theorem ederiv_smul (c : ℝ) (ω : Ω^n⟮E, F⟯) {x : E} :
     ederiv (c • ω) x = c • ederiv ω x :=
-  _root_.ederiv_smul ω.toFun c (ω.differentiableAt x)
+  _root_.ederiv_smul ω.toFun c
 
 theorem ederiv_apply (ω : Ω^n⟮E, F⟯) {x : E} (v : Fin (n + 1) → E) :
     ederiv ω x v = ∑ i, (-1) ^ i.val • fderiv ℝ (ω.toFun · (i.removeNth v)) x (v i) :=
@@ -111,8 +111,8 @@ theorem _root_.ederiv_finset_sum {ι : Type*} {s : Finset ι}
     (ω : ι → (E → E [⋀^Fin n]→L[ℝ] F)) {x : E}
     (hω : ∀ i ∈ s, DifferentiableAt ℝ (ω i) x) :
     _root_.ederiv (∑ i ∈ s, ω i) x = ∑ i ∈ s, _root_.ederiv (ω i) x := by
-  change ContinuousAlternatingMap.uncurryFinCLM (fderiv ℝ (∑ i ∈ s, ω i) x) =
-    ∑ i ∈ s, ContinuousAlternatingMap.uncurryFinCLM (fderiv ℝ (ω i) x)
+  change ContinuousAlternatingMap.alternatizeUncurryFinCLM ℝ E F (fderiv ℝ (∑ i ∈ s, ω i) x) =
+    ∑ i ∈ s, ContinuousAlternatingMap.alternatizeUncurryFinCLM ℝ E F (fderiv ℝ (ω i) x)
   rw [fderiv_sum hω, _root_.map_sum]
 
 /-- Pointwise basis expansion for a smooth differential form: at each point `y`,
@@ -164,9 +164,8 @@ theorem _root_.ederiv_smul_const (a : E → ℝ) (e : E [⋀^Fin m]→L[ℝ] ℝ
     ha.hasFDerivAt.smul_const e
   -- Therefore `fderiv (fun z ↦ a z • e) y = (fderiv a y).smulRight e`.
   have hfderiv : fderiv ℝ (fun z ↦ a z • e) y = (fderiv ℝ a y).smulRight e := hd.fderiv
-  -- `ederiv = uncurryFin ∘ fderiv`, then unfold via `uncurryFin_apply`.
-  change ContinuousAlternatingMap.uncurryFin (fderiv ℝ (fun z ↦ a z • e) y) v = _
-  rw [hfderiv, ContinuousAlternatingMap.uncurryFin_apply]
+  -- `ederiv ω y = uncurryFin (fderiv ω y)` (bridge), then unfold via `uncurryFin_apply`.
+  rw [ederiv_eq_uncurryFin, hfderiv, ContinuousAlternatingMap.uncurryFin_apply]
   refine Finset.sum_congr rfl fun k _ => ?_
   -- Each summand: `(-1)^k • ((fderiv a y).smulRight e) (v k) (k.removeNth v)`
   -- equals `(-1)^k • (fderiv a y (v k)) • e (k.removeNth v)`.
@@ -232,8 +231,10 @@ theorem ederiv_wedge (ω : Ω^m⟮E, F⟯) (τ : Ω^n⟮E, F'⟯) (f : F →L[�
   -- (5) The two helpers `uncurryFin_wedge_productL_precompL/R` in Wedge.lean identify each
   --     summand with the corresponding wedge of an `ederiv` factor.
   funext x
-  change ContinuousAlternatingMap.uncurryFin
-      (fderiv ℝ (DifferentialForm.wedge ω τ f).toFun x) = _
+  -- Bridge `ederiv` (now a wrapper over `extDeriv`) back to the local `uncurryFin`
+  -- packaging used by the wedge helpers, on both sides of the goal.
+  show _root_.ederiv (DifferentialForm.wedge ω τ f).toFun x = _
+  rw [ederiv_eq_uncurryFin, ederiv_eq_uncurryFin, ederiv_eq_uncurryFin]
   have hΩ : (DifferentialForm.wedge ω τ f).toFun =
       fun y => ContinuousAlternatingMap.wedge_productL f (ω.toFun y) (τ.toFun y) := by
     funext y; rfl
