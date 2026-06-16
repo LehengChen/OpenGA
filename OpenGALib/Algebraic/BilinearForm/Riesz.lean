@@ -1,6 +1,5 @@
 import OpenGALib.Algebraic.BilinearForm.Basic
-import Mathlib.LinearAlgebra.Dual.Lemmas
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+import Mathlib.LinearAlgebra.BilinearForm.Properties
 
 /-!
 # Riesz extraction — algebraic core
@@ -45,6 +44,19 @@ omit [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] in
 theorem toDual_apply (B : Form 𝕜 V) (v w : V) :
     toDual B v w = inner B v w := rfl
 
+omit [IsStrictOrderedRing 𝕜] in
+/-- **Positive-definite ⇒ nondegenerate** (`LinearMap.BilinForm.Nondegenerate`):
+a positive-definite bilinear form is nondegenerate, the hypothesis Mathlib's
+`LinearMap.BilinForm.toDual` requires. Both separating directions follow from
+`B v v > 0` for `v ≠ 0` (no symmetry needed). -/
+theorem IsPosDef.nondegenerate {B : Form 𝕜 V} (hB : IsPosDef B) :
+    (B : LinearMap.BilinForm 𝕜 V).Nondegenerate := by
+  refine ⟨fun x hx => ?_, fun y hy => ?_⟩
+  · by_contra hne
+    exact ne_of_gt (inner_self_pos hB x hne) (hx x)
+  · by_contra hne
+    exact ne_of_gt (inner_self_pos hB y hne) (hy y)
+
 /-- **Injectivity of forward Riesz**: from positive-definiteness. -/
 theorem toDual_injective {B : Form 𝕜 V} (hB : IsPosDef B) :
     Function.Injective (toDual B) := by
@@ -70,33 +82,23 @@ theorem inner_eq_iff_eq {B : Form 𝕜 V} (hB : IsPosDef B) (v w : V) :
 
 variable [FiniteDimensional 𝕜 V]
 
-/-- **Bijectivity of forward Riesz**: injective + same finrank ⇒ bijective. -/
-theorem toDual_bijective {B : Form 𝕜 V} (hB : IsPosDef B) :
-    Function.Bijective (toDual B) := by
-  refine ⟨toDual_injective hB, ?_⟩
-  have h_finrank : Module.finrank 𝕜 (V →ₗ[𝕜] 𝕜) = Module.finrank 𝕜 V :=
-    Subspace.dual_finrank_eq
-  exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank
-    (f := toDual B) h_finrank.symm).mp (toDual_injective hB)
-
-/-- The Riesz isomorphism as a `LinearEquiv`. -/
+/-- The Riesz isomorphism as a `LinearEquiv`, delegating to Mathlib's
+`LinearMap.BilinForm.toDual` for the nondegenerate form `B`. -/
 noncomputable def toDualEquiv {B : Form 𝕜 V} (hB : IsPosDef B) :
     V ≃ₗ[𝕜] (V →ₗ[𝕜] 𝕜) :=
-  LinearEquiv.ofBijective (toDual B) (toDual_bijective hB)
+  LinearMap.BilinForm.toDual B hB.nondegenerate
 
 /-- **Inverse Riesz**: linear functional → vector via bilinear form. -/
 noncomputable def riesz {B : Form 𝕜 V} (hB : IsPosDef B)
     (φ : V →ₗ[𝕜] 𝕜) : V :=
   (toDualEquiv hB).symm φ
 
+omit [IsStrictOrderedRing 𝕜] in
 /-- **Riesz defining property**: `inner B (riesz hB φ) v = φ v`. -/
 theorem riesz_inner {B : Form 𝕜 V} (hB : IsPosDef B)
     (φ : V →ₗ[𝕜] 𝕜) (v : V) :
-    inner B (riesz hB φ) v = φ v := by
-  show toDual B (riesz hB φ) v = φ v
-  have heq : toDual B ((toDualEquiv hB).symm φ) = φ :=
-    (toDualEquiv hB).apply_symm_apply φ
-  exact congrArg (fun (f : V →ₗ[𝕜] 𝕜) => f v) heq
+    inner B (riesz hB φ) v = φ v :=
+  LinearMap.BilinForm.apply_toDual_symm_apply (hB := hB.nondegenerate) φ v
 
 /-- **Riesz uniqueness**: if `v` represents `φ`, then `v = riesz hB φ`. -/
 theorem riesz_unique {B : Form 𝕜 V} (hB : IsPosDef B) (v : V)
@@ -105,10 +107,7 @@ theorem riesz_unique {B : Form 𝕜 V} (hB : IsPosDef B) (v : V)
   apply toDual_injective hB
   ext w
   rw [toDual_apply, h w]
-  show φ w = toDual B (riesz hB φ) w
-  have heq : toDual B ((toDualEquiv hB).symm φ) = φ :=
-    (toDualEquiv hB).apply_symm_apply φ
-  exact congrArg (fun (f : V →ₗ[𝕜] 𝕜) => f w) heq.symm
+  exact (riesz_inner hB φ w).symm
 
 end Riesz
 
