@@ -3,6 +3,7 @@ import OpenGALib.Tensor.Alternating.Comp
 import OpenGALib.Tensor.Alternating.Congr
 import OpenGALib.Algebraic.Auxiliary.ShuffleDecomposition
 import Mathlib.Analysis.Normed.Module.Alternating.Curry
+import Mathlib.Analysis.Normed.Module.Alternating.Uncurry.Fin
 import Mathlib.LinearAlgebra.Alternating.DomCoprod
 import Mathlib.LinearAlgebra.Alternating.Uncurry.Fin
 import Mathlib.Tactic.Cases
@@ -48,48 +49,39 @@ variable {𝕜 E F G ι ι' : Type*} [NontriviallyNormedField 𝕜]
 /-- Given `f : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F`, produce the continuous alternating `(n+1)`-form
 `uncurryFin f : E [⋀^Fin (n+1)]→L[𝕜] F` by antisymmetrization:
 `uncurryFin f v = ∑ k, (-1)^k • f (v k) (k.removeNth v)`.
-The norm satisfies `‖uncurryFin f‖ ≤ (n+1) * ‖f‖`. See `norm_uncurryFin_le`. -/
+The norm satisfies `‖uncurryFin f‖ ≤ (n+1) * ‖f‖`. See `norm_uncurryFin_le`.
+
+This is a thin wrapper around Mathlib's `ContinuousAlternatingMap.alternatizeUncurryFin`. -/
 def uncurryFin (f : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F) : E [⋀^Fin (n + 1)]→L[𝕜] F :=
-  AlternatingMap.mkContinuous (.alternatizeUncurryFin <| toAlternatingMapLinear ∘ₗ f)
-    ((n + 1) * ‖f‖) fun v ↦ calc
-      _ = ‖∑ k, (-1) ^ k.val • f (v k) (k.removeNth v)‖ := by
-        simp [AlternatingMap.alternatizeUncurryFin_apply]
-      _ ≤ ∑ k, ‖f‖ * ‖v k‖ * ∏ j, ‖v (k.succAbove j)‖ := by
-        refine norm_sum_le_of_le _ fun k _ ↦ ?_
-        rw [norm_isUnit_zsmul _ (.pow _ isUnit_one.neg)]
-        exact (f (v k)).le_of_opNorm_le (f.le_opNorm _) _
-      _ = _ := by
-        simp [mul_assoc, ← Fin.prod_univ_succAbove (‖v ·‖)]
+  alternatizeUncurryFin f
 
 /-- The underlying alternating map of `uncurryFin f` is `alternatizeUncurryFin` applied to
 `toAlternatingMapLinear ∘ₗ f`. -/
 lemma toAlternatingMap_uncurryFin (f : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F) :
     (uncurryFin f).toAlternatingMap = .alternatizeUncurryFin (toAlternatingMapLinear ∘ₗ f) :=
-  rfl
+  toAlternatingMap_alternatizeUncurryFin f
 
 /-- Norm bound for `uncurryFin`: `‖uncurryFin f‖ ≤ (n + 1) * ‖f‖`. -/
 theorem norm_uncurryFin_le (f : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F) :
     ‖uncurryFin f‖ ≤ (n + 1) * ‖f‖ :=
-  AlternatingMap.mkContinuous_norm_le _ (by positivity) _
+  norm_alternatizeUncurryFin_le f
 
 /-- Evaluation formula for `uncurryFin`:
 `uncurryFin f v = ∑ k, (-1)^k • f (v k) (k.removeNth v)`. -/
 theorem uncurryFin_apply (f : E →L[𝕜] (E [⋀^Fin n]→L[𝕜] F)) (v : Fin (n + 1) → E) :
     uncurryFin f v = ∑ k, (-1) ^ k.val • f (v k) (k.removeNth v) :=
-  AlternatingMap.alternatizeUncurryFin_apply ..
+  alternatizeUncurryFin_apply f v
 
 /-- `uncurryFin` is additive in `f`. -/
 theorem uncurryFin_add (f g : E →L[𝕜] (E [⋀^Fin n]→L[𝕜] F)) :
-    uncurryFin (f + g) = uncurryFin f + uncurryFin g := by
-  ext v
-  simp [uncurryFin_apply, Finset.sum_add_distrib]
+    uncurryFin (f + g) = uncurryFin f + uncurryFin g :=
+  alternatizeUncurryFin_add f g
 
 /-- `uncurryFin` commutes with scalar multiplication. -/
 theorem uncurryFin_smul {M : Type*} [Monoid M] [DistribMulAction M F] [ContinuousConstSMul M F]
     [SMulCommClass 𝕜 M F] (c : M) (f : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F) :
-    uncurryFin (c • f) = c • uncurryFin f := by
-  ext v
-  simp [uncurryFin_apply, smul_comm _ c, Finset.smul_sum]
+    uncurryFin (c • f) = c • uncurryFin f :=
+  alternatizeUncurryFin_smul c f
 
 /-- `uncurryFin` as a continuous linear map
 `(E →L[𝕜] E [⋀^Fin n]→L[𝕜] F) →L[𝕜] E [⋀^Fin (n+1)]→L[𝕜] F`.
@@ -115,52 +107,22 @@ theorem uncurryFin_uncurryFinCLM_comp_of_symmetric {f : E →L[𝕜] E →L[𝕜
     intro x y
     have : g x y = (f x y).toAlternatingMap := rfl
     aesop
-  let h₀ := AlternatingMap.alternatizeUncurryFin_alternatizeUncurryFinLM_comp_of_symmetric (g_symm)
-  exact toAlternatingMap_injective h₀
+  have h₀ := AlternatingMap.alternatizeUncurryFin_alternatizeUncurryFinLM_comp_of_symmetric (g_symm)
+  apply toAlternatingMap_injective
+  rw [toAlternatingMap_uncurryFin, toAlternatingMap_zero]
+  convert h₀ using 2
+  ext x : 1
+  exact toAlternatingMap_uncurryFin (f x)
 
 /-- The interior product (contraction): given `f : E [⋀^Fin (n+1)]→L[𝕜] F`, produce the
 continuous linear map `E →L[𝕜] E [⋀^Fin n]→L[𝕜] F` that fixes `x : E` as the first argument
 of `f`, i.e. `curryFin f x m = f (Fin.cons x m)`.
-The operator norm satisfies `‖curryFin f‖ ≤ ‖f‖`. -/
-def curryFin (f : E [⋀^Fin (n + 1)]→L[𝕜] F) : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F :=
-  have f_curry_bounded (x : E) : ∀ (m : Fin n → E), ‖(f.curryLeft x) m‖ ≤ ‖f‖ * ‖x‖ * ∏ i, ‖m i‖
-    := by
-    intro m
-    let m' : Fin (n + 1) → E := Fin.cons x m
-    have h₀ : (f.curryLeft x) m = f m' := rfl
-    rw [h₀]
-    let m_norm : Fin n → ℝ := fun i => ‖m i‖
-    let m_norm' : Fin (n + 1) → ℝ := Fin.cons (‖x‖) m_norm
-    have h₁ : ∏ i, ‖m' i‖ = ‖x‖ * ∏ i, ‖m i‖ := by
-      have aux := Fin.prod_cons (‖x‖) m_norm
-      unfold m_norm at aux
-      have : ∀ i, ‖m' i‖ = m_norm' i := by
-        apply Fin.induction
-        · simp [Fin.cons_zero, m', m_norm']
-        · intro i _
-          simp [Fin.cons_succ, m', m_norm', m_norm]
-      rw [← aux]
-      simp [this, m_norm', Fin.prod_cons, m_norm]
-    rw [mul_assoc, ←h₁]
-    exact f.le_opNorm m'
-  let f_curry (x : E) := (f.1.curryLeft x).mkContinuous (‖f‖ * ‖x‖) (f_curry_bounded x)
-  LinearMap.mkContinuous
-    { toFun := fun x =>
-        { toContinuousMultilinearMap := f_curry x
-          map_eq_zero_of_eq' := fun v i j hv hne ↦ by
-            apply f.map_eq_zero_of_eq (Fin.cons x v) (i := i.succ) (j := j.succ) <;> simpa }
-      map_add' := fun x y => by unfold f_curry; ext; simp
-      map_smul' := fun c x => by unfold f_curry; ext; simp }
-    ‖f‖ fun x => by
-      rw [LinearMap.coe_mk, AddHom.coe_mk, ← norm_toContinuousMultilinearMap]
-      dsimp
-      apply (ContinuousMultilinearMap.opNorm_le_iff _).mpr
-      · intro m
-        have : (f_curry x) m = (f.curryLeft x) m := rfl
-        rw [this]
-        exact f_curry_bounded x m
-      · positivity
+The operator norm satisfies `‖curryFin f‖ ≤ ‖f‖`.
 
+This is a thin wrapper around Mathlib's `ContinuousAlternatingMap.curryLeft`
+(`Matrix.vecCons = Fin.cons` definitionally). -/
+def curryFin (f : E [⋀^Fin (n + 1)]→L[𝕜] F) : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F :=
+  f.curryLeft
 
 /-- Evaluation formula for `curryFin`: `curryFin f x m = f (Fin.cons x m)`. -/
 theorem curryFin_apply (f : E [⋀^Fin (n + 1)]→L[𝕜] F) (x : E) (m : Fin n → E) :
@@ -169,18 +131,13 @@ theorem curryFin_apply (f : E [⋀^Fin (n + 1)]→L[𝕜] F) (x : E) (m : Fin n 
 
 /-- Norm bound for `curryFin`: `‖curryFin f‖ ≤ ‖f‖`. -/
 theorem norm_curryFin_le (f : E [⋀^Fin (n + 1)]→L[𝕜] F) :
-    ‖curryFin f‖ ≤ ‖f‖ := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) (fun x => ?_)
-  refine ContinuousAlternatingMap.opNorm_le_bound _
-    (mul_nonneg (norm_nonneg _) (norm_nonneg _)) (fun m => ?_)
-  rw [curryFin_apply]
-  exact f.1.norm_map_cons_le x m
+    ‖curryFin f‖ ≤ ‖f‖ :=
+  (norm_curryLeft f).le
 
 /-- `curryFin` is additive in `f`. -/
 theorem curryFin_add (f g : E [⋀^Fin (n + 1)]→L[𝕜] F) :
-    curryFin (f + g) = curryFin f + curryFin g := by
-  ext e v
-  simp [curryFin_apply]
+    curryFin (f + g) = curryFin f + curryFin g :=
+  curryLeft_add f g
 
 /-- `curryFin` commutes with scalar multiplication. -/
 theorem curryFin_smul {M : Type*} [Monoid M] [DistribMulAction M F] [ContinuousConstSMul M F]
