@@ -460,7 +460,7 @@ uniqueness). -/
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [InnerProductSpace ℝ E]
   [NeZero (Module.finrank ℝ E)] [I.Boundaryless] [T2Space M]
-  [IsLocallyConstantChartedSpace H M] in
+  [IsLocallyConstantChartedSpace H M] hm in
 /-- **Math.** **Locality of `koszulFunctional` in the middle argument**:
 if $Y_1 =ᶠ[𝓝 x] Y_2$, then $K(X, Y_1; Z)(x) = K(X, Y_2; Z)(x)$. -/
 private theorem koszulFunctional_eventuallyEq_middle
