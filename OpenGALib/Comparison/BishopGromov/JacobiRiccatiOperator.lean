@@ -94,4 +94,34 @@ theorem operatorRiccati_scalar_riccati
   exact matrixRiccati_trace_scalar_riccati hn b Sₗ Rₗ κ t hSsym u hu hSu hR
     (fun s => LinearMap.trace ℝ V (Sₗ s)) (fun _ => rfl) htr a ha
 
+/-- **Math.** **Operator Riccati ⟶ mean-curvature Riccati.** Same hypotheses as
+`operatorRiccati_scalar_riccati`, but delivering the conclusion in the
+**mean-curvature `m = trace S`-form** that `riccati_le_model` consumes directly:
+`m'(t) + m(t)²/(n-1) + (n-1)κ ≤ 0`, where `m t = trace (S t)`. This is the operator
+Riccati fed into the `m`-form trace reduction `matrixRiccati_trace_riccati`; it is
+the exact `hsub` shape of the Riccati comparison engine. -/
+theorem operatorRiccati_mean_riccati
+    {n : ℕ} (hn : 2 ≤ n) (b : OrthonormalBasis (Fin n) ℝ V)
+    (S R : ℝ → (V →L[ℝ] V)) (κ : ℝ) (t : ℝ)
+    (hSsym : (S t : V →ₗ[ℝ] V).IsSymmetric)
+    (u : V) (hu : ‖u‖ = 1) (hSu : (S t) u = 0)
+    (hR : ((n : ℝ) - 1) * κ ≤ LinearMap.trace ℝ V (R t : V →ₗ[ℝ] V))
+    (hric : HasDerivAt S (-(R t) - S t ∘L S t) t)
+    (m : ℝ → ℝ) (hm : ∀ s, m s = LinearMap.trace ℝ V (S s : V →ₗ[ℝ] V)) :
+    deriv m t + m t ^ 2 / ((n : ℝ) - 1) + ((n : ℝ) - 1) * κ ≤ 0 := by
+  set Sₗ : ℝ → (V →ₗ[ℝ] V) := fun s => (S s : V →ₗ[ℝ] V) with hSₗ
+  set Rₗ : ℝ → (V →ₗ[ℝ] V) := fun s => (R s : V →ₗ[ℝ] V) with hRₗ
+  have htr := hasDerivAt_trace_continuousLinearMap (V := V) hric
+  have hrhs : LinearMap.trace ℝ V ((-(R t) - S t ∘L S t : V →L[ℝ] V) : V →ₗ[ℝ] V)
+      = -(LinearMap.trace ℝ V (Sₗ t ∘ₗ Sₗ t)) - LinearMap.trace ℝ V (Rₗ t) := by
+    rw [ContinuousLinearMap.coe_sub, ContinuousLinearMap.coe_neg,
+      ContinuousLinearMap.coe_comp, map_sub, map_neg]
+    ring
+  rw [hrhs] at htr
+  -- Rephrase the supplied `m` as the trace function and transport its derivative.
+  have hmfun : m = fun s => LinearMap.trace ℝ V (Sₗ s) := funext hm
+  rw [hmfun]
+  exact matrixRiccati_trace_riccati hn b Sₗ Rₗ κ t hSsym u hu hSu hR
+    (fun s => LinearMap.trace ℝ V (Sₗ s)) (fun _ => rfl) htr
+
 end OpenGA.Comparison.BishopGromov

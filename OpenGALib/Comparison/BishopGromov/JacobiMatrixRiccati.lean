@@ -110,4 +110,26 @@ theorem scalarRiccati_of_jacobiMatrixODE
     (fun s => A' s * Ring.inverse (A s)) Rc κ t hSsym u hu hSu hR
     (hasDerivAt_shapeOperator_of_jacobiMatrixODE A A' Rc t hAt hA'' hunit) a ha
 
+/-- **Math.** **Jacobi matrix ODE ⟶ mean-curvature Riccati** (the `m = trace S`
+form of the spine). Same hypotheses as `scalarRiccati_of_jacobiMatrixODE`, but the
+conclusion is delivered in the mean-curvature form `m'(t) + m(t)²/(n-1) +
+(n-1)κ ≤ 0` with `m t = trace (S t)` — the exact pointwise sub-equation `hsub`
+consumed by the Riccati comparison engine `riccati_le_model`. -/
+theorem meanCurvatureRiccati_of_jacobiMatrixODE
+    {n : ℕ} (hn : 2 ≤ n) (b : OrthonormalBasis (Fin n) ℝ V)
+    (A A' Rc : ℝ → (V →L[ℝ] V)) (κ : ℝ) (t : ℝ)
+    (hAt : HasDerivAt A (A' t) t)
+    (hA'' : HasDerivAt A' (-(Rc t) * A t) t)
+    (hunit : IsUnit (A t))
+    (hSsym : ((A' t * Ring.inverse (A t) : V →L[ℝ] V) : V →ₗ[ℝ] V).IsSymmetric)
+    (u : V) (hu : ‖u‖ = 1) (hSu : (A' t * Ring.inverse (A t)) u = 0)
+    (hR : ((n : ℝ) - 1) * κ ≤ LinearMap.trace ℝ V (Rc t : V →ₗ[ℝ] V))
+    (m : ℝ → ℝ)
+    (hm : ∀ s, m s = LinearMap.trace ℝ V
+      ((A' s * Ring.inverse (A s) : V →L[ℝ] V) : V →ₗ[ℝ] V)) :
+    deriv m t + m t ^ 2 / ((n : ℝ) - 1) + ((n : ℝ) - 1) * κ ≤ 0 :=
+  operatorRiccati_mean_riccati hn b
+    (fun s => A' s * Ring.inverse (A s)) Rc κ t hSsym u hu hSu hR
+    (hasDerivAt_shapeOperator_of_jacobiMatrixODE A A' Rc t hAt hA'' hunit) m hm
+
 end OpenGA.Comparison.BishopGromov
