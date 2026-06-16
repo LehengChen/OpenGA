@@ -15,24 +15,6 @@ open Fin
 
 variable {m n p k : ℕ}
 
-@[simps!]
-def addAssocPerm :
-    Equiv.Perm ((Fin m ⊕ Fin n) ⊕ Fin p) ≃ Equiv.Perm (Fin m ⊕ Fin n ⊕ Fin p) :=
-  Equiv.permCongr (Equiv.sumAssoc (Fin m) (Fin n) (Fin p))
-
-@[simp]
-lemma addAssocPerm_symm_addAssocPerm (σ₁ : Equiv.Perm ((Fin m ⊕ Fin n) ⊕ Fin p)) :
-    addAssocPerm.symm (addAssocPerm σ₁) = σ₁ :=
-  Equiv.symm_apply_apply addAssocPerm σ₁
-
-@[simp]
-lemma sign_addAssocPerm (σ₁ : Equiv.Perm ((Fin m ⊕ Fin n) ⊕ Fin p)) :
-    Equiv.Perm.sign (addAssocPerm σ₁) = Equiv.Perm.sign σ₁ := by
-  simp only [addAssocPerm, Equiv.Perm.sign_permCongr]
-
-def addCongrPerm : Equiv.Perm (Fin (m + n)) ≃ Equiv.Perm (Fin (n + m)) :=
-  Equiv.permCongr finAddCongr
-
 def sumCongrPerm : Equiv.Perm (Fin m ⊕ Fin n) ≃ Equiv.Perm (Fin n ⊕ Fin m) :=
   Equiv.permCongr finSumCongr
 

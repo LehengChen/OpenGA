@@ -144,25 +144,13 @@ theorem removeNone_sign {α : Type*} [DecidableEq α] [Fintype α]
   conv_rhs => rw [← optionCongr_removeNone_of_fix_none σ h]
   exact (Equiv.optionCongr_sign _).symm
 
-/-- `Equiv.permCongr` preserves sign. -/
-theorem permCongr_sign {α β : Type*} [DecidableEq α] [DecidableEq β]
-    [Fintype α] [Fintype β]
-    (e : α ≃ β) (σ : Equiv.Perm α) :
-    Equiv.Perm.sign (Equiv.permCongr e σ) = Equiv.Perm.sign σ :=
-  Equiv.Perm.sign_permCongr _ _
-
-/-- `Equiv.permCongr` commutes with `Equiv.Perm` inverse-multiply. -/
+/-- `Equiv.permCongr` commutes with `Equiv.Perm` inverse-multiply.
+Thin wrapper over the `MulEquiv` `Equiv.permCongrHom`. -/
 theorem permCongr_inv_mul {α β : Type*}
     (e : α ≃ β) (σ₁ σ₂ : Equiv.Perm α) :
     Equiv.permCongr e (σ₁⁻¹ * σ₂) =
       (Equiv.permCongr e σ₁)⁻¹ * Equiv.permCongr e σ₂ := by
-  have h_inv : (Equiv.permCongr e σ₁ : Equiv.Perm _)⁻¹ =
-      Equiv.permCongr e σ₁⁻¹ := by
-    ext y
-    show (Equiv.permCongr e σ₁).symm y = e (σ₁⁻¹ (e.symm y))
-    simp [Equiv.permCongr_def, Equiv.Perm.inv_def]
-  ext x
-  simp only [Equiv.Perm.coe_mul, Function.comp_apply, Equiv.permCongr_apply,
-    h_inv, Equiv.symm_apply_apply]
+  have := map_mul e.permCongrHom σ₁⁻¹ σ₂
+  simpa only [Equiv.permCongrHom_coe, map_inv] using this
 
 end ShuffleSplit
