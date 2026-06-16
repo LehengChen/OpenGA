@@ -82,4 +82,32 @@ theorem hasDerivAt_shapeOperator_of_jacobiMatrixODE
     simp only [mul_assoc]
   rw [hfst, sub_eq_add_neg, hprod, mul_neg]
 
+/-- **Math.** **Jacobi matrix ODE ⟶ scalar Riccati (the leg-① spine).** Chaining
+`hasDerivAt_shapeOperator_of_jacobiMatrixODE` into `operatorRiccati_scalar_riccati`:
+from the normal-frame Jacobi matrix ODE `A'' = -R̃ A` at `t`, with `A t` invertible
+and the shape operator `S = A' A⁻¹` symmetric with the radial unit vector `u` in
+its kernel and the Ricci-trace bound `tr R̃ ≥ (n-1)κ`, the scalar mean
+`a t := tr (S t)/(n-1)` satisfies the scalar Riccati `a'(t) + a(t)² + κ ≤ 0`.
+
+This is the operator-calculus spine of the Bishop–Gromov Jacobi route: it consumes
+only the matrix ODE (which the parallel-frame reduction of the Jacobi equation
+supplies) and the algebraic shape-operator facts, and outputs exactly the scalar
+Riccati that `riccati_le_model` compares against the model. -/
+theorem scalarRiccati_of_jacobiMatrixODE
+    {n : ℕ} (hn : 2 ≤ n) (b : OrthonormalBasis (Fin n) ℝ V)
+    (A A' Rc : ℝ → (V →L[ℝ] V)) (κ : ℝ) (t : ℝ)
+    (hAt : HasDerivAt A (A' t) t)
+    (hA'' : HasDerivAt A' (-(Rc t) * A t) t)
+    (hunit : IsUnit (A t))
+    (hSsym : ((A' t * Ring.inverse (A t) : V →L[ℝ] V) : V →ₗ[ℝ] V).IsSymmetric)
+    (u : V) (hu : ‖u‖ = 1) (hSu : (A' t * Ring.inverse (A t)) u = 0)
+    (hR : ((n : ℝ) - 1) * κ ≤ LinearMap.trace ℝ V (Rc t : V →ₗ[ℝ] V))
+    (a : ℝ → ℝ)
+    (ha : ∀ s, a s = LinearMap.trace ℝ V
+      ((A' s * Ring.inverse (A s) : V →L[ℝ] V) : V →ₗ[ℝ] V) / ((n : ℝ) - 1)) :
+    deriv a t + a t ^ 2 + κ ≤ 0 :=
+  operatorRiccati_scalar_riccati hn b
+    (fun s => A' s * Ring.inverse (A s)) Rc κ t hSsym u hu hSu hR
+    (hasDerivAt_shapeOperator_of_jacobiMatrixODE A A' Rc t hAt hA'' hunit) a ha
+
 end OpenGA.Comparison.BishopGromov
