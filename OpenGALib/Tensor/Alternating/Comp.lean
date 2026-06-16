@@ -18,9 +18,6 @@ about continuous multilinear maps lift to alternating maps.
   composition: `f : N →L[𝕜] N' →L[𝕜] N''`, `g : M [⋀^ι]→L[𝕜] N`,
   `h : M' [⋀^ι']→L[𝕜] N'` produce `(m, m') ↦ f (g m) (h m') :
   M [⋀^ι]→L[𝕜] M' [⋀^ι']→L[𝕜] N''`.
-* `LinearIsometry.compLeft` — post-composition with a semilinear isometry as
-  a semilinear isometry on continuous semilinear maps.
-
 ## Main results
 
 * `compContinuousAlternatingMapCLM_cont` /
@@ -116,19 +113,6 @@ theorem compContinuousAlternatingMap₂_lsmul_apply
     (ContinuousLinearMap.lsmul 𝕜 𝕜).compContinuousAlternatingMap₂ g h m m' = (g m) • (h m') :=
   rfl
 
-/-- Post-composition with a semilinear isometry `f : F →ₛₗᵢ[σ₂₃] G` defines a
-semilinear isometry `(E →SL[σ₁₂] F) →ₛₗᵢ[σ₂₃] (E →SL[σ₁₃] G)`. -/
-noncomputable def _root_.LinearIsometry.compLeft {𝕜 : Type*} {𝕜₂ : Type*}
-    {𝕜₃ : Type*} (E : Type*) {F : Type*} {G : Type*} [NormedAddCommGroup E]
-    [NormedAddCommGroup F] [NormedAddCommGroup G] [NontriviallyNormedField 𝕜]
-    [NontriviallyNormedField 𝕜₂] [NontriviallyNormedField 𝕜₃] [NormedSpace 𝕜 E]
-    [NormedSpace 𝕜₂ F] [NormedSpace 𝕜₃ G] (σ₁₂ : 𝕜 →+* 𝕜₂) {σ₂₃ : 𝕜₂ →+* 𝕜₃} {σ₁₃ : 𝕜 →+* 𝕜₃}
-    [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [RingHomIsometric σ₁₂] [RingHomIsometric σ₂₃]
-    [RingHomIsometric σ₁₃] (f : F →ₛₗᵢ[σ₂₃] G) :
-    (E →SL[σ₁₂] F) →ₛₗᵢ[σ₂₃] (E →SL[σ₁₃] G) :=
-  { ContinuousLinearMap.compSL _ _ _ _ _ f.toContinuousLinearMap with
-    norm_map' := fun _ ↦ f.norm_toContinuousLinearMap_comp }
-
 /-- Pre-composition with a continuous linear map `p : M →L[𝕜] M'` gives a
 continuous linear operator on alternating maps; the assignment
 `p ↦ compContinuousLinearMapCLM p` is itself continuous. -/
@@ -136,7 +120,7 @@ theorem compContinuousAlternatingMapCLM_cont :
     Continuous (ContinuousAlternatingMap.compContinuousLinearMapCLM :
     (M →L[𝕜] M') → (M' [⋀^ι]→L[𝕜] N) →L[𝕜] (M [⋀^ι]→L[𝕜] N)) := by
   let φ : (M [⋀^ι]→L[𝕜] N) →ₗᵢ[𝕜] _ := ContinuousAlternatingMap.toContinuousMultilinearMapLI
-  let Φ : ((M' [⋀^ι]→L[𝕜] N) →L[𝕜] (M [⋀^ι]→L[𝕜] N)) →ₗᵢ[𝕜] _ := φ.compLeft _ (RingHom.id _)
+  let Φ : ((M' [⋀^ι]→L[𝕜] N) →L[𝕜] (M [⋀^ι]→L[𝕜] N)) →ₗᵢ[𝕜] _ := φ.postcomp
   rw [← Φ.comp_continuous_iff]
   change Continuous (fun p : M →L[𝕜] M' ↦
     (ContinuousMultilinearMap.compContinuousLinearMapL (fun _ ↦ p) :
@@ -197,7 +181,7 @@ theorem ContinuousAlternatingMap.compContinuousLinearMapL_continuous :
     (ContinuousAlternatingMap.compContinuousLinearMapCLM p :
     (F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂))) := by
   let φ : (F₁ [⋀^ι]→L[𝕜] F₂) →ₗᵢ[𝕜] _ := ContinuousAlternatingMap.toContinuousMultilinearMapLI
-  let Φ : ((F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂)) →ₗᵢ[𝕜] _ := φ.compLeft _ (RingHom.id _)
+  let Φ : ((F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂)) →ₗᵢ[𝕜] _ := φ.postcomp
   rw [← Φ.comp_continuous_iff]
   change Continuous (fun p : F₁ →L[𝕜] F₁ ↦
     (ContinuousMultilinearMap.compContinuousLinearMapL (fun _ ↦ p) :
@@ -236,7 +220,7 @@ theorem ContinuousAlternatingMap.compContinuousLinearMapCLM_contMDiff :
     ContinuousAlternatingMap.toContinuousMultilinearMapLI
   let Φ : ((F₁ [⋀^ι]→L[𝕜] F₂) →L[𝕜] (F₁ [⋀^ι]→L[𝕜] F₂)) →ₗᵢ[𝕜]
       (F₁ [⋀^ι]→L[𝕜] F₂ →L[𝕜] ContinuousMultilinearMap 𝕜 (fun _ : ι ↦ F₁) F₂) :=
-    φ.compLeft _ (RingHom.id _)
+    φ.postcomp
   haveI : FiniteDimensional 𝕜 (ContinuousMultilinearMap 𝕜 (fun _ : ι ↦ F₁) F₂)
     := FiniteDimensional.of_injective ContinuousMultilinearMap.toMultilinearMapLinear
       ContinuousMultilinearMap.toMultilinearMap_injective

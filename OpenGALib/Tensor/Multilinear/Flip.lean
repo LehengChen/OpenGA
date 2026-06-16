@@ -23,30 +23,29 @@ variable
   {G' : Type*} [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G']
 
 /-- Linear isometry equivalence between continuous-linear maps into multilinear
-maps and multilinear maps into continuous-linear maps. -/
+maps and multilinear maps into continuous-linear maps.
+
+This upgrades Mathlib's continuous linear equivalence
+`ContinuousLinearMap.flipMultilinearEquiv` to a linear isometry equivalence,
+using that flipping preserves the operator norm. -/
 def LinearIsometryEquiv.flipMultilinear :
     (G →L[𝕜] ContinuousMultilinearMap 𝕜 E G') ≃ₗᵢ[𝕜]
-      (ContinuousMultilinearMap 𝕜 E (G →L[𝕜] G')) where
-  toFun := ContinuousLinearMap.flipMultilinear
-  invFun := (ContinuousLinearMap.flipMultilinearEquiv 𝕜 E G G').invFun
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  left_inv := congrFun rfl
-  right_inv := congrFun rfl
-  norm_map' f := le_antisymm
-    (ContinuousMultilinearMap.opNorm_le_bound (by positivity) fun m ↦
-      ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun x ↦ calc
-        ‖f.flipMultilinear m x‖ = ‖f x m‖ := rfl
-        _ ≤ ‖f x‖ * ∏ i, ‖m i‖ := (f x).le_opNorm m
-        _ ≤ (‖f‖ * ‖x‖) * ∏ i, ‖m i‖ := mul_le_mul_of_nonneg_right (f.le_opNorm x) (by positivity)
-        _ = ‖f‖ * (∏ i, ‖m i‖) * ‖x‖ := by ring)
-    (ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun x ↦
-      ContinuousMultilinearMap.opNorm_le_bound (by positivity) fun m ↦ calc
-        ‖f x m‖ = ‖f.flipMultilinear m x‖ := rfl
-        _ ≤ ‖f.flipMultilinear m‖ * ‖x‖ := (f.flipMultilinear m).le_opNorm x
-        _ ≤ (‖f.flipMultilinear‖ * ∏ i, ‖m i‖) * ‖x‖ :=
-          mul_le_mul_of_nonneg_right (f.flipMultilinear.le_opNorm m) (by positivity)
-        _ = ‖f.flipMultilinear‖ * ‖x‖ * ∏ i, ‖m i‖ := by ring)
+      (ContinuousMultilinearMap 𝕜 E (G →L[𝕜] G')) :=
+  { ContinuousLinearMap.flipMultilinearEquiv 𝕜 E G G' with
+    norm_map' := fun f ↦ le_antisymm
+      (ContinuousMultilinearMap.opNorm_le_bound (by positivity) fun m ↦
+        ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun x ↦ calc
+          ‖f.flipMultilinear m x‖ = ‖f x m‖ := rfl
+          _ ≤ ‖f x‖ * ∏ i, ‖m i‖ := (f x).le_opNorm m
+          _ ≤ (‖f‖ * ‖x‖) * ∏ i, ‖m i‖ := mul_le_mul_of_nonneg_right (f.le_opNorm x) (by positivity)
+          _ = ‖f‖ * (∏ i, ‖m i‖) * ‖x‖ := by ring)
+      (ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun x ↦
+        ContinuousMultilinearMap.opNorm_le_bound (by positivity) fun m ↦ calc
+          ‖f x m‖ = ‖f.flipMultilinear m x‖ := rfl
+          _ ≤ ‖f.flipMultilinear m‖ * ‖x‖ := (f.flipMultilinear m).le_opNorm x
+          _ ≤ (‖f.flipMultilinear‖ * ∏ i, ‖m i‖) * ‖x‖ :=
+            mul_le_mul_of_nonneg_right (f.flipMultilinear.le_opNorm m) (by positivity)
+          _ = ‖f.flipMultilinear‖ * ‖x‖ * ∏ i, ‖m i‖ := by ring) }
 
 namespace ContinuousMultilinearMap
 
