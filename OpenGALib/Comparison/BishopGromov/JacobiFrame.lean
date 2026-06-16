@@ -1,4 +1,5 @@
 import OpenGALib.Riemannian.Connection.ParallelTransport
+import OpenGALib.Riemannian.Curvature.JacobiField
 
 /-!
 # Parallel frame: the covariant derivative is the component derivative
@@ -67,5 +68,48 @@ theorem hasDerivAt_metricInner_parallel_right
   have hval := covDerivAlongCurve_metricInner g γ W Efield t₀ hWc hEc hγc hγcont
   rw [hE, g.metricInner_zero_right, add_zero] at hval
   exact hval ▸ hdiff.hasDerivAt
+
+section JacobiRow
+
+variable [CompleteSpace E] [T2Space M] [IsLocallyConstantChartedSpace H M] [HasMetric I M]
+
+/-- **Math.** **Second component derivative of a Jacobi field against a parallel
+field = minus the curvature term.** For a Jacobi field `J` along `γ` and a field `E`
+parallel at `t₀`, the first-component derivative `t ↦ ⟨D_t J, E⟩_g` has, at `t₀`,
+derivative `-⟨R(J, γ') γ', E⟩_g`. Equivalently the parallel-frame component
+`c(t) = ⟨J, E⟩` satisfies `c''(t₀) = -⟨R(J,γ')γ', E⟩` — exactly the row of the
+Jacobi matrix ODE `A'' + R̃ A = 0` (CH21 L156–168) read against the frame.
+
+Apply the parallel-frame atom `hasDerivAt_metricInner_parallel_right` to
+`W = D_t J`: its derivative is `⟨D_t (D_t J), E⟩ = ⟨D_t² J, E⟩`; the Jacobi equation
+`D_t² J = -R(J,γ')γ'` (`hJac`) turns this into `-⟨R(J,γ')γ', E⟩`. -/
+theorem hasDerivAt_metricInner_covDeriv_jacobi
+    (g : RiemannianMetric I M) (γ : ℝ → M)
+    (J Efield : (t : ℝ) → TangentSpace I (γ t)) (t₀ : ℝ)
+    (hJac : Riemannian.IsJacobiFieldAlong (I := I) g γ J)
+    (hE : covDerivAlongCurve (I := I) g γ Efield t₀ = 0)
+    (hDJc : DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t)
+        (covDerivAlongCurve (I := I) g γ J t)) t₀)
+    (hEc : DifferentiableAt ℝ (fun t =>
+      (trivializationAt E (TangentSpace I) (γ t₀)).continuousLinearMapAt ℝ (γ t) (Efield t)) t₀)
+    (hγc : DifferentiableAt ℝ (fun t => extChartAt I (γ t₀) (γ t)) t₀)
+    (hγcont : ContinuousAt γ t₀)
+    (hdiff : DifferentiableAt ℝ (fun t =>
+      g.metricInner (γ t) (covDerivAlongCurve (I := I) g γ J t) (Efield t)) t₀) :
+    HasDerivAt (fun t => g.metricInner (γ t) (covDerivAlongCurve (I := I) g γ J t) (Efield t))
+      (-(g.metricInner (γ t₀) (Riemannian.jacobiCurvatureTerm (I := I) g γ J t₀) (Efield t₀))) t₀ := by
+  have hatom := hasDerivAt_metricInner_parallel_right g γ
+    (fun s => covDerivAlongCurve (I := I) g γ J s) Efield t₀ hE hDJc hEc hγc hγcont hdiff
+  -- The covariant derivative of `D_t J` is `D_t² J = -R(J,γ')γ'` by the Jacobi equation.
+  have h2 : covDerivAlongCurve (I := I) g γ (fun s => covDerivAlongCurve (I := I) g γ J s) t₀
+      = -(Riemannian.jacobiCurvatureTerm (I := I) g γ J t₀) := by
+    have hj := hJac t₀
+    rw [Riemannian.covDerivAlongCurve2_def] at hj
+    exact eq_neg_of_add_eq_zero_left hj
+  rw [h2, g.metricInner_neg_left] at hatom
+  exact hatom
+
+end JacobiRow
 
 end OpenGA.Comparison.BishopGromov
