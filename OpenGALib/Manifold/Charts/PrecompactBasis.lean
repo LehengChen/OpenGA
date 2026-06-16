@@ -160,7 +160,7 @@ theorem isTopologicalBasis_isPrecompactCoordinateBall :
       (n := n) hx hu
     exact ⟨s, hs, hxs, hsu⟩
 
-/-- **Math.** Lemma 1.10: every topological manifold has a *countable* topological
+/-- **Math.** Every topological manifold has a *countable* topological
 basis consisting of precompact coordinate balls. -/
 theorem exists_countable_precompact_coordinate_ball_basis :
     ∃ b : Set (Set M),
@@ -219,7 +219,7 @@ theorem exists_countable_locallyFinite_refinement_of_isTopologicalBasis {X : Typ
   · exact fun j ↦ (hW_basis j).1
   · exact fun j ↦ ⟨i (c j), (hW_basis j).2.2⟩
 
-/-- **Math.** Theorem 1.15: given an open cover of a topological manifold, there is a
+/-- **Math.** Given an open cover of a topological manifold, there is a
 countable locally finite refinement by precompact coordinate balls subordinate to
 the cover. -/
 theorem exists_countable_locally_finite_precompact_coordinate_ball_refinement
