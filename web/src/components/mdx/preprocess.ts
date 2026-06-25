@@ -1,0 +1,111 @@
+/** Convert LaTeX macros to HTML tags before Markdown rendering.
+ *
+ * Supported:
+ *   \entryref{hash}{text (may contain $math{braces}$)}  → inline entry link
+ *   \entryblock{hash}                                    → entry block
+ *   \entryblock{hash}{collapsible}                       → collapsible entry block
+ *   \entryblock{hash}{ ...children... }                  → nested block
+ *
+ * If a numberMap is provided, data-number attributes are added.
+ */
+export function preprocess(content: string, numberMap?: Map<string, string>): string {
+    let result = processEntryRefs(content, numberMap)
+    result = processEntryBlocks(result, numberMap)
+    return result
+}
+
+/** Find the index of the closing } that matches the { at position pos. */
+function findMatchingBrace(input: string, pos: number): number {
+    if (input[pos] !== '{') return -1
+    let depth = 1
+    for (let i = pos + 1; i < input.length; i++) {
+        if (input[i] === '{') depth++
+        else if (input[i] === '}') {
+            depth--
+            if (depth === 0) return i
+        }
+    }
+    return -1
+}
+
+function processEntryRefs(input: string, numberMap?: Map<string, string>): string {
+    let result = ''
+    let i = 0
+    const tag = '\\entryref{'
+
+    while (i < input.length) {
+        const idx = input.indexOf(tag, i)
+        if (idx === -1) { result += input.slice(i); break }
+
+        result += input.slice(i, idx)
+
+        // Parse first arg: hash
+        const hashStart = idx + tag.length
+        const hashEnd = findMatchingBrace(input, hashStart - 1)
+        if (hashEnd === -1) { result += input.slice(idx); break }
+        const hash = input.slice(hashStart, hashEnd)
+
+        // Check for optional second arg: text (with brace matching)
+        const textBrace = hashEnd + 1
+        const numAttr = numberMap?.get(hash) ? ` data-number="${numberMap.get(hash)}"` : ''
+
+        if (textBrace >= input.length || input[textBrace] !== '{') {
+            // Single-arg: \entryref{hash} → auto mode (no display text)
+            result += `<span data-entry="${hash}" data-auto="true"${numAttr}></span>`
+            i = hashEnd + 1
+            continue
+        }
+        const textEnd = findMatchingBrace(input, textBrace)
+        if (textEnd === -1) { result += input.slice(idx); break }
+        const text = input.slice(textBrace + 1, textEnd)
+
+        // Two-arg: \entryref{hash}{text} → manual mode
+        result += `<span data-entry="${hash}"${numAttr}>${text}</span>`
+        i = textEnd + 1
+    }
+
+    return result
+}
+
+function processEntryBlocks(input: string, numberMap?: Map<string, string>): string {
+    let result = ''
+    let i = 0
+    const tag = '\\entryblock{'
+
+    while (i < input.length) {
+        const idx = input.indexOf(tag, i)
+        if (idx === -1) { result += input.slice(i); break }
+
+        result += input.slice(i, idx)
+
+        // Parse first arg: hash
+        const hashStart = idx + tag.length
+        const hashEnd = findMatchingBrace(input, hashStart - 1)
+        if (hashEnd === -1) { result += input.slice(idx); break }
+        const hash = input.slice(hashStart, hashEnd)
+
+        const numAttr = numberMap?.get(hash) ? ` data-number="${numberMap.get(hash)}"` : ''
+
+        // Check for second arg
+        let afterHash = hashEnd + 1
+        while (afterHash < input.length && ' \n\r'.includes(input[afterHash])) afterHash++
+
+        if (afterHash >= input.length || input[afterHash] !== '{') {
+            result += `<div data-entry="${hash}"${numAttr}></div>`
+            i = hashEnd + 1
+        } else {
+            const bodyEnd = findMatchingBrace(input, afterHash)
+            if (bodyEnd === -1) { result += input.slice(idx); break }
+            const body = input.slice(afterHash + 1, bodyEnd).trim()
+
+            if (body === 'collapsible') {
+                result += `<div data-entry="${hash}" data-collapsible="true"${numAttr}></div>`
+            } else {
+                result += `<div data-entry="${hash}"${numAttr}>\n${processEntryBlocks(body, numberMap)}\n</div>`
+            }
+            i = bodyEnd + 1
+        }
+    }
+
+    return result
+}

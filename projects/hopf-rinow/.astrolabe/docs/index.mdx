@@ -1,0 +1,162 @@
+# The Hopf–Rinow Theorem
+
+On a connected \entryref{1947bd1d3bb8}{Riemannian manifold}, two very different ideas of "completeness"
+turn out to be the same. One is metric — \entryref{c3c2cbdf6b34}{Cauchy sequences} converge. The other
+is geometric — \entryref{40531bb49d25}{geodesics} extend forever. The Hopf–Rinow theorem says they
+coincide, and that as a consequence any two points are joined by a shortest
+geodesic.
+
+\entryblock{ed9bc94cf42d}
+
+Here completeness is meant in two senses, which the theorem identifies:
+
+\entryblock{097d60abf481}
+
+\entryblock{827f945d4ef1}
+
+Throughout, $d$ is the Riemannian distance, $\exp_p : T_pM \to M$ the
+exponential map at $p$, and geodesics are parametrized by arc length. Fix
+$p \in M$. We will prove the equivalence of the following conditions and that
+each implies the existence of minimizing geodesics out of $p$:
+
+- **(a)** $\exp_p$ is defined on all of $T_pM$;
+- **(b)** every closed and bounded subset of $M$ is compact;
+- **(c)** $(M, d)$ is complete as a metric space;
+- **(d)** $M$ is geodesically complete (every maximal geodesic is defined on all of $\mathbb{R}$);
+- **(f)** every $q \in M$ is joined to $p$ by a minimizing geodesic.
+
+The route is $(a) \Rightarrow (f)$, then the cycle
+$(a) \Rightarrow (b) \Rightarrow (c) \Rightarrow (d) \Rightarrow (a)$. The
+statement "metric complete $\iff$ geodesically complete" is the case
+$(c) \iff (d)$.
+
+## Step 1 — The minimizing-geodesic lemma
+
+The whole theorem rests on one geometric fact: if geodesics from $p$ never stop,
+then one of them is a shortest path to any prescribed point.
+
+\entryblock{fc7203c4453f}
+
+**Proof of $(a) \Rightarrow (f)$.**
+Fix $q \neq p$ and put $r = d(p, q)$. Choose $\delta \in (0, r)$ small enough
+that $\overline{B_\delta(p)}$ is a \entryref{9d964db42b95}{normal ball}. Its
+boundary, the \entryref{38c99016b279}{geodesic sphere}
+$S_\delta = \exp_p\{\,v : \lVert v \rVert = \delta\,\}$, is compact, so the
+continuous function $x \mapsto d(x, q)$ attains a minimum on $S_\delta$ at a
+point
+
+$$
+x_0 = \exp_p(\delta\, v_0), \qquad \lVert v_0 \rVert = 1 .
+$$
+
+Because $\exp_p$ is defined on all of $T_pM$ by **(a)**, the geodesic
+$\gamma(s) = \exp_p(s\, v_0)$ exists for every $s \ge 0$ and is unit speed. We
+claim
+
+$$
+d(\gamma(s), q) = r - s \qquad \text{for all } s \in [\delta, r]. \tag{$\ast$}
+$$
+
+Taking $s = r$ gives $d(\gamma(r), q) = 0$, i.e. $\gamma(r) = q$; then
+$\gamma|_{[0, r]}$ has length $r = d(p, q)$, so it is a
+\entryref{f20ca754bb9b}{minimizing geodesic} from $p$ to $q$, which is exactly **(f)**.
+
+Let $A = \{\, s \in [\delta, r] : (\ast)\text{ holds at } s \,\}$. It is closed
+by continuity of $s \mapsto d(\gamma(s), q)$, hence contains its supremum.
+
+*The base point $\delta \in A$.* Every path from $p$ to $q$ must leave the
+normal ball $\overline{B_\delta(p)}$ and therefore crosses $S_\delta$; inside a
+normal ball the radial geodesics are the unique minimizers, so any such path has
+length at least $\delta + d(x, q)$ for the crossing point $x \in S_\delta$.
+Taking the infimum over paths,
+
+$$
+r = d(p, q) = \min_{x \in S_\delta}\big(\delta + d(x, q)\big) = \delta + d(x_0, q),
+$$
+
+so $d(x_0, q) = r - \delta$. Since $\gamma(\delta) = x_0$, $(\ast)$ holds at $\delta$.
+
+*The supremum is $r$.* Let $s_0 = \max A$ and suppose, for contradiction, that
+$s_0 < r$. Repeat the construction at $p' = \gamma(s_0)$: pick
+$\delta' \in (0, r - s_0)$ with $\overline{B_{\delta'}(p')}$ a normal ball,
+geodesic sphere $S'_{\delta'}$, and let $x_0'$ minimize $d(\cdot, q)$ on
+$S'_{\delta'}$. As before,
+
+$$
+d(\gamma(s_0), q) = \delta' + d(x_0', q),
+$$
+
+and since $s_0 \in A$ we have $d(\gamma(s_0), q) = r - s_0$, hence
+$d(x_0', q) = r - s_0 - \delta'$. The triangle inequality now gives
+
+$$
+d(p, x_0') \ge d(p, q) - d(q, x_0') = r - (r - s_0 - \delta') = s_0 + \delta'.
+$$
+
+But the broken path that follows $\gamma$ from $p$ to $\gamma(s_0)$ (length
+$s_0$) and then the radial geodesic from $\gamma(s_0)$ to $x_0'$ (length
+$\delta'$) joins $p$ to $x_0'$ with total length $s_0 + \delta'$. Therefore
+$d(p, x_0') = s_0 + \delta'$ and this broken path is minimizing. A minimizing
+curve is a geodesic, hence smooth with no corner, so the broken path coincides
+with $\gamma$ and $x_0' = \gamma(s_0 + \delta')$. Consequently
+
+$$
+d(\gamma(s_0 + \delta'), q) = d(x_0', q) = r - (s_0 + \delta'),
+$$
+
+so $s_0 + \delta' \in A$ — contradicting $s_0 = \max A$. Hence $s_0 = r$, $(\ast)$
+holds on all of $[\delta, r]$, and the lemma follows. $\blacksquare$
+
+## Step 2 — The equivalence cycle
+
+**$(a) \Rightarrow (b)$.**
+Let $K \subseteq M$ be closed and bounded, say $K \subseteq \overline{B_r(p)}$.
+By Step 1, every $x$ with $d(p, x) \le r$ equals $\exp_p(v)$ for some
+$\lVert v \rVert \le r$, so
+
+$$
+\overline{B_r(p)} \subseteq \exp_p\big(\overline{B_r(0)}\big),
+$$
+
+the continuous image of the compact Euclidean ball
+$\overline{B_r(0)} \subset T_pM$, which is compact. As a closed subset of a
+compact set, $K$ is compact.
+
+**$(b) \Rightarrow (c)$.**
+A Cauchy sequence $(x_n)$ in $M$ is bounded, hence contained in a closed,
+bounded — by **(b)** compact — set. It therefore has a convergent subsequence;
+a Cauchy sequence with a convergent subsequence converges. So $M$ is complete.
+
+**$(c) \Rightarrow (d)$.**
+Let $\gamma : [0, s_0) \to M$ be a maximal unit-speed geodesic and suppose
+$s_0 < \infty$. For any $t_n \uparrow s_0$ we have
+$d(\gamma(t_n), \gamma(t_m)) \le \lvert t_n - t_m \rvert$, so $(\gamma(t_n))$ is
+Cauchy and, by **(c)**, converges to some $q \in M$. Around $q$ choose a
+uniformly normal neighborhood $W$: there is $\varepsilon > 0$ such that every
+point of $W$ is the center of a normal ball of radius $\varepsilon$, so every
+geodesic issuing from a point of $W$ is defined for time at least
+$\varepsilon$. For $n$ large, $\gamma(t_n) \in W$ and $s_0 - t_n < \varepsilon$;
+the geodesic with initial data $(\gamma(t_n), \gamma'(t_n))$ is then defined on
+$[t_n, t_n + \varepsilon)$, which extends past $s_0$. By uniqueness of geodesics
+it prolongs $\gamma$ beyond $s_0$, contradicting maximality. Hence $s_0 = \infty$
+and every geodesic extends to all of $\mathbb{R}$, which is **(d)**.
+
+**$(d) \Rightarrow (a)$.**
+Geodesic completeness at every point includes $p$, so $\exp_p$ is defined on all
+of $T_pM$.
+
+This closes the cycle $(a) \Rightarrow (b) \Rightarrow (c) \Rightarrow (d) \Rightarrow (a)$,
+and $(a) \Rightarrow (f)$ was Step 1. In particular $(c) \iff (d)$: metric
+completeness and geodesic completeness coincide. $\blacksquare$
+
+Notice that the argument used only a compact geodesic sphere, the triangle
+inequality, and uniqueness of geodesics — no Morse theory and no second
+variation of energy.
+
+## Corollaries
+
+\entryblock{53e7dae56642}
+
+\entryblock{29f15429cae1}
+
+\entryblock{4f47e60eae22}
