@@ -8,32 +8,15 @@ bullet is a concrete place to start.
 
 ## Formalization — proving it in Lean
 
-Write do Carmo's results as Lean proofs a machine can check, closing the open `sorry`s
-from the most upstream gap downward.
-
-- **The exponential differential** — `d(exp_p)_v` for a general direction `v`; only the
-  `v = 0` case exists today. The core blocker: everything from the Gauss lemma onward
-  depends on it. *(Ch. 5)*
-- **Hopf–Rinow, unconditional** — the 4 remaining sorries: a minimizing geodesic from the
-  geodesic sphere, and metric completeness via Heine–Borel. *(Ch. 7 §2)*
-- **The Gauss lemma** — `dist(exp_p v, p) = ‖v‖`, the elementary route from the symmetry
-  lemma (3.4, done) and a geodesic variation. *(Ch. 3 §3, Lemma 3.5)*
-- **Jacobi fields and the Jacobi equation** — the variation of geodesics and its second
-  order theory. *(Ch. 5)*
-- **Second variation of energy and the index form.** *(Ch. 9–10)*
-- **Conjugate points and the cut locus.** *(Ch. 13)*
-- **Comparison theorems** — Rauch, and Bishop–Gromov volume comparison. *(Ch. 10, Ch. 11)*
-- **Curvature** — the tensor's symmetries; sectional, Ricci, and scalar curvature. *(Ch. 4)*
-- **Spaces of constant curvature.** *(Ch. 8)*
+Complete the formalization: every result in the textbook, written as a Lean proof a
+machine can check. What is still open is live on the [Status](/docs/status) page.
 
 ## Exposition — the natural-language textbook
 
 Make the written layer a faithful, readable textbook: every statement transcribed, every
 prose argument complete.
 
-- **Fill the missing statements** — Ch. 11 §2.2, Ch. 13 §2.7 and §2.8 are not yet
-  transcribed.
-- **Faithful transcription of the remaining chapters**, statement by statement.
+- **Transcribe the statements still missing**, faithfully, chapter by chapter.
 - **Proof sketches** for results currently stated without one.
 - **Worked examples and exercises** carried over from do Carmo.
 - **Notation consistency** across chapters — one symbol, one meaning.
