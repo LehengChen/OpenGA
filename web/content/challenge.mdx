@@ -41,6 +41,18 @@ proof that it really proves what it claims, or add a piece everyone else can imm
 on? We think the way people do mathematics together is about to change, and we want to find
 out how.
 
+## How we build it
+
+Underneath the questions is a working system, and every part of it is open to improvement —
+this is where most concrete contributions land.
+
+- **Visualization** — graph layout that stays legible across thousands of linked results.
+- **The reader** — navigation, search, and cross-references that never lose the reader.
+- **The toolchain** — extract, register, and audit results as they move between Lean and the store.
+- **Integrity** — stable content hashing, deduplication and merge, referential closure as the graph is rewritten.
+- **The loop** — make audit → formalize → bridge → re-audit robust and, where possible, automatic.
+- **CI and fitness functions** — architectural linters that catch drift before it lands.
+
 ## References
 
 [1] M. P. do Carmo, [*Riemannian Geometry*](https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC).
