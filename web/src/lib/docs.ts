@@ -11,7 +11,7 @@ export const DOCS: DocMeta[] = [
   {
     slug: 'introduction',
     title: 'Introduction',
-    eyebrow: 'Riemannian Geometry Challenge',
+    eyebrow: 'About Astrolabe',
   },
   {
     slug: 'challenge',
