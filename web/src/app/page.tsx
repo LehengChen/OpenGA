@@ -29,11 +29,19 @@ export default function Home() {
           </p>
 
           <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4 mt-20">Current activity</h2>
-          <div>
-            <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry Challenge</h3>
-            <p className="text-sm text-white/40 mt-3">
-              Recent — open problems toward a fully formalized Hopf–Rinow, sourced from the live tex ↔ Lean graph.
-            </p>
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry Challenge</h3>
+              <p className="text-sm text-white/40 mt-3">
+                Recent — open problems toward a fully formalized Hopf–Rinow, sourced from the live tex ↔ Lean graph.
+              </p>
+            </div>
+            <Link
+              href="/activities/riemannian-geometry-challenge"
+              className="shrink-0 mt-1 px-4 py-1.5 text-xs uppercase tracking-wider text-white/60 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
+            >
+              Read
+            </Link>
           </div>
         </div>
       </main>
