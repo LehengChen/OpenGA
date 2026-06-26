@@ -15,12 +15,8 @@ An Astrolabe store is a flat set of **entries**. Each entry is a triple
 
 The length of `ref` is what an entry *is*. Two kinds are primitive:
 
-- an **atom** (`|ref| = 1`, a self-reference) — a leaf of content. *For example,* the prose
-  statement of the Hopf–Rinow theorem is one atom; the Lean declaration that proves it is
-  another.
-- an **edge** (`|ref| = 2`) — a binary relation between two atoms. *For example,* the
-  `(lean, tex)` link tying that Lean proof to the prose it formalizes — or a dependency,
-  "Hopf–Rinow *uses* the exponential map."
+- an **atom** (`|ref| = 1`, a self-reference) — a leaf of content: a statement, a proof.
+- an **edge** (`|ref| = 2`) — a binary relation between two atoms.
 
 Atoms and edges are already a **traditional graph**: each edge renders as a line
 between two nodes. That is the layer the project runs on today.
@@ -31,6 +27,14 @@ deduplicated, and merged without ambiguity — the property the whole loop relie
 On disk this is just one file per node, named by its hash; documents reference them:
 
 <StorageTree />
+
+Inside, a file is YAML frontmatter and a body. A real atom — the *geodesic sphere*
+definition — and a real edge — a `(lean, tex)` link saying a Lean node *formalizes* the
+prose *geodesic*:
+
+<AtomExample />
+
+<EdgeExample />
 
 ## Two layers, one graph
 

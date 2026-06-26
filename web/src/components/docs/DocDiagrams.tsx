@@ -19,10 +19,10 @@ export function StorageTree() {
       <pre className="rounded-lg border border-white/10 bg-white/[0.02] p-5 text-[13px] leading-relaxed font-mono text-white/55 overflow-x-auto">
         <div><Dim>.astrolabe/</Dim></div>
         <div>├─ atoms/</div>
-        <div>│  ├─ <Hash>a1f3c9e20b4d</Hash>.md{'   '}<Dim>← one file per node</Dim></div>
-        <div>│  └─ <Hash>9c2e0f81a3c7</Hash>.md</div>
+        <div>│  ├─ <Hash>38c99016b279</Hash>.md{'   '}<Dim>← one file per node</Dim></div>
+        <div>│  └─ <Hash>097d60abf481</Hash>.md</div>
         <div>├─ edges/</div>
-        <div>│  └─ <Hash>4d8b1a05f9e2</Hash>.md{'   '}<Dim>← a (lean, tex) bridge</Dim></div>
+        <div>│  └─ <Hash>014c1e2a49fe</Hash>.md{'   '}<Dim>← a (lean, tex) bridge</Dim></div>
         <div>└─ docs/</div>
         <div>{'   '}├─ 00-index.mdx</div>
         <div>{'   '}└─ 03-geodesics.mdx{'  '}<Dim>composes nodes by hash</Dim></div>
@@ -32,6 +32,48 @@ export function StorageTree() {
       </figcaption>
     </figure>
   )
+}
+
+/** A real node file: hash-named, YAML frontmatter + body. */
+function NodeFile({ dir, hash, body }: { dir: string; hash: string; body: string }) {
+  return (
+    <figure className="my-5">
+      <div className="rounded-lg border border-white/10 bg-white/[0.02] overflow-hidden">
+        <div className="px-4 py-2 border-b border-white/[0.07] text-[12px] font-mono text-white/40">
+          .astrolabe/{dir}/<Hash>{hash}</Hash>.md
+        </div>
+        <pre className="px-4 py-3 text-[12px] leading-relaxed font-mono text-white/65 overflow-x-auto">{body}</pre>
+      </div>
+    </figure>
+  )
+}
+
+/** A real atom file from the Riemannian Geometry project. */
+export function AtomExample() {
+  const body = String.raw`---
+ref:
+- 38c99016b279
+sort: definition
+source: tex
+title: Geodesic sphere
+---
+$S_\delta = \exp_p(\{v : \lVert v \rVert = \delta\})$, the image of a
+Euclidean sphere under $\exp_p$.`
+  return <NodeFile dir="atoms" hash="38c99016b279" body={body} />
+}
+
+/** A real (lean, tex) cross-source edge file. */
+export function EdgeExample() {
+  const body = `---
+kind: bipartite
+ref:
+- 264fbf8cb406
+- 6e6c552589c3
+rel: formalizes
+sort: (lean, tex)
+---
+formalizes «geodesic»`
+  return <NodeFile dir="edges" hash="014c1e2a49fe" body={body} />
 }
 
 /** Two tiers: atoms + binary edges form a traditional graph; a hyperedge is a
