@@ -34,19 +34,34 @@ export function StorageTree() {
   )
 }
 
-/** One row of an entry: a fixed-width key and its value. */
-function Field({ k, v, indent }: { k: string; v: React.ReactNode; indent?: boolean }) {
+/** One row of an entry: a fixed-width key and its value, at an indent depth. */
+function Field({ k, v, depth = 0 }: { k: string; v: React.ReactNode; depth?: number }) {
+  const pad = depth >= 2 ? 'pl-10' : depth === 1 ? 'pl-5' : ''
   return (
-    <div className={`flex gap-2 ${indent ? 'pl-5' : ''}`}>
+    <div className={`flex gap-2 ${pad}`}>
       <span className="w-14 shrink-0 text-white/35">{k}</span>
       <span className="text-white/65 min-w-0 break-words">{v}</span>
     </div>
   )
 }
 
+/** Render record fields, descending into a nested group when the value is an array. */
+function renderFields(entries: any[], depth: number): React.ReactNode {
+  return entries.map(([k, v]) =>
+    Array.isArray(v) ? (
+      <div key={k}>
+        <div className={`${depth >= 2 ? 'pl-10' : 'pl-5'} text-white/35`}>{k}</div>
+        {renderFields(v, depth + 1)}
+      </div>
+    ) : (
+      <Field key={k} k={k} v={v} depth={depth} />
+    ),
+  )
+}
+
 /** An entry in the canonical (hash, ref, record) shape — everything but ref and
  *  hash lives, layered, inside record. */
-function NodeEntry({ hash, refs, record }: { hash: string; refs: string[]; record: [string, React.ReactNode][] }) {
+function NodeEntry({ hash, refs, record }: { hash: string; refs: string[]; record: any[] }) {
   const badge = refs.length === 1 ? 'self-reference → atom' : refs.length === 2 ? 'two atoms → edge' : ''
   return (
     <figure className="my-5">
@@ -54,7 +69,7 @@ function NodeEntry({ hash, refs, record }: { hash: string; refs: string[]; recor
         <Field k="hash" v={<Hash>{hash}</Hash>} />
         <Field k="ref" v={<>[ <Hash>{refs.join(', ')}</Hash> ]{badge && <Dim>{'  ← '}{badge}</Dim>}</>} />
         <div className="text-white/35 mt-0.5">record</div>
-        {record.map(([k, v]) => <Field key={k} k={k} v={v} indent />)}
+        {renderFields(record, 1)}
       </div>
     </figure>
   )
@@ -69,8 +84,10 @@ export function AtomExample() {
       record={[
         ['sort', <>(ref[0].source)<Dim>{'  = (tex)'}</Dim></>],
         ['source', 'tex'],
-        ['title', 'Geodesic sphere'],
-        ['notes', String.raw`$S_\delta = \exp_p(\{v : \lVert v\rVert = \delta\})$`],
+        ['content', [
+          ['title', 'Geodesic sphere'],
+          ['notes', String.raw`$S_\delta = \exp_p(\{v : \lVert v\rVert = \delta\})$`],
+        ]],
       ]}
     />
   )
