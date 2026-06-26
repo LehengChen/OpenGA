@@ -69,48 +69,48 @@ export function StatusBoard() {
 
   return (
     <>
-      <h2 id="summary" className="text-xl font-semibold text-white/85 mt-2 mb-3 scroll-mt-20 flex items-center gap-3">
+      <h2 id="summary" className="text-xl font-semibold text-white/85 mt-2 mb-6 scroll-mt-20 flex items-baseline gap-3">
         Summary
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-normal text-emerald-300/80">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> live · {snap.at}
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-normal tracking-wide text-white/35">
+          <span className="w-1 h-1 rounded-full bg-white/50 animate-pulse" /> live · {snap.at}
         </span>
       </h2>
 
-      <div className="grid grid-cols-3 gap-3 mb-5">
+      <dl className="flex mb-10">
         {[
           { label: 'Declarations', value: snap.total },
           { label: 'Proven', value: snap.proven },
           { label: 'Open', value: snap.open.length },
-        ].map((s) => (
-          <div key={s.label} className="rounded-lg border border-white/10 bg-white/[0.02] px-4 py-4">
-            <div className="text-3xl font-semibold text-white/90 tabular-nums">{s.value}</div>
-            <div className="text-[11px] uppercase tracking-[0.15em] text-white/35 mt-1">{s.label}</div>
+        ].map((s, i) => (
+          <div key={s.label} className={i === 0 ? 'pr-10' : 'px-10 border-l border-white/10'}>
+            <dd className="text-4xl text-white/90 tabular-nums leading-none">{s.value}</dd>
+            <dt className="text-[11px] uppercase tracking-[0.18em] text-white/30 mt-2.5">{s.label}</dt>
           </div>
         ))}
-      </div>
+      </dl>
 
-      <div className="mb-2 flex items-center justify-between text-[13px] text-white/45">
+      <div className="mb-2 flex items-baseline justify-between text-[13px] text-white/40">
         <span>{snap.proven} of {snap.total} machine-checked</span>
         <span className="tabular-nums">{pct}%</span>
       </div>
-      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden mb-12">
-        <div className="h-full bg-emerald-400/70" style={{ width: `${pct}%` }} />
+      <div className="h-1 rounded-full bg-white/[0.07] overflow-hidden mb-14">
+        <div className="h-full rounded-full bg-white/35" style={{ width: `${pct}%` }} />
       </div>
 
-      <h2 id="open-problems" className="text-xl font-semibold text-white/85 mt-14 mb-3 scroll-mt-20">
+      <h2 id="open-problems" className="text-xl font-semibold text-white/85 mt-14 mb-4 scroll-mt-20">
         Open problems
       </h2>
       {snap.open.length === 0 ? (
         <p className="text-[15px] text-white/55">No open <code className="text-cyan-300/80 bg-white/[0.06] px-1.5 py-0.5 rounded text-[13px] font-mono">sorry</code> — the formalized library is complete.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="border-t border-white/[0.07]">
           {snap.open.map((r) => (
-            <li key={r.name} className="rounded-lg border border-white/10 bg-white/[0.02] px-4 py-3">
-              <div className="flex items-baseline justify-between gap-3">
+            <li key={r.name} className="py-4 border-b border-white/[0.07]">
+              <div className="flex items-baseline justify-between gap-4">
                 <span className="text-[15px] text-white/80">{r.title || r.name}</span>
-                <span className="text-[11px] uppercase tracking-wider text-amber-300/70">{r.sort || 'sorry'}</span>
+                <span className="text-[11px] uppercase tracking-wider text-white/30 shrink-0">{r.sort || 'sorry'}</span>
               </div>
-              <div className="text-[12px] font-mono text-white/35 mt-1 truncate">
+              <div className="text-[12px] font-mono text-white/30 mt-1.5 truncate">
                 {r.name}{r.file ? ` · ${r.file}${r.line ? `:${r.line}` : ''}` : ''}
               </div>
             </li>
