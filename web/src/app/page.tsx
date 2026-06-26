@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="h-full flex flex-col bg-[#0a0a0f] text-white">
       <Navbar />
-      <main className="flex-1 relative overflow-hidden">
+      <main className="flex-1 relative overflow-y-auto">
         <ParticleBackground particleCount={260} mouseRadius={250} />
         <div className="relative z-10 max-w-3xl mx-auto px-8 py-24">
           <h1 className="text-4xl font-bold tracking-[0.15em] text-white/90 mb-2">ASTROLABE</h1>
@@ -27,6 +27,14 @@ export default function Home() {
           <p className="text-sm text-white/40 mt-3">
             A shared tex + Lean knowledge graph of Riemannian geometry — chapters following do Carmo
           </p>
+
+          <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4 mt-20">Current activity</h2>
+          <div>
+            <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry Challenge</h3>
+            <p className="text-sm text-white/40 mt-3">
+              Recent — open problems toward a fully formalized Hopf–Rinow, sourced from the live tex ↔ Lean graph.
+            </p>
+          </div>
         </div>
       </main>
     </div>
