@@ -46,8 +46,9 @@ The same store holds both sides of the mathematics:
 
 They are joined by **cross-source edges** typed `(lean, tex)`: a Lean node that
 *formalizes* a tex concept. An edge's `sort` is not its own — it is the pair of its
-endpoints' sorts, `(ref[0].sort, ref[1].sort)`, so the type falls out of the two ends.
-Such an edge is a first-class, hash-identified entry, exactly like any other.
+endpoints' sources, `(ref[0].source, ref[1].source)`, so a Lean↔tex bridge is typed
+`(lean, tex)` automatically. Such an edge is a first-class, hash-identified entry,
+exactly like any other.
 
 ## Stable identity
 
