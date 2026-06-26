@@ -14,7 +14,7 @@ export const DOCS: DocMeta[] = [
   },
   {
     slug: 'challenge',
-    title: 'Riemannian Geometry Challenge',
+    title: 'Challenge List',
     eyebrow: 'An open public initiative',
   },
   {
