@@ -17,36 +17,29 @@ export default function Home() {
           <h1 className="text-4xl font-bold tracking-[0.15em] text-white/90 mb-2">ASTROLABE</h1>
           <p className="text-sm text-white/40 mb-20">Manage your knowledge network</p>
 
-          <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4">Projects</h2>
-          <div className="flex items-start justify-between gap-6">
-            <div>
-              <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry</h3>
-              <p className="text-sm text-white/40 mt-3">
-                A shared tex + Lean knowledge graph of Riemannian geometry — chapters following do Carmo
-              </p>
-            </div>
-            <Link
-              href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
-              className="shrink-0 mt-1 px-4 py-1.5 text-xs uppercase tracking-wider text-white/60 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
-            >
-              Open
-            </Link>
-          </div>
-
-          <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4 mt-20">Current activity</h2>
-          <div className="flex items-start justify-between gap-6">
+          <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4">Current activity</h2>
+          <div className="flex items-start justify-between gap-8">
             <div>
               <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry Challenge</h3>
               <p className="text-sm text-white/40 mt-3">
-                Recent — open problems toward a fully formalized Hopf–Rinow, sourced from the live tex ↔ Lean graph.
+                A shared tex + Lean knowledge graph of Riemannian geometry (do Carmo) — open problems toward a
+                fully formalized Hopf–Rinow.
               </p>
             </div>
-            <Link
-              href="/activities/riemannian-geometry-challenge"
-              className="shrink-0 mt-1 px-4 py-1.5 text-xs uppercase tracking-wider text-white/60 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
-            >
-              Read
-            </Link>
+            <div className="shrink-0 flex flex-col gap-2 mt-1">
+              <Link
+                href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
+                className="px-4 py-1.5 text-xs text-center whitespace-nowrap text-white/65 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
+              >
+                Open the project
+              </Link>
+              <Link
+                href="/activities/riemannian-geometry-challenge"
+                className="px-4 py-1.5 text-xs text-center whitespace-nowrap text-white/65 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
+              >
+                Read the Challenge List
+              </Link>
+            </div>
           </div>
         </div>
       </main>
