@@ -22,8 +22,9 @@ export default function Home() {
             <div>
               <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry Challenge</h3>
               <p className="text-sm text-white/40 mt-3">
-                An open, decentralized challenge to formalize Riemannian geometry — the whole of do Carmo,
-                turned into a shared tex ↔ Lean knowledge graph. Pick a problem, close the loop.
+                A public, open initiative to build Riemannian geometry into a living, machine-verified
+                textbook — a shared foundation anyone can learn from, contribute to, reuse, and build on.
+                Modeled on do Carmo, made for everyone.
               </p>
             </div>
             <div className="shrink-0 flex flex-col gap-2 mt-1">
