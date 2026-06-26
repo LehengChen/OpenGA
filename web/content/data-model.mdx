@@ -21,10 +21,6 @@ The length of `ref` is what an entry *is*. Two kinds are primitive:
 Atoms and edges are already a **traditional graph**: each edge renders as a line
 between two nodes. That is the layer the project runs on today.
 
-A **hyperedge** (`|ref| ≥ 3`) is not a third primitive but a structure built *on* that
-graph. When one node is cited by many results and itself cites many, that whole bundle
-— several nodes joined at once — is one n-ary relation, captured as a single entry.
-
 Because identity is the hash of content, a card can be re-derived, re-referenced,
 deduplicated, and merged without ambiguity — the property the whole loop relies on.
 
@@ -40,8 +36,8 @@ The same store holds both sides of the mathematics:
 - **lean atoms** — the formal declarations that prove them.
 
 They are joined by **cross-source edges** typed `(lean, tex)`: a Lean node that
-*formalizes* a tex concept. The type is inherited from its two ends — a binary
-hyperedge is a first-class, hash-identified entry, exactly like any other.
+*formalizes* a tex concept. The type is inherited from its two ends — such an edge
+is a first-class, hash-identified entry, exactly like any other.
 
 ## Stable identity
 
