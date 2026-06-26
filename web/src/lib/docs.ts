@@ -14,12 +14,6 @@ export const DOCS: DocMeta[] = [
     eyebrow: 'Riemannian Geometry Challenge',
   },
   {
-    slug: 'status',
-    title: 'Status',
-    eyebrow: 'Live formalization progress',
-    live: true,
-  },
-  {
     slug: 'challenge',
     title: 'Open Questions',
     eyebrow: 'The questions we are curious about',
@@ -28,5 +22,11 @@ export const DOCS: DocMeta[] = [
     slug: 'data-model',
     title: 'Astrolabe: Data Model',
     eyebrow: 'How the knowledge is stored',
+  },
+  {
+    slug: 'status',
+    title: 'Status',
+    eyebrow: 'Live formalization progress',
+    live: true,
   },
 ]
