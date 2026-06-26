@@ -19,6 +19,19 @@ right way for a human to meet it — prose for one reader, a diagram for another
 graph for a third, each regenerated from the same source? We are curious what a subject looks
 like when every page is just one rendering of the proof underneath.
 
+## How to store mathematics
+
+What is the right substrate for a living body of mathematical knowledge? A corpus of mathematics
+is only as valuable as it is composable, and a shelf of PDFs is not.
+
+We keep every statement and every proof as an immutable, content-addressed entry in a hypergraph:
+identity is the hash of the content, so references never rot, and any piece can be reused, merged,
+or checked on its own — the same idea that makes code addressable by what it is rather than where
+it sits, turned on mathematics. The model is laid out in [the data model](/docs/data-model).
+
+We are curious how far the idea carries — what a database *of mathematics itself* should be, and
+what becomes possible once a subject has one.
+
 ## How the structure of mathematics navigates its formalization
 
 Mathematics is not a list of results; it is a structure — what rests on what, what generalizes
@@ -33,19 +46,6 @@ the shape of a subject can drive its own formalization, instead of a linear marc
 Part of the question is which relations even deserve to be first-class. `uses` and `implies` are
 obvious; `generalizes`, `specializes`, and `dual-to` carry real mathematical content, and a graph
 that records them is a richer object than any table of contents.
-
-## How to store mathematics
-
-What is the right substrate for a living body of mathematical knowledge? A corpus of mathematics
-is only as valuable as it is composable, and a shelf of PDFs is not.
-
-We keep every statement and every proof as an immutable, content-addressed entry in a hypergraph:
-identity is the hash of the content, so references never rot, and any piece can be reused, merged,
-or checked on its own — the same idea that makes code addressable by what it is rather than where
-it sits, turned on mathematics. The model is laid out in [the data model](/docs/data-model).
-
-We are curious how far the idea carries — what a database *of mathematics itself* should be, and
-what becomes possible once a subject has one.
 
 ## How humans will do mathematics together
 
