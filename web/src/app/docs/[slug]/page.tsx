@@ -9,6 +9,7 @@ import 'katex/dist/katex.min.css'
 import { Navbar } from '@/components/Navbar'
 import { DocsShell, type TocItem } from '@/components/DocsShell'
 import { StatusBoard } from '@/components/StatusBoard'
+import { StorageTree, NumberingFlow } from '@/components/docs/DocDiagrams'
 import { DOCS } from '@/lib/docs'
 
 export function generateStaticParams() {
@@ -52,6 +53,8 @@ const components = {
   },
   hr: () => <hr className="border-white/10 my-10" />,
   code: ({ children }: any) => <code className="text-cyan-300/80 bg-white/[0.06] px-1.5 py-0.5 rounded text-[13px] font-mono">{children}</code>,
+  StorageTree,
+  NumberingFlow,
 }
 
 function parseToc(src: string): TocItem[] {

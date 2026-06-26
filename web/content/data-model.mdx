@@ -19,6 +19,10 @@ An Astrolabe store is a flat set of **entries**. Each entry is a triple
 Because identity is the hash of content, a card can be re-derived, re-referenced,
 deduplicated, and merged without ambiguity — the property the whole loop relies on.
 
+On disk this is just one file per node, named by its hash; documents reference them:
+
+<StorageTree />
+
 ## Two layers, one graph
 
 The same store holds both sides of the mathematics:
@@ -55,6 +59,8 @@ A card's identity is its hash, not a number — but a reader still wants to see
 documents are scanned in order and each hash is assigned a number the first time it
 appears: `chapter.section.item`, where the chapter comes from the document's
 position and the rest from the order of entries inside it.
+
+<NumberingFlow />
 
 Because the number is a function of where a hash first occurs *in that project*, the
 same content-addressed card can carry different numbers in different projects, yet
