@@ -1,0 +1,61 @@
+How the whole project is stored: not as files and folders, but as a single
+content-addressed hypergraph — the Astrolabe data model. Every statement, every
+formal declaration, every relationship is one immutable, hash-identified entry.
+
+## The Astrolabe model
+
+An Astrolabe store is a flat set of **entries**. Each entry is a triple
+`(hash, ref, record)`:
+
+- **`ref`** — an ordered list of hashes the entry points to.
+  - `|ref| = 1` (a self-reference) → an **atom**: a leaf of content.
+  - `|ref| = 2` → an **edge**: a binary relation.
+  - `|ref| ≥ 3` → a **hyperedge**: an n-ary relation.
+- **`record`** — an opaque payload, read by a domain plugin (here: a mathematical
+  statement, or a Lean declaration).
+- **`hash`** — `SHA-256(ref₁ ‖ 0x00 ‖ … ‖ record)`, truncated. Identity *is*
+  content: the same content always yields the same hash, everywhere it appears.
+
+Because identity is the hash of content, a card can be re-derived, re-referenced,
+deduplicated, and merged without ambiguity — the property the whole loop relies on.
+
+## Two layers, one graph
+
+The same store holds both sides of the mathematics:
+
+- **tex atoms** — the natural-language statements of do Carmo (a definition, a lemma).
+- **lean atoms** — the formal declarations that prove them.
+
+They are joined by **cross-source edges** typed `(lean, tex)`: a Lean node that
+*formalizes* a tex concept. The type is inherited from its two ends — a binary
+hyperedge is a first-class, hash-identified entry, exactly like any other.
+
+## Stable identity
+
+So re-running the pipeline never churns the graph, identity is pinned to what a
+node *is*, not its current text:
+
+- a **tex** node hashes over `{source, src, dcref}` — which do Carmo statement;
+- a **lean** node hashes over `{source, name}` — which declaration.
+
+A proof going from `sorry` to `proven`, or a line number moving, updates the
+record in place; the hash — and every reference to it — is unchanged.
+
+## Typed relations
+
+Edges are not merely "depends on". Each carries a relation label: `references` (an
+explicit citation), `uses` (a concept the statement invokes), `example-of`,
+`remark-on`, `corollary-of`, `formalizes` (the cross-source bridge), and more. The
+graph is a typed network, not a bare dependency tree.
+
+## Derived numbering
+
+Statement numbers are never stored. A card's number is a function of where it first
+appears — `§section.item` within its chapter — so moving or reordering a card
+re-numbers it everywhere, and the same hash always shows a consistent number.
+
+## References
+
+[1] X. Li, [*Astrolabe: A Content-Addressable Hypergraph for Semantic Knowledge Management*](https://arxiv.org/abs/2604.10435). arXiv:2604.10435.
+
+[2] M. P. do Carmo, [*Riemannian Geometry*](https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC). Birkhäuser, Boston, 1992.

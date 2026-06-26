@@ -35,7 +35,7 @@ export default function Home() {
                 Open the project
               </Link>
               <Link
-                href="/activities/riemannian-geometry-challenge"
+                href="/docs/challenge"
                 className="px-4 py-1.5 text-xs text-center whitespace-nowrap text-white/65 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
               >
                 Read the Challenge List

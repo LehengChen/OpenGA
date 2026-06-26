@@ -1,14 +1,18 @@
 import fs from 'fs'
 import path from 'path'
+import { notFound } from 'next/navigation'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
 import { Navbar } from '@/components/Navbar'
-import { DocsShell, type TocItem } from './DocsShell'
+import { DocsShell, type TocItem } from '@/components/DocsShell'
+import { DOCS } from '@/lib/docs'
 
-const TITLE = 'Riemannian Geometry Challenge'
+export function generateStaticParams() {
+  return DOCS.map((d) => ({ slug: d.slug }))
+}
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 const textOf = (c: any): string =>
@@ -40,8 +44,12 @@ function parseToc(src: string): TocItem[] {
   })
 }
 
-export default async function Page() {
-  const source = fs.readFileSync(path.join(process.cwd(), 'content/riemannian-geometry-challenge.mdx'), 'utf8')
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug: s } = await params
+  const doc = DOCS.find((d) => d.slug === s)
+  if (!doc) notFound()
+
+  const source = fs.readFileSync(path.join(process.cwd(), `content/${doc.slug}.mdx`), 'utf8')
   const { content } = await compileMDX({
     source,
     components,
@@ -52,9 +60,9 @@ export default async function Page() {
     <div className="h-screen flex flex-col bg-[#0a0a0f] text-white">
       <Navbar />
       <main className="flex-1 overflow-y-auto">
-        <DocsShell title={TITLE} toc={parseToc(source)}>
-          <p className="text-xs uppercase tracking-[0.2em] text-white/30 mb-3">An open public initiative</p>
-          <h1 className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-8">{TITLE}</h1>
+        <DocsShell docs={DOCS} current={doc.slug} toc={parseToc(source)}>
+          <p className="text-xs uppercase tracking-[0.2em] text-white/30 mb-3">{doc.eyebrow}</p>
+          <h1 className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-8">{doc.title}</h1>
           {content}
         </DocsShell>
       </main>
