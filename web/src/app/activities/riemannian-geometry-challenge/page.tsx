@@ -72,7 +72,7 @@ export default function RiemannianGeometryChallenge() {
                 <span className="text-white/35 mr-2">[1]</span>
                 M. P. do Carmo,{' '}
                 <a
-                  href="https://link.springer.com/book/9780817634902"
+                  href="https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="italic text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors"
