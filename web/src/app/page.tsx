@@ -14,9 +14,6 @@ export default function Home() {
       <main className="flex-1 relative overflow-y-auto">
         <ParticleBackground particleCount={260} mouseRadius={250} />
         <div className="relative z-10 max-w-3xl mx-auto px-8 py-24">
-          <h1 className="text-4xl font-bold tracking-[0.15em] text-white/90 mb-2">ASTROLABE</h1>
-          <p className="text-sm text-white/40 mb-20">Manage your knowledge network</p>
-
           <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4">Current activity</h2>
           <Link
             href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
