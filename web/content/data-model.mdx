@@ -28,9 +28,10 @@ On disk this is just one file per node, named by its hash; documents reference t
 
 <StorageTree />
 
-Inside, a file is YAML frontmatter and a body. A real atom — the *geodesic sphere*
-definition — and a real edge — a `(lean, tex)` link saying a Lean node *formalizes* the
-prose *geodesic*:
+As an entry, each is exactly `hash`, `ref`, and a `record` that carries everything else —
+`sort`, `title`, the body, and for an edge its `rel` and `kind`. A real atom (the *geodesic
+sphere* definition) and a real `(lean, tex)` edge (a Lean node *formalizes* the prose
+*geodesic*):
 
 <AtomExample />
 

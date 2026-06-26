@@ -34,46 +34,62 @@ export function StorageTree() {
   )
 }
 
-/** A real node file: hash-named, YAML frontmatter + body. */
-function NodeFile({ dir, hash, body }: { dir: string; hash: string; body: string }) {
+/** One row of an entry: a fixed-width key and its value. */
+function Field({ k, v, indent }: { k: string; v: React.ReactNode; indent?: boolean }) {
+  return (
+    <div className={`flex gap-2 ${indent ? 'pl-5' : ''}`}>
+      <span className="w-14 shrink-0 text-white/35">{k}</span>
+      <span className="text-white/65 min-w-0 break-words">{v}</span>
+    </div>
+  )
+}
+
+/** An entry in the canonical (hash, ref, record) shape — everything but ref and
+ *  hash lives, layered, inside record. */
+function NodeEntry({ hash, refs, record }: { hash: string; refs: string[]; record: [string, React.ReactNode][] }) {
+  const badge = refs.length === 1 ? 'self-reference → atom' : refs.length === 2 ? 'two atoms → edge' : ''
   return (
     <figure className="my-5">
-      <div className="rounded-lg border border-white/10 bg-white/[0.02] overflow-hidden">
-        <div className="px-4 py-2 border-b border-white/[0.07] text-[12px] font-mono text-white/40">
-          .astrolabe/{dir}/<Hash>{hash}</Hash>.md
-        </div>
-        <pre className="px-4 py-3 text-[12px] leading-relaxed font-mono text-white/65 overflow-x-auto">{body}</pre>
+      <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4 text-[12px] font-mono leading-relaxed">
+        <Field k="hash" v={<Hash>{hash}</Hash>} />
+        <Field k="ref" v={<>[ <Hash>{refs.join(', ')}</Hash> ]{badge && <Dim>{'  ← '}{badge}</Dim>}</>} />
+        <div className="text-white/35 mt-0.5">record</div>
+        {record.map(([k, v]) => <Field key={k} k={k} v={v} indent />)}
       </div>
     </figure>
   )
 }
 
-/** A real atom file from the Riemannian Geometry project. */
+/** A real atom from the Riemannian Geometry project. */
 export function AtomExample() {
-  const body = String.raw`---
-ref:
-- 38c99016b279
-sort: definition
-source: tex
-title: Geodesic sphere
----
-$S_\delta = \exp_p(\{v : \lVert v \rVert = \delta\})$, the image of a
-Euclidean sphere under $\exp_p$.`
-  return <NodeFile dir="atoms" hash="38c99016b279" body={body} />
+  return (
+    <NodeEntry
+      hash="38c99016b279"
+      refs={['38c99016b279']}
+      record={[
+        ['sort', 'definition'],
+        ['source', 'tex'],
+        ['title', 'Geodesic sphere'],
+        ['notes', String.raw`$S_\delta = \exp_p(\{v : \lVert v\rVert = \delta\})$`],
+      ]}
+    />
+  )
 }
 
-/** A real (lean, tex) cross-source edge file. */
+/** A real (lean, tex) cross-source edge. */
 export function EdgeExample() {
-  const body = `---
-kind: bipartite
-ref:
-- 264fbf8cb406
-- 6e6c552589c3
-rel: formalizes
-sort: (lean, tex)
----
-formalizes «geodesic»`
-  return <NodeFile dir="edges" hash="014c1e2a49fe" body={body} />
+  return (
+    <NodeEntry
+      hash="014c1e2a49fe"
+      refs={['264fbf8cb406', '6e6c552589c3']}
+      record={[
+        ['sort', '(lean, tex)'],
+        ['rel', 'formalizes'],
+        ['kind', 'bipartite'],
+        ['notes', 'formalizes «geodesic»'],
+      ]}
+    />
+  )
 }
 
 /** Two tiers: atoms + binary edges form a traditional graph; a hyperedge is a
