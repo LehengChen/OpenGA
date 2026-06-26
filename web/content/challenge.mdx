@@ -2,52 +2,96 @@ An open, public effort to build Riemannian geometry into a living, machine-verif
 textbook — grounded in do Carmo, owned by everyone. Below is the working list of open
 problems. Pick one, close it, and your work becomes part of a foundation anyone can reuse.
 
-## Open problems
+The work falls into five kinds. The first two build the textbook, the third keeps it
+honest, and the last two are the graph and the platform that hold it all together. Each
+bullet is a concrete place to start.
 
-Each problem is a gap in the formalized textbook. Solving one means a machine-checked
-proof, linked back to the natural-language statement it formalizes.
+## Formalization — proving it in Lean
 
-### The exponential differential
+Write do Carmo's results as Lean proofs a machine can check, closing the open `sorry`s
+from the most upstream gap downward.
 
-**Open · core blocker.** Formalize the differential of the exponential map,
-`d(exp_p)_v`, for a general direction `v` — only the `v = 0` case exists today.
-Everything from the Gauss lemma onward depends on it.
+- **The exponential differential** — `d(exp_p)_v` for a general direction `v`; only the
+  `v = 0` case exists today. The core blocker: everything from the Gauss lemma onward
+  depends on it. *(Ch. 5)*
+- **Hopf–Rinow, unconditional** — the 4 remaining sorries: a minimizing geodesic from the
+  geodesic sphere, and metric completeness via Heine–Borel. *(Ch. 7 §2)*
+- **The Gauss lemma** — `dist(exp_p v, p) = ‖v‖`, the elementary route from the symmetry
+  lemma (3.4, done) and a geodesic variation. *(Ch. 3 §3, Lemma 3.5)*
+- **Jacobi fields and the Jacobi equation** — the variation of geodesics and its second
+  order theory. *(Ch. 5)*
+- **Second variation of energy and the index form.** *(Ch. 9–10)*
+- **Conjugate points and the cut locus.** *(Ch. 13)*
+- **Comparison theorems** — Rauch, and Bishop–Gromov volume comparison. *(Ch. 10, Ch. 11)*
+- **Curvature** — the tensor's symmetries; sectional, Ricci, and scalar curvature. *(Ch. 4)*
+- **Spaces of constant curvature.** *(Ch. 8)*
 
-*do Carmo, Ch. 5.*
+## Exposition — the natural-language textbook
 
-### Hopf–Rinow, unconditional
+Make the written layer a faithful, readable textbook: every statement transcribed, every
+prose argument complete.
 
-**Open · 4 sorries.** Discharge the remaining gaps in the Hopf–Rinow theorem: the
-existence of a minimizing geodesic (geodesic-sphere + connectedness) and metric
-completeness via Heine–Borel.
+- **Fill the missing statements** — Ch. 11 §2.2, Ch. 13 §2.7 and §2.8 are not yet
+  transcribed.
+- **Faithful transcription of the remaining chapters**, statement by statement.
+- **Proof sketches** for results currently stated without one.
+- **Worked examples and exercises** carried over from do Carmo.
+- **Notation consistency** across chapters — one symbol, one meaning.
+- **Strengthen under-linked statements** — long cards with few links usually hide concepts
+  that were never wired in.
 
-*do Carmo, Ch. 7 §2.*
+## Verification — attack and defense
 
-### The Gauss lemma
+Keep the two layers honest by pitting them against each other: the formal side exposes
+holes in the prose, and human review confirms the formal side really proves what it claims.
 
-**Open · symmetry lemma done.** Prove `dist(exp_p v, p) = ‖v‖` from the symmetry lemma
-(3.4, complete) and a geodesic variation — the elementary route, with no second variation.
+- **Attack the prose** — use Lean as a logical oracle to surface unstated hypotheses and
+  steps that do not follow.
+- **Defend the proofs** — review each Lean proof for correctness, not just that it compiles.
+- **Bridge faithfulness** — confirm a `(lean, tex)` link formalizes the *same* statement,
+  not a weaker or shifted one.
+- **Flag "proven modulo interface"** — interface fields that are really axioms in disguise.
+- **Audit the derived numbering** against do Carmo's own.
 
-*do Carmo, Ch. 3 §3, Lemma 3.5.*
+## Meta-mathematics — understanding the structure
 
-## Ways to contribute
+Beneath the theorems sits the question of what it means to *understand* one: its real
+antecedents and consequences, the cleanest interface to state it through, and how to
+measure all of that. This is mathematics about the mathematics.
 
-### Mathematics
+- **Better interfaces** — for each object (a connection, a metric, curvature), the cleanest
+  API a proof should depend on. The interface *is* the reusable surface; a result proven
+  only "modulo interface" is exactly a bet on having chosen it well.
+- **Antecedents and consequences** — make every result's true dependencies, and what it
+  unlocks, explicit as typed edges rather than folklore.
+- **The relation taxonomy** — what *kinds* of mathematical dependency exist: `uses`,
+  `implies`, `specializes`, `generalizes`, `dual-to`, `example-of`.
+- **Hypergraph metrics** — how to measure structure and understanding: coverage, concept
+  density, the length-vs-connectivity heuristic for finding gaps.
+- **Multi-ary hyperedges** — a theorem depends on its hypotheses *jointly*; a binary edge
+  cannot say that. Build the n-ary layer on top of the binary one.
 
-Prove the theorems so a machine can check them; complete the foundations, one result at a time.
+## Knowledge graph — the Astrolabe layer
 
-### Review
+Keep the content-addressed store itself clean and trustworthy as the graph grows.
 
-Keep the mathematics honest — on the written side and the formal side; find the gap, flag
-the step that does not follow.
+- **The self-iterating loop** — make audit → formalize → bridge → re-audit robust and, where
+  possible, automatic.
+- **Deduplication and merge** of equivalent cards.
+- **A coverage dashboard** — what fraction of do Carmo is machine-checked.
+- **Identity and integrity** — stable hashing across re-extraction, referential closure as
+  the graph is rewritten.
 
-### Design &amp; visualization
+## Platform — visualization and tools
 
-Make a body of knowledge with thousands of results legible, beautiful, and a pleasure to explore.
+Build the public surface: make a graph of thousands of results legible, fast, and a pleasure
+to explore, contribute to, and reuse.
 
-### Tools &amp; infrastructure
-
-Build the systems that let everyone read, contribute, and reuse — the public plumbing of the textbook.
+- **Graph layout and visualization** that stays legible at scale.
+- **Reader experience** — navigation, search, and cross-references that do not lose the reader.
+- **The public website and onboarding** for new contributors.
+- **The extract / register / audit toolchain** that moves results between Lean and the store.
+- **CI and fitness functions** — architectural linters that catch drift before it lands.
 
 ## How we work together
 
