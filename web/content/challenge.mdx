@@ -4,13 +4,27 @@ shared, machine-checked graph. The four below are the ones driving the work.
 
 ## Formalization as the primary artifact, prose as interface
 
-For centuries the textbook *was* the mathematics, and the formal content lived in the
-reader's head. We invert that. The formal object — the definition, the proof a machine can
-check — is the primary artifact; the prose, the diagrams, the numbering, even the Lean
-syntax are interfaces onto it: views that can be generated, linked, and replaced. What does
-a subject look like when the proof is the source and every page is just one rendering of it,
-and what is the right interface for a human to meet it through? What is still unproven at any
-moment is live on the [Status](/docs/status) page.
+The idea that mathematics can be a fully formal object — something a machine reads and checks,
+with no appeal to intuition — is old. De Bruijn's Automath did it in the 1960s, and the QED
+Manifesto later imagined a universal library of all mathematics, checked end to end. What we
+are testing is a stronger claim: that this formal object should be the *primary* one, and
+everything familiar — the prose, the diagrams, the numbering, even the Lean syntax — is an
+interface onto it.
+
+The reason to invert the usual order is that prose is a lossy interface. A written proof leaves
+gaps the reader is trusted to fill, and the gaps sometimes hide mistakes; Lamport has argued
+for decades that the structure ordinary proofs omit is exactly where the errors live. Voevodsky
+turned to formalization after finding errors in his own published work that had stood for years
+— for him the machine-checked version became the one you could actually rely on. Take the
+formal proof as the source, then, and the page becomes a rendering of it: generated, linked,
+and replaceable, rather than the thing itself.
+
+That turns the real question into one of interface. If the proof is the artifact, what is the
+right way for a human to meet it — prose for one reader, a diagram for another, the dependency
+graph for a third, each a view regenerated from the same source? We are building the formal
+layer and its interfaces at once, to see what a subject looks like when every page is just one
+rendering of the proof underneath. What is still unproven at any moment is live on the
+[Status](/docs/status) page.
 
 ## How the structure of mathematics navigates its formalization
 
@@ -85,3 +99,15 @@ Nature **461**, 879–881, 2009.
 
 [6] The mathlib Community, [*The Lean Mathematical Library*](https://arxiv.org/abs/1910.09336).
 Certified Programs and Proofs (CPP), 367–381, 2020.
+
+[7] N. G. de Bruijn, *A Survey of the Project Automath*. In *To H. B. Curry: Essays on
+Combinatory Logic, Lambda Calculus and Formalism*, Academic Press, 579–606, 1980.
+
+[8] *The QED Manifesto*. In *Automated Deduction (CADE-12)*, Lecture Notes in Artificial
+Intelligence **814**, 238–251, 1994.
+
+[9] L. Lamport, *How to Write a 21st Century Proof*. Journal of Fixed Point Theory and
+Applications **11**(1), 43–63, 2012.
+
+[10] V. Voevodsky, *The Origins and Motivations of Univalent Foundations*. The Institute
+Letter (Institute for Advanced Study), Summer 2014.
