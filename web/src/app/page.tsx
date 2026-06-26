@@ -5,7 +5,7 @@ import { Navbar } from '@/components/Navbar'
 // The active project lives outside the web app, as its own folder.
 // Override with NEXT_PUBLIC_PROJECT_PATH when deploying elsewhere.
 const PROJECT_PATH =
-  process.env.NEXT_PUBLIC_PROJECT_PATH || '/Users/moqian/OpenGALib/projects/hopf-rinow'
+  process.env.NEXT_PUBLIC_PROJECT_PATH || '/Users/moqian/OpenGALib/projects/riemannian-geometry'
 
 export default function Home() {
   return (
@@ -22,11 +22,10 @@ export default function Home() {
             href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
             className="text-2xl font-medium text-white/85 hover:text-white border-b border-white/15 hover:border-white/50 transition-colors pb-0.5"
           >
-            Hopf–Rinow
+            Riemannian Geometry
           </Link>
           <p className="text-sm text-white/40 mt-3">
-            Riemannian geometry — metric completeness coincides with geodesic completeness
-            <span className="text-white/25"> · 11 objects · 10 morphisms</span>
+            A shared tex + Lean knowledge graph of Riemannian geometry — chapters following do Carmo
           </p>
         </div>
       </main>

@@ -1,0 +1,7 @@
+---
+ref:
+- b3bc3c1ebc75
+- a3530d479ea5
+sort: (definition, definition)
+---
+Lean dependency.

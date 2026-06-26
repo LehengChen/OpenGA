@@ -1,0 +1,474 @@
+# Chapter 6 — Isometric Immersions
+
+Faithful transcription of do Carmo, *Riemannian Geometry*. Each numbered
+statement keeps do Carmo's number, kind and (name); proofs keep his explicit
+cross-references ("by Proposition 2.1", "Theorem 2.5 of this chapter", "Chapter 4")
+so the dependency graph is recoverable from the text.
+
+## §1 Introduction
+
+In this chapter we consider an isometric immersion $f:M\to\overline{M}$ of a manifold
+$M$ of dimension $n$ into a Riemannian manifold $\overline{M}$ of dimension
+$k=n+m$. The Riemannian metric of $\overline{M}$ induces, in a natural manner, a
+Riemannian metric on $M$: if $v_1,v_2\in T_pM$, define
+$\langle v_1,v_2\rangle=\langle df_p(v_1),df_p(v_2)\rangle$. In this situation $f$
+becomes an isometric immersion of $M$ into $\overline{M}$, and we study the
+relationship between the geometry of $M$ and that of $\overline{M}$.
+
+The motivation comes from the classical case of surfaces $S$ in $\mathbb{R}^3$.
+Restricting to the case where $S$ is the graph
+$\{(x,y,z)\in\mathbb{R}^3;z=f(x,y)\}$ of a differentiable function $f$ with
+$f(0,0)=0$ and $f_x(0,0)=f_y(0,0)=0$ (so that $S$ is tangent to the $x,y$ plane),
+the behavior of $S$ near the origin $0\in\mathbb{R}^3$ is strongly influenced by
+the quadratic form
+
+$$
+\mathit{II}(x,y)=f_{xx}(0)x^2+2f_{xy}(0)xy+f_{yy}(0)y^2
+$$
+
+defined in the $x,y$ plane. $\mathit{II}$ is called the *second fundamental form*
+of $S$ at the point $0$, and the Gaussian curvature of $S$ at $0$ is given by
+
+$$
+K=f_{xx}f_{yy}-f_{xy}^2.\qquad(1)
+$$
+
+Our first objective is to generalize the notion of the second fundamental form to
+$f:M\to\overline{M}$. Since the codimension $m$ can be larger than $1$, the
+quadratic form so defined must take values in a vector space of dimension
+$m\geq 1$.
+
+The most important relation between the metrics of $M$ and $\overline{M}$ is the
+Gauss formula (Theorem 2.5), which generalizes (1) and yields the difference
+between the curvatures of $M$ and $\overline{M}$ in terms of the second
+fundamental form. Since the curvatures are defined intrinsically, the Gauss
+formula generalizes the fundamental theorem of Gauss (the point of departure for
+Riemannian Geometry). Using the Gauss formula we give a geometric interpretation
+of sectional curvature that is essentially the definition used by Riemann
+(Cf. Chap. 4, Introduction). In the last section we introduce the equations of
+Codazzi and Ricci, which together with Gauss' equation form the fundamental
+equations of the local theory of isometric immersions.
+
+## §2 The second fundamental form
+
+Let $f:M^n\to\overline{M}^{n+m=k}$ be an immersion. For each $p\in M$ there is a
+neighborhood $U\subset M$ of $p$ such that $f(U)\subset\overline{M}$ is a
+submanifold of $\overline{M}$. To simplify notation we identify $U$ with $f(U)$
+and each vector $v\in T_qM$, $q\in U$, with $df_q(v)\in T_{f(q)}\overline{M}$, and
+use such identifications to extend a local vector field on $M$ to a local vector
+field on $\overline{M}$.
+
+For each $p\in M$ the inner product on $T_p\overline{M}$ splits it into the direct
+sum
+
+$$
+T_p\overline{M}=T_pM\oplus(T_pM)^\perp,
+$$
+
+where $(T_pM)^\perp$ is the orthogonal complement of $T_pM$ in $T_p\overline{M}$.
+If $v\in T_p\overline{M}$ we write $v=v^T+v^N$, $v^T\in T_pM$,
+$v^N\in(T_pM)^\perp$, calling $v^T$ the *tangential component* and $v^N$ the
+*normal component* of $v$; this splitting is differentiable.
+
+The Riemannian connection of $\overline{M}$ is denoted $\overline{\nabla}$. If
+$X,Y$ are local vector fields on $M$ and $\overline{X},\overline{Y}$ local
+extensions to $\overline{M}$, define
+
+$$
+\nabla_X Y=(\overline{\nabla}_{\overline{X}}\overline{Y})^T;
+$$
+
+this is the Riemannian connection relative to the induced metric on $M$
+(Cf. Exercise 3 of Chap. 2). To define the second fundamental form, set, for $X,Y$
+local vector fields on $M$,
+
+$$
+B(X,Y)=\overline{\nabla}_{\overline{X}}\overline{Y}-\nabla_X Y,
+$$
+
+a local vector field on $\overline{M}$ normal to $M$. $B(X,Y)$ does not depend on
+the extensions $\overline{X},\overline{Y}$. We denote by $\mathcal{X}(U)^\perp$ the
+differentiable vector fields on $U$ that are normal to $f(U)\approx U$.
+
+### 2.1 Proposition (the second fundamental form mapping $B$)
+If $X,Y\in\mathcal{X}(U)$, the mapping
+$B:\mathcal{X}(U)\times\mathcal{X}(U)\to\mathcal{X}(U)^\perp$ given by
+
+$$
+B(X,Y)=\overline{\nabla}_{\overline{X}}\overline{Y}-\nabla_X Y
+$$
+
+is bilinear and symmetric.
+
+*Proof.* From linearity of a connection, $B$ is additive in $X$ and $Y$ and
+$B(fX,Y)=fB(X,Y)$, $f\in\mathcal{D}(U)$. To show $B(X,fY)=fB(X,Y)$, denote the
+extension of $f$ to $\overline{U}$ by $\overline{f}$; then
+
+$$
+B(X,fY)=\overline{\nabla}_{\overline{X}}(\overline{f}\,\overline{Y})-\nabla_X(fY)=\overline{f}\,\overline{\nabla}_{\overline{X}}\overline{Y}-f\nabla_X Y+\overline{X}(\overline{f})\overline{Y}-X(f)Y.
+$$
+
+Since $f=\overline{f}$, $\overline{X}(\overline{f})=X(f)$, and $Y=\overline{Y}$ on
+$M$, the last two terms cancel, giving $B(X,fY)=fB(X,Y)$. To show $B$ is
+symmetric, by symmetry of the Riemannian connection,
+
+$$
+B(X,Y)=\overline{\nabla}_{\overline{X}}\overline{Y}-\nabla_X Y=\overline{\nabla}_{\overline{Y}}\overline{X}+[\overline{X},\overline{Y}]-\nabla_Y X-[X,Y].
+$$
+
+Since $[\overline{X},\overline{Y}]=[X,Y]$ on $M$, we conclude $B(X,Y)=B(Y,X)$.
+$\square$
+
+Because $B$ is bilinear, the value $B(X,Y)(p)$ depends only on the values $X(p)$
+and $Y(p)$. Now let $p\in M$ and $\eta\in(T_pM)^\perp$. The mapping
+$H_\eta:T_pM\times T_pM\to\mathbb{R}$ given by
+
+$$
+H_\eta(x,y)=\langle B(x,y),\eta\rangle,\quad x,y\in T_pM,
+$$
+
+is, by Proposition 2.1, a symmetric bilinear form.
+
+### 2.2 Definition (second fundamental form $\mathit{II}_\eta$)
+The quadratic form $\mathit{II}_\eta$ defined on $T_pM$ by
+
+$$
+\mathit{II}_\eta(x)=H_\eta(x,x)
+$$
+
+is called *the second fundamental form* of $f$ at $p$ along the normal vector
+$\eta$. Sometimes the expression *second fundamental form* also designates the
+mapping $B$. The bilinear mapping $H_\eta$ is associated to a linear self-adjoint
+operator $S_\eta:T_pM\to T_pM$ by
+
+$$
+\langle S_\eta(x),y\rangle=H_\eta(x,y)=\langle B(x,y),\eta\rangle.
+$$
+
+### 2.3 Proposition (the operator $S_\eta$ via the covariant derivative)
+Let $p\in M$, $x\in T_pM$ and $\eta\in(T_pM)^\perp$. Let $N$ be a local extension
+of $\eta$ normal to $M$. Then
+
+$$
+S_\eta(x)=-(\overline{\nabla}_x N)^T.
+$$
+
+*Proof.* Let $y\in T_pM$ and let $X,Y$ be local extensions of $x,y$, tangent to
+$M$. Then $\langle N,Y\rangle=0$, and therefore
+
+$$
+\langle S_\eta(x),y\rangle=\langle B(X,Y)(p),N\rangle=\langle\overline{\nabla}_X Y-\nabla_X Y,N\rangle(p)=\langle\overline{\nabla}_X Y,N\rangle(p)=-\langle Y,\overline{\nabla}_X N\rangle(p)=\langle-\overline{\nabla}_x N,y\rangle,
+$$
+
+for all $y\in T_pM$. $\square$
+
+### 2.4 Example (hypersurface; principal curvatures; Gauss spherical mapping)
+Consider the case in which the codimension of the immersion is $1$, i.e.
+$f:M^n\to\overline{M}^{n+1}$; $f(M)\subset\overline{M}$ is then called a
+*hypersurface*. Let $p\in M$ and $\eta\in(T_pM)^\perp$, $|\eta|=1$. Since
+$S_\eta:T_pM\to T_pM$ is symmetric, there exists an orthonormal basis of
+eigenvectors $\{e_1,\dots,e_n\}$ of $T_pM$ with real eigenvalues
+$\lambda_1,\dots,\lambda_n$, $S_\eta(e_i)=\lambda_i e_i$. If $M$ and $\overline{M}$
+are both orientable and oriented, then $\eta$ is uniquely determined by requiring
+$\{e_1,\dots,e_n\}$ to be in the orientation of $M$ and $\{e_1,\dots,e_n,\eta\}$ in
+the orientation of $\overline{M}$. The $e_i$ are *principal directions* and the
+$\lambda_i=k_i$ are *principal curvatures* of $f$. The symmetric functions of the
+$\lambda_i$ are invariants of the immersion: $\det(S_\eta)=\lambda_1\cdots\lambda_n$
+is the *Gauss-Kronecker curvature* and
+$\frac{1}{n}(\lambda_1+\cdots+\lambda_n)$ the *mean curvature* of $f$.
+
+When $\overline{M}=\mathbb{R}^{n+1}$, take $N$ a local unit normal extension of
+$\eta$. Let $S_1^n=\{x\in\mathbb{R}^{n+1};|x|=1\}$ and define the *Gauss spherical
+mapping* $g:M^n\to S_1^n$ by translating the origin of $N$ to the origin of
+$\mathbb{R}^{n+1}$, with $g(q)=$ endpoint of the translation of $N(q)$. Since
+$T_qM$ and $T_{g(q)}S_1^n$ are parallel, we identify them and find
+
+$$
+dg_q(x)=\frac{d}{dt}(N\circ c(t))_{t=0}=\overline{\nabla}_x N=(\overline{\nabla}_x N)^T=-S_\eta(x),
+$$
+
+where $c:(-\varepsilon,\varepsilon)\to M$ has $c(0)=q$, $c'(0)=x$, using
+$\langle N,N\rangle=1$. Thus $-S_\eta$ is the derivative of the Gauss spherical
+mapping. As an application: if $M^n$, $n\geq 2$, is a connected, compact,
+orientable manifold and there exists an immersion $f:M^n\to\mathbb{R}^{n+1}$ with
+non-vanishing Gauss-Kronecker curvature at every point, then $M$ is diffeomorphic
+to $S_1^n$ (the proof depends on covering spaces; $\det(dg_p)\neq 0$ makes
+$g:M\to S_1^n$ a local diffeomorphism, hence a covering map since $M$ is compact,
+hence a diffeomorphism since $S_1^n$ is simply connected).
+
+### 2.5 Theorem (Gauss)
+Let $p\in M$ and let $x,y$ be orthonormal vectors in $T_pM$. Then
+
+$$
+K(x,y)-\overline{K}(x,y)=\langle B(x,x),B(y,y)\rangle-|B(x,y)|^2,\qquad(1)
+$$
+
+where $K(x,y)$ and $\overline{K}(x,y)$ denote the sectional curvatures of $M$ and
+$\overline{M}$, respectively, in the plane generated by $x$ and $y$.
+
+*Proof.* Let $X,Y$ be local orthogonal extensions of $x,y$, tangent to $M$, with
+extensions $\overline{X},\overline{Y}$ to $\overline{M}$. Then
+
+$$
+K(x,y)-\overline{K}(x,y)=\langle\nabla_Y\nabla_X X-\nabla_X\nabla_Y X-(\overline{\nabla}_{\overline{Y}}\overline{\nabla}_{\overline{X}}\overline{X}-\overline{\nabla}_{\overline{X}}\overline{\nabla}_{\overline{Y}}\overline{X}),Y\rangle(p)+\langle\nabla_{[X,Y]}X-\overline{\nabla}_{[\overline{X},\overline{Y}]}\overline{X},Y\rangle(p).
+$$
+
+The last term is zero because
+$\langle\nabla_{[X,Y]}X-\overline{\nabla}_{[\overline{X},\overline{Y}]}\overline{X},Y\rangle(p)=-\langle(\overline{\nabla}_{[\overline{X},\overline{Y}]}\overline{X})^N,Y\rangle(p)=0$.
+Denoting by $E_1,\dots,E_m$, $m=\dim\overline{M}-\dim M$, local orthonormal fields
+normal to $M$, we have $B(X,Y)=\sum_i H_i(X,Y)E_i$, $H_i=H_{E_i}$. Then at $p$,
+
+$$
+\overline{\nabla}_{\overline{Y}}\overline{\nabla}_{\overline{X}}\overline{X}=\overline{\nabla}_{\overline{Y}}\Big(\sum_i H_i(X,X)E_i+\nabla_X X\Big)=\sum_i\{H_i(X,X)\overline{\nabla}_{\overline{Y}}E_i+\overline{Y}H_i(X,X)E_i\}+\overline{\nabla}_{\overline{Y}}\nabla_X X,
+$$
+
+hence
+
+$$
+\langle\overline{\nabla}_{\overline{Y}}\overline{\nabla}_{\overline{X}}\overline{X},Y\rangle=-\sum_i H_i(X,X)H_i(Y,Y)+\langle\nabla_Y\nabla_X X,Y\rangle,\qquad(2)
+$$
+
+and similarly
+
+$$
+\langle\overline{\nabla}_{\overline{X}}\overline{\nabla}_{\overline{Y}}\overline{X},Y\rangle=-\sum_i H_i(X,Y)H_i(X,Y)+\langle\nabla_X\nabla_Y X,Y\rangle.\qquad(3)
+$$
+
+Using (2) and (3) we obtain (1). $\square$
+
+### 2.6 Remark (Gauss formula for a hypersurface)
+In the case of a hypersurface $f:M^n\to\overline{M}^{n+1}$, let $p\in M$,
+$\eta\in(T_pM)^\perp$, and $\{e_1,\dots,e_n\}$ an orthonormal basis of $T_pM$ in
+which $S_\eta=S$ is diagonal, $S(e_i)=\lambda_ie_i$. Then $H(e_i,e_i)=\lambda_i$
+and $H(e_i,e_j)=0$ if $i\neq j$, so (1) becomes
+
+$$
+K(e_i,e_j)-\overline{K}(e_i,e_j)=\lambda_i\lambda_j.\qquad(4)
+$$
+
+### 2.7 Remark (Theorema Egregium)
+In the case $M=M^2\subset\overline{M}=\mathbb{R}^3$, the product $\lambda_1\lambda_2$
+of the principal curvatures coincides with the Gaussian curvature of the surface.
+Remark 2.6 then shows that the Gaussian curvature coincides with the sectional
+curvature of the surface, and implies the famous *Theorema Egregium* of Gauss:
+the Gaussian curvature of $M^2\subset\mathbb{R}^3$ is an invariant under
+isometries.
+
+### 2.8 Example (curvature of $S^n$)
+The sectional curvature of the unit sphere $S^n\subset\mathbb{R}^{n+1}$ is constant
+equal to $1$. Orient $S^n$ by the inward pointing unit normal $N(x)=-x$,
+$|x|=1$. The Gauss mapping is then equal to $(-i)$, $i$ the identity of $S^n$, so
+the self-adjoint operator associated to $H_N$ has all eigenvalues equal to $1$.
+Thus every $v\in T_pS^n$ is an eigenvector; by (4) all sectional curvatures of
+$S^n$ equal $1$.
+
+An immersion $f:M\to\overline{M}$ is *geodesic at* $p\in M$ if for every
+$\eta\in(T_pM)^\perp$ the second fundamental form $H_\eta$ is identically zero at
+$p$. An immersion $f$ is *totally geodesic* if it is geodesic for all $p\in M$.
+
+### 2.9 Proposition (totally geodesic criterion)
+An immersion $f:M\to\overline{M}$ is geodesic at $p\in M$ if and only if every
+geodesic $\gamma$ of $M$ starting from $p$ is a geodesic of $\overline{M}$ at $p$.
+
+*Proof.* Let $\gamma(0)=p$, $\gamma'(0)=x$. Let $N$ be a local extension, normal to
+$M$, of a vector $\eta$ normal to $M$ at $p$, and $X$ a local extension of
+$\gamma'(t)$ to a tangent field on $M$. Since $\langle X,N\rangle=0$, at $p$,
+
+$$
+H_\eta(x,x)=\langle S_\eta(x),x\rangle=-\langle\overline{\nabla}_X N,X\rangle=-X\langle N,X\rangle+\langle N,\overline{\nabla}_X X\rangle=\langle N,\overline{\nabla}_X X\rangle.
+$$
+
+Thus $f$ is geodesic at $p$ iff for all $x\in T_pM$ the geodesic $\gamma$ tangent
+to $x$ at $p$ satisfies: $\overline{\nabla}_X X(p)$ has no normal component;
+equivalently, every geodesic $\gamma$ of $M$ starting from $p$ is a geodesic of
+$\overline{M}$ at $p$. $\square$
+
+Proposition 2.9 gives the geometric interpretation of sectional curvature. Let
+$B\subset T_pM$ be an open ball on which $\exp_p$ is a diffeomorphism, and
+$\sigma\subset T_pM$ a two-dimensional subspace. Then $\exp_p(\sigma\cap B)=S$ is a
+two-dimensional submanifold of $M$ through $p$, the surface formed by "small"
+geodesics tangent to $\sigma$ at $p$. By Proposition 2.9, $S$ is geodesic at $p$,
+so the second fundamental forms of $i:S\subset M$ vanish at $p$. Denoting by $K_S$
+the Gaussian curvature of $S$ at $p$, the Gauss formula gives
+
+$$
+K_S(p)=K(p,\sigma).
+$$
+
+This is exactly the way Riemann defined sectional curvature in [Ri]. It was proven
+by E. Cartan that if a Riemannian manifold $M$ has, for every $p$ and every
+two-dimensional $\sigma\subset T_pM$, a totally geodesic submanifold tangent to
+$\sigma$, then $M$ has constant sectional curvature.
+
+### 2.10 Definition (minimal immersion; mean curvature vector)
+An immersion $f:M\to\overline{M}$ is called *minimal* if for every $p\in M$ and
+every $\eta\in(T_pM)^\perp$ the trace of $S_\eta=0$. Choosing an orthonormal frame
+$E_1,\dots,E_m$ of vectors in $\mathcal{X}(U)^\perp$, where $U$ is a neighborhood
+of $p$ in which $f$ is an embedding, we write at $p$
+
+$$
+B(x,y)=\sum_i H_i(x,y)E_i,\quad x,y\in T_pM,\ i=1,\dots,m,
+$$
+
+with $H_i=H_{E_i}$. The normal vector
+
+$$
+H=\frac{1}{n}\sum_i(\operatorname{trace}S_i)E_i,
+$$
+
+where $S_i=S_{E_i}$, does not depend on the chosen frame; it is the *mean
+curvature vector* of $f$. Thus $f$ is minimal iff $H(p)=0$ for all $p\in M$. Such
+immersions minimize volume in the induced metric, in the same way that geodesics
+minimize arc length.
+
+## §3 The fundamental equations
+
+Given an isometric immersion $f:M^n\to\overline{M}^{n+m}$, at each $p\in M$ we have
+$T_p\overline{M}=T_pM\oplus(T_pM)^\perp$, varying differentiably with $p$. Locally
+$T\overline{M}$ over $M$ decomposes into the direct sum of the *tangent bundle*
+$TM$ and the *normal bundle* $TM^\perp$. We use Latin letters $X,Y,Z$ for fields
+tangent to $M$ and Greek letters $\xi,\eta,\zeta$ for fields normal to $M$.
+
+Given $X$ and $\eta$, the tangent component of $\overline{\nabla}_X\eta$ is
+$(\overline{\nabla}_X\eta)^T=-S_\eta(X)$. The normal component is called the
+*normal connection* $\nabla^\perp$ of the immersion:
+
+$$
+\nabla_X^\perp\eta=(\overline{\nabla}_X\eta)^N=\overline{\nabla}_X\eta-(\overline{\nabla}_X\eta)^T=\overline{\nabla}_X\eta+S_\eta(X).\qquad(5)
+$$
+
+The normal connection $\nabla^\perp$ has the usual properties of a connection:
+linear in $X$, additive in $\eta$, and
+$\nabla_X^\perp(f\eta)=f\nabla_X^\perp\eta+X(f)\eta$, $f\in\mathcal{D}(M)$. As with
+the tangent bundle, we introduce the *normal curvature* $R^\perp$ of the immersion,
+
+$$
+R^\perp(X,Y)\eta=\nabla_Y^\perp\nabla_X^\perp\eta-\nabla_X^\perp\nabla_Y^\perp\eta+\nabla_{[X,Y]}^\perp\eta.
+$$
+
+### 3.1 Proposition (Gauss equation and Ricci equation)
+The following equations are valid.
+
+(a) *Gauss equation*
+
+$$
+\langle\overline{R}(X,Y)Z,T\rangle=\langle R(X,Y)Z,T\rangle-\langle B(Y,T),B(X,Z)\rangle+\langle B(X,T),B(Y,Z)\rangle.
+$$
+
+(b) *Ricci equation*
+
+$$
+\langle\overline{R}(X,Y)\eta,\zeta\rangle-\langle R^\perp(X,Y)\eta,\zeta\rangle=\langle[S_\eta,S_\zeta]X,Y\rangle,
+$$
+
+where $[S_\eta,S_\zeta]$ denotes the operator $S_\eta\circ S_\zeta-S_\zeta\circ S_\eta$.
+
+*Proof.* Observe that $\overline{\nabla}_X Y=\nabla_X Y+B(X,Y)$. Since
+
+$$
+\overline{R}(X,Y)Z=\overline{\nabla}_Y\overline{\nabla}_X Z-\overline{\nabla}_X\overline{\nabla}_Y Z+\overline{\nabla}_{[X,Y]}Z=\overline{\nabla}_Y(\nabla_X Z+B(X,Z))-\overline{\nabla}_X(\nabla_Y Z+B(Y,Z))+\nabla_{[X,Y]}Z+B([X,Y],Z),
+$$
+
+we have
+
+$$
+\overline{R}(X,Y)Z=R(X,Y)Z+B(Y,\nabla_X Z)+\nabla_Y^\perp B(X,Z)-S_{B(X,Z)}Y-B(X,\nabla_Y Z)-\nabla_X^\perp B(Y,Z)+S_{B(Y,Z)}X+B([X,Y],Z).\qquad(6)
+$$
+
+Taking the inner product of (6) with $T$, the normal terms vanish and
+
+$$
+\langle\overline{R}(X,Y)Z,T\rangle=\langle R(X,Y)Z,T\rangle-\langle S_{B(X,Z)}Y,T\rangle+\langle S_{B(Y,Z)}X,T\rangle=\langle R(X,Y)Z,T\rangle-\langle B(Y,T),B(X,Z)\rangle+\langle B(X,T),B(Y,Z)\rangle,
+$$
+
+which is the Gauss equation. For the Ricci equation, calculate
+
+$$
+\overline{R}(X,Y)\eta=\overline{\nabla}_Y\overline{\nabla}_X\eta-\overline{\nabla}_X\overline{\nabla}_Y\eta+\overline{\nabla}_{[X,Y]}\eta=R^\perp(X,Y)\eta-S_{\nabla_X^\perp\eta}Y-\nabla_Y(S_\eta X)-B(S_\eta X,Y)+S_{\nabla_Y^\perp\eta}X+\nabla_X(S_\eta Y)+B(X,S_\eta Y)-S_\eta[X,Y].
+$$
+
+Multiplying by $\zeta$ and observing that $\langle B(X,Y),\eta\rangle=\langle S_\eta X,Y\rangle$,
+
+$$
+\langle\overline{R}(X,Y)\eta,\zeta\rangle=\langle R^\perp(X,Y)\eta,\zeta\rangle-\langle B(S_\eta X,Y),\zeta\rangle+\langle B(X,S_\eta Y),\zeta\rangle=\langle R^\perp(X,Y)\eta,\zeta\rangle+\langle(S_\eta S_\zeta-S_\zeta S_\eta)X,Y\rangle=\langle R^\perp(X,Y)\eta,\zeta\rangle+\langle[S_\eta,S_\zeta]X,Y\rangle,
+$$
+
+which is Ricci's equation. $\square$
+
+### 3.2 Remark
+Theorem 2.5 of this chapter is a special case of Gauss' equation.
+
+### 3.3 Remark (flat normal bundle)
+We say the normal bundle of an immersion is *flat* if $R^\perp=0$. Assume the
+ambient space $\overline{M}$ has constant sectional curvature. Then the Ricci
+equation can be written
+
+$$
+\langle R^\perp(X,Y)\eta,\zeta\rangle=-\langle[S_\eta,S_\zeta]X,Y\rangle.
+$$
+
+It follows that $R^\perp=0$ if and only if $[S_\eta,S_\zeta]=0$ for all
+$\eta,\zeta$, that is, if and only if for all $p\in M$ there exists a basis of
+$T_pM$ which diagonalizes all of the $S_\eta$ simultaneously.
+
+The Gauss and Ricci equations are algebraic relations between the curvatures of
+the tangent and normal bundles and the second fundamental form. A non-algebraic
+relation is the Codazzi equation, for which we differentiate the second
+fundamental form considered as a tensor
+$B:\mathcal{X}(M)\times\mathcal{X}(M)\times\mathcal{X}(M)^\perp\to\mathbb{R}$,
+$B(X,Y,\eta)=\langle B(X,Y),\eta\rangle$, with covariant derivative
+
+$$
+(\overline{\nabla}_X B)(Y,Z,\eta)=X(B(Y,Z,\eta))-B(\nabla_X Y,Z,\eta)-B(Y,\nabla_X Z,\eta)-B(Y,Z,\nabla_X^\perp\eta).
+$$
+
+### 3.4 Proposition (Codazzi's equation)
+With the notation above,
+
+$$
+\langle\overline{R}(X,Y)Z,\eta\rangle=(\overline{\nabla}_Y B)(X,Z,\eta)-(\overline{\nabla}_X B)(Y,Z,\eta).
+$$
+
+*Proof.* Observe first that
+
+$$
+(\overline{\nabla}_X B)(Y,Z,\eta)=X\langle B(Y,Z),\eta\rangle-\langle B(\nabla_X Y,Z),\eta\rangle-\langle B(Y,\nabla_X Z),\eta\rangle-\langle B(Y,Z),\nabla_X^\perp\eta\rangle=\langle\nabla_X^\perp(B(Y,Z)),\eta\rangle-\langle B(\nabla_X Y,Z),\eta\rangle-\langle B(Y,\nabla_X Z),\eta\rangle.
+$$
+
+Consider expression (6) in the proof of Proposition 3.1 and multiply both sides by
+$\eta$. Taking the remark above into account,
+
+$$
+\langle\overline{R}(X,Y)Z,\eta\rangle=\langle B(Y,\nabla_X Z),\eta\rangle+\langle\nabla_Y^\perp B(X,Z),\eta\rangle-\langle B(X,\nabla_Y Z),\eta\rangle-\langle\nabla_X^\perp B(Y,Z),\eta\rangle+\langle B(\nabla_X Y,Z),\eta\rangle-\langle B(\nabla_Y X,Z),\eta\rangle=-(\overline{\nabla}_X B)(Y,Z,\eta)+(\overline{\nabla}_Y B)(X,Z,\eta),
+$$
+
+which is Codazzi's equation. $\square$
+
+### 3.5 Remark (Codazzi for constant curvature ambient and hypersurfaces)
+If the ambient space $\overline{M}$ has constant sectional curvature, the Codazzi
+equation reduces to
+
+$$
+(\overline{\nabla}_X B)(Y,Z,\eta)=(\overline{\nabla}_Y B)(X,Z,\eta).
+$$
+
+If, in addition, the codimension of the immersion is $1$, then
+$\nabla_X^\perp\eta=0$, hence
+
+$$
+\overline{\nabla}_X B(Y,Z,\eta)=X\langle S_\eta(Y),Z\rangle-\langle S_\eta(\nabla_X Y),Z\rangle-\langle S_\eta(Y),\nabla_X Z\rangle=\langle\nabla_X(S_\eta(Y)),Z\rangle-\langle S_\eta(\nabla_X Y),Z\rangle.
+$$
+
+Therefore, in this case, the Codazzi equation can be written
+
+$$
+\nabla_X(S_\eta(Y))-\nabla_Y(S_\eta(X))=S_\eta([X,Y]).
+$$
+
+The importance of the equations of Gauss, Codazzi, and Ricci is that, when the
+ambient space has constant sectional curvature, they play an analogous role to the
+compatibility equations in the local theory of surfaces (Cf. M. do Carmo [dC 2],
+pp. 235–236). It is possible to state an analogous theorem to the fundamental
+theorem of local surface theory; see K. Tenenblat, "On isometric immersions of
+Riemannian manifolds", Boletim da Soc. Bras. de Mat. vol. 2 (1971), 23–36, and
+H. Jacobowitz, "The Gauss-Codazzi equations", Tensor N.S., 39 (1982), 15–22.

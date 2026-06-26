@@ -29,13 +29,17 @@ def build_skeleton_graph(entries: dict) -> nx.DiGraph:
             else:
                 G.add_node(h, sort="", title="")
 
-    # Add degree-1 entries as edges
+    # Edges: binary (|ref| = 2) and bipartite hyperedges (|ref| ≥ 3, expanded as
+    # ref[0] → ref[i]) both render as directed edges; hyperedge-derived edges are
+    # tagged `hyper` so the frontend can style them.
     for h, e in entries.items():
-        if len(e["ref"]) == 2:
-            src, tgt = e["ref"]
-            if src in G.nodes and tgt in G.nodes:
-                parsed = _parse_record(e["record"])
-                sort = parsed.get("sort", "") if parsed else ""
-                G.add_edge(src, tgt, hash=h, sort=sort)
+        if len(e["ref"]) >= 2:
+            src = e["ref"][0]
+            parsed = _parse_record(e["record"])
+            sort = parsed.get("sort", "") if parsed else ""
+            is_hyper = len(e["ref"]) > 2
+            for tgt in e["ref"][1:]:
+                if src in G.nodes and tgt in G.nodes:
+                    G.add_edge(src, tgt, hash=h, sort=sort, hyper=is_hyper)
 
     return G

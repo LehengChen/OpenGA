@@ -3,19 +3,20 @@
 import { useSelectObjStore } from '@/stores/selectObjStore'
 import { SORT_LABELS, parseRecord } from './utils'
 
-export function LeanNetsEntryRef({ hash, record, color, number, displayText }: {
-    hash: string; record: string; color: string; number?: string; displayText?: string
+export function LeanNetsEntryRef({ hash, record, color, number, displayText, ofChapter }: {
+    hash: string; record: string; color: string; number?: string; displayText?: string; ofChapter?: string
 }) {
     const selectObj = useSelectObjStore(s => s.select)
 
     // Manual mode: \entryref{hash}{text} — use displayText as-is
-    // Auto mode: \entryref{hash} — fallback chain: number → title → hash
+    // Auto mode: \entryref{hash} — derived "Sort N.M [of Chapter C]"
     let text = displayText
     if (!text) {
         const parsed = parseRecord(record)
         const label = parsed ? (SORT_LABELS[parsed.sort] || parsed.sort || '') : ''
         if (number) {
             text = label ? `${label} ${number}` : number
+            if (ofChapter) text += ` of Chapter ${ofChapter}`
         } else if (parsed?.title) {
             text = parsed.title
         } else {

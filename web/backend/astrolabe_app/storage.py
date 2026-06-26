@@ -83,25 +83,33 @@ class AstrolabeStorage:
     def __init__(self, project_dir: str):
         base = Path(project_dir) / ".astrolabe"
         self.json_path = base / "astrolabe.json"
-        self.nodes_dir = base / "nodes"
-        # Per-node format if there's a nodes/ dir, or the project is brand new.
-        # A legacy project (astrolabe.json, no nodes/) keeps the single-file format.
-        self.use_nodes = self.nodes_dir.exists() or not self.json_path.exists()
+        # Per-node files split by degree: atoms (ref = [self]) and edges (|ref| ≥ 2).
+        self.atoms_dir = base / "atoms"
+        self.edges_dir = base / "edges"
+        self.legacy_nodes_dir = base / "nodes"  # pre-split layout, migrated on save
+        self.use_nodes = (
+            self.atoms_dir.exists() or self.edges_dir.exists()
+            or self.legacy_nodes_dir.exists() or not self.json_path.exists()
+        )
         self.path = self.json_path  # kept for compatibility
         self.data: dict = {}
         self._load()
         self._last_mtime = self._get_mtime()
 
+    def _node_dirs(self):
+        return (self.atoms_dir, self.edges_dir, self.legacy_nodes_dir)
+
     def _get_mtime(self) -> float:
         if self.use_nodes:
-            if not self.nodes_dir.exists():
-                return 0.0
-            mtimes = [self.nodes_dir.stat().st_mtime]
-            for f in self.nodes_dir.glob("*.md"):
-                try:
-                    mtimes.append(f.stat().st_mtime)
-                except OSError:
-                    pass
+            mtimes = [0.0]
+            for d in self._node_dirs():
+                if d.exists():
+                    mtimes.append(d.stat().st_mtime)
+                    for f in d.glob("*.md"):
+                        try:
+                            mtimes.append(f.stat().st_mtime)
+                        except OSError:
+                            pass
             return max(mtimes)
         try:
             return self.json_path.stat().st_mtime
@@ -117,10 +125,11 @@ class AstrolabeStorage:
     def _load(self):
         if self.use_nodes:
             self.data = {}
-            if self.nodes_dir.exists():
-                for f in sorted(self.nodes_dir.glob("*.md")):
-                    ref, record = _md_to_record(f.read_text(encoding="utf-8"))
-                    self.data[f.stem] = {"ref": ref, "record": record}
+            for d in self._node_dirs():
+                if d.exists():
+                    for f in sorted(d.glob("*.md")):
+                        ref, record = _md_to_record(f.read_text(encoding="utf-8"))
+                        self.data[f.stem] = {"ref": ref, "record": record}
             validate_store(self.data)
         elif self.json_path.exists():
             self.data = json.loads(self.json_path.read_text(encoding="utf-8"))
@@ -128,15 +137,27 @@ class AstrolabeStorage:
 
     def _save(self):
         if self.use_nodes:
-            self.nodes_dir.mkdir(parents=True, exist_ok=True)
+            self.atoms_dir.mkdir(parents=True, exist_ok=True)
+            self.edges_dir.mkdir(parents=True, exist_ok=True)
             keep = set(self.data.keys())
-            for f in self.nodes_dir.glob("*.md"):
-                if f.stem not in keep:
-                    f.unlink()
+            # prune stale files across atoms/ and edges/
+            for d in (self.atoms_dir, self.edges_dir):
+                for f in d.glob("*.md"):
+                    if f.stem not in keep:
+                        f.unlink()
             for h, e in self.data.items():
-                (self.nodes_dir / f"{h}.md").write_text(
+                target = self.atoms_dir if len(e["ref"]) == 1 else self.edges_dir
+                (target / f"{h}.md").write_text(
                     _record_to_md(e["ref"], e["record"]), encoding="utf-8"
                 )
+            # migrate away from the old flat nodes/ layout
+            if self.legacy_nodes_dir.exists():
+                for f in self.legacy_nodes_dir.glob("*.md"):
+                    f.unlink()
+                try:
+                    self.legacy_nodes_dir.rmdir()
+                except OSError:
+                    pass
         else:
             self.json_path.parent.mkdir(parents=True, exist_ok=True)
             self.json_path.write_text(

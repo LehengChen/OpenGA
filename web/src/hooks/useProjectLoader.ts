@@ -5,8 +5,10 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { useDataStore } from '@/stores/dataStore'
+import { useViewStore } from '@/stores/viewStore'
 import { useFileWatcher } from './useFileWatcher'
 import { initPlugins } from '@/plugins/init'
+import { buildProjectNumbering } from '@/components/mdx/numbering'
 
 import { API_BASE } from '@/lib/apiBase'
 
@@ -50,6 +52,32 @@ export function useProjectLoader(projectPath: string | null) {
 
         return () => { cancelled = true }
     }, [projectPath, setObjects, setMorphisms, refreshTrigger])
+
+    // Build the project-wide DERIVED numbering: read every chapter doc and
+    // assign each card a "§.item" from where it first appears. Rebuilds on any
+    // store/file change so reordering a card re-numbers it everywhere.
+    useEffect(() => {
+        if (!projectPath) return
+        let cancelled = false
+        const p = encodeURIComponent(projectPath)
+        const json = <T,>(url: string, fallback: T): Promise<T> =>
+            fetch(url).then(r => r.ok ? r.json() : fallback).catch(() => fallback)
+
+        Promise.all([
+            json<{ files?: { path: string; name: string }[] }>(`${API_BASE}/api/docs/list?path=${p}`, {}),
+            json<Record<string, { record: string }>>(`${API_BASE}/api/astrolabe/entries?path=${p}`, {}),
+        ]).then(async ([list, entries]) => {
+            const files = list.files || []
+            const docs = await Promise.all(files.map(async f => ({
+                filename: f.name,
+                content: (await json<{ content?: string }>(`${API_BASE}/api/docs/read?path=${encodeURIComponent(f.path)}`, {})).content || '',
+            })))
+            if (cancelled) return
+            useViewStore.getState().setNumbering(buildProjectNumbering(docs, entries))
+        })
+
+        return () => { cancelled = true }
+    }, [projectPath, refreshTrigger])
 
     return { loading }
 }

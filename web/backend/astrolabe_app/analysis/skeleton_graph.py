@@ -201,15 +201,19 @@ def build_skeleton_view(
             c1 = colors.get(u, "#888888")
             c2 = colors.get(v, "#888888")
             edge_color = _blend_hex(c1, c2)
-        # statement→proof edges are dashed (sort ends with ", proof)")
+        # statement→proof and bipartite-hyperedge edges are dashed
         is_proof_edge = sort.endswith(", proof)")
+        is_hyper = data.get("hyper", False)
+        is_cross = bool(src_u and src_v and src_u != src_v)
         edges.append({
             "source": u,
             "target": v,
             "sort": sort,
             "hash": data.get("hash", ""),
             "color": edge_color,
-            **({"dashed": True} if is_proof_edge else {}),
+            "hyper": is_hyper,
+            "cross": is_cross,
+            **({"dashed": True} if (is_proof_edge or is_hyper) else {}),
         })
 
     return {"nodes": nodes, "edges": edges}

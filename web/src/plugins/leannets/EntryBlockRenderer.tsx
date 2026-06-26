@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelectObjStore } from '@/stores/selectObjStore'
 import { API_BASE } from '@/lib/apiBase'
 import { InlineMath } from '@/components/mdx/InlineMath'
+import { Prose } from '@/components/mdx/Prose'
 import { LeanCode } from './LeanHighlight'
 import { LeanBadge } from './LeanBadge'
 import { SORT_LABELS, parseRecord } from './utils'
@@ -101,6 +102,8 @@ export function LeanNetsEntryBlock({ hash, record, color, number, collapsible, c
     const isLean = parsed.sort?.startsWith('lean-') || parsed.source === 'lean'
     const isTex = parsed.source === 'tex'
     const showBody = !collapsible || open
+    // `number` is the DERIVED project-wide "§.item" (from where this card first
+    // appears), injected by preprocess as data-number — never stored.
     const numberStr = number ? ` ${number}` : ''
 
     // Scenario A: tex entry — look for cross-source lean counterpart
@@ -109,7 +112,7 @@ export function LeanNetsEntryBlock({ hash, record, color, number, collapsible, c
     const leanProofs = useLeanProofs(leanCounterpart?.hash, projectPath)
 
     return (
-        <div className="my-3 pl-3 rounded-r" style={{ borderLeftColor: color, borderLeftWidth: 2, opacity: 0.9 }}>
+        <div data-entry={hash} className="my-3 pl-3 rounded-r" style={{ borderLeftColor: color, borderLeftWidth: 2, opacity: 0.9 }}>
             <div className="font-semibold flex items-center" style={{ color, fontSize: '0.85em', gap: '0.3em', marginBottom: '0.25em' }}>
                 {collapsible && (
                     <button
@@ -146,7 +149,7 @@ export function LeanNetsEntryBlock({ hash, record, color, number, collapsible, c
                         {isLean ? (
                             <LeanCode>{displayText}</LeanCode>
                         ) : (
-                            <InlineMath>{displayText}</InlineMath>
+                            <Prose>{displayText}</Prose>
                         )}
                     </div>
                     {/* Cross-source lean panel */}

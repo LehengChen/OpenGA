@@ -21,8 +21,9 @@ const components: any = {
         const entryId = node?.properties?.dataEntry
         if (entryId) {
             const number = node?.properties?.dataNumber
+            const chapter = node?.properties?.dataChapter
             const auto = node?.properties?.dataAuto === 'true'
-            return <EntryLink id={entryId} number={number} auto={auto}>{children}</EntryLink>
+            return <EntryLink id={entryId} number={number} chapter={chapter} auto={auto}>{children}</EntryLink>
         }
         return <span {...props}>{children}</span>
     },
@@ -30,12 +31,12 @@ const components: any = {
 
 /** Render text with KaTeX math + entrylinks. Used inside EntryBlock. */
 export function InlineMath({ children }: { children: any }) {
-    const numberMap = useViewStore(s => s.numberMap)
-    const text = preprocess(extractText(children), numberMap)
+    const numbering = useViewStore(s => s.numbering)
+    const text = preprocess(extractText(children), numbering)
     return (
         <ReactMarkdown
             remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex, rehypeRaw]}
+            rehypePlugins={[rehypeRaw, rehypeKatex]}
             components={components}
         >
             {text}
