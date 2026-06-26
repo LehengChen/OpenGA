@@ -11,13 +11,17 @@ import { create } from 'zustand'
 interface ReadState {
     selectedDoc: string | null
     scrollTop: number
+    sidebarOpen: boolean
     setSelectedDoc: (path: string | null) => void
     setScrollTop: (top: number) => void
+    setSidebarOpen: (open: boolean) => void
 }
 
 export const useReadStore = create<ReadState>((set) => ({
     selectedDoc: null,
     scrollTop: 0,
+    sidebarOpen: true,
     setSelectedDoc: (path) => set({ selectedDoc: path, scrollTop: 0 }),
     setScrollTop: (top) => set({ scrollTop: top }),
+    setSidebarOpen: (open) => set({ sidebarOpen: open }),
 }))

@@ -13,6 +13,7 @@ import { useViewStore } from '@/stores/viewStore'
 import { useReadStore } from '@/stores/readStore'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import type { Numbering } from '@/components/mdx/numbering'
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/outline'
 
 interface DocFile {
     name: string
@@ -64,6 +65,8 @@ export function ReadView() {
     // — which unmounts ReadView — never resets which chapter is open.
     const selected = useReadStore(s => s.selectedDoc)
     const setSelected = useReadStore(s => s.setSelectedDoc)
+    const sidebarOpen = useReadStore(s => s.sidebarOpen)
+    const setSidebarOpen = useReadStore(s => s.setSidebarOpen)
     const [content, setContent] = useState('')
     const [entries, setEntries] = useState<Record<string, { record: string }> | undefined>(undefined)
     const fontSize = useViewStore(s => s.fontSize)
@@ -143,8 +146,28 @@ export function ReadView() {
 
     return (
         <div className="h-full flex">
+            {/* Collapsed: a thin strip to reopen the contents sidebar. */}
+            {!sidebarOpen && (
+                <button
+                    onClick={() => setSidebarOpen(true)}
+                    title="Show contents"
+                    className="w-7 shrink-0 border-r border-white/5 flex items-start justify-center pt-2.5 text-white/30 hover:text-white/70 hover:bg-white/5 transition-colors"
+                >
+                    <ChevronDoubleRightIcon className="w-3.5 h-3.5" />
+                </button>
+            )}
             {/* Chapter list + per-chapter outline */}
-            <div className="w-56 shrink-0 border-r border-white/5 overflow-y-auto">
+            <div className={`${sidebarOpen ? 'w-56' : 'hidden'} shrink-0 border-r border-white/5 overflow-y-auto`}>
+                <div className="flex items-center justify-between pl-3 pr-1.5 py-1.5 border-b border-white/5">
+                    <span className="text-[10px] uppercase tracking-wider text-white/25">Contents</span>
+                    <button
+                        onClick={() => setSidebarOpen(false)}
+                        title="Collapse"
+                        className="p-1 text-white/30 hover:text-white/70 rounded hover:bg-white/5 transition-colors"
+                    >
+                        <ChevronDoubleLeftIcon className="w-3.5 h-3.5" />
+                    </button>
+                </div>
                 {files.length === 0 ? (
                     <div className="p-3 text-xs text-white/20">No docs</div>
                 ) : (
