@@ -37,9 +37,9 @@ export function StorageTree() {
 /** How a hash gets its derived number from its first appearance in a document. */
 export function NumberingFlow() {
   const rows: [string, string, string][] = [
-    ['a1f3c9e2', 'Definition', '3.1'],
-    ['9c2e0f81', 'Theorem', '3.2'],
-    ['4e7d22b0', 'Corollary', '3.3'],
+    ['a1f3c9e2', 'Definition', '3.2.1'],
+    ['9c2e0f81', 'Theorem', '3.2.2'],
+    ['4e7d22b0', 'Corollary', '3.2.3'],
   ]
   return (
     <figure className="my-8">
@@ -60,7 +60,7 @@ export function NumberingFlow() {
             <Hash>a1f3c9e2…</Hash>
             <Dim>appears again</Dim>
             <span className="text-white/25">→</span>
-            <Num>3.1</Num>
+            <Num>3.2.1</Num>
             <Dim>(same hash, same number)</Dim>
           </div>
         </div>
