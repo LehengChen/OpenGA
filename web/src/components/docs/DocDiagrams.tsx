@@ -85,8 +85,6 @@ export function EdgeExample() {
       record={[
         ['sort', <>(ref[0].source, ref[1].source)<Dim>{'  = (lean, tex)'}</Dim></>],
         ['rel', 'formalizes'],
-        ['kind', 'bipartite'],
-        ['notes', 'formalizes «geodesic»'],
       ]}
     />
   )
