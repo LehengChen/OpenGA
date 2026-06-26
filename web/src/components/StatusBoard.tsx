@@ -7,7 +7,7 @@ const PROJECT_PATH =
   process.env.NEXT_PUBLIC_PROJECT_PATH || '/Users/moqian/OpenGALib/projects/riemannian-geometry'
 
 interface LeanNode { name?: string; title?: string; sort?: string; state?: string; file?: string; line?: number }
-interface Snapshot { total: number; proven: number; open: LeanNode[]; at: string }
+interface Snapshot { total: number; open: LeanNode[]; at: string }
 
 // Pull the live store and reduce it to the formalization status. The single
 // source of truth is each lean atom's `state` field (sorry | proven) — nothing
@@ -24,7 +24,7 @@ function reduce(entries: Record<string, { ref: string[]; record: string }>): Sna
   const open = lean
     .filter((r) => r.state === 'sorry')
     .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
-  return { total: lean.length, proven: lean.length - open.length, open, at: new Date().toLocaleTimeString() }
+  return { total: lean.length, open, at: new Date().toLocaleTimeString() }
 }
 
 export function StatusBoard() {
@@ -65,8 +65,6 @@ export function StatusBoard() {
     )
   }
 
-  const pct = snap.total ? Math.round((snap.proven / snap.total) * 1000) / 10 : 0
-
   return (
     <>
       <h2 id="summary" className="text-xl font-semibold text-white/85 mt-2 mb-6 scroll-mt-20 flex items-baseline gap-3">
@@ -76,11 +74,10 @@ export function StatusBoard() {
         </span>
       </h2>
 
-      <dl className="flex mb-10">
+      <dl className="flex mb-5">
         {[
-          { label: 'Declarations', value: snap.total },
-          { label: 'Proven', value: snap.proven },
-          { label: 'Open', value: snap.open.length },
+          { label: 'Open sorries', value: snap.open.length },
+          { label: 'Declarations formalized', value: snap.total },
         ].map((s, i) => (
           <div key={s.label} className={i === 0 ? 'pr-10' : 'px-10 border-l border-white/10'}>
             <dd className="text-4xl text-white/90 tabular-nums leading-none">{s.value}</dd>
@@ -89,13 +86,11 @@ export function StatusBoard() {
         ))}
       </dl>
 
-      <div className="mb-2 flex items-baseline justify-between text-[13px] text-white/40">
-        <span>{snap.proven} of {snap.total} machine-checked</span>
-        <span className="tabular-nums">{pct}%</span>
-      </div>
-      <div className="h-1 rounded-full bg-white/[0.07] overflow-hidden mb-14">
-        <div className="h-full rounded-full bg-white/35" style={{ width: `${pct}%` }} />
-      </div>
+      <p className="text-[13px] leading-relaxed text-white/35 mb-14 max-w-xl">
+        These count only what has been written in Lean so far. How much of the
+        textbook remains to formalize is not yet enumerated, so this is a live
+        to-do list of open <code className="text-cyan-300/80 bg-white/[0.06] px-1 py-0.5 rounded text-[12px] font-mono">sorry</code>s — not a completion percentage.
+      </p>
 
       <h2 id="open-problems" className="text-xl font-semibold text-white/85 mt-14 mb-4 scroll-mt-20">
         Open problems
