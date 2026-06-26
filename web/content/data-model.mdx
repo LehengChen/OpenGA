@@ -50,9 +50,17 @@ graph is a typed network, not a bare dependency tree.
 
 ## Derived numbering
 
-Statement numbers are never stored. A card's number is a function of where it first
-appears — `§section.item` within its chapter — so moving or reordering a card
-re-numbers it everywhere, and the same hash always shows a consistent number.
+A card's identity is its hash, not a number — but a reader still wants to see
+"Theorem 7.2.8". So numbers are **derived, never stored**. Within a project, the
+documents are scanned in order and each hash is assigned a number the first time it
+appears: `chapter.section.item`, where the chapter comes from the document's
+position and the rest from the order of entries inside it.
+
+Because the number is a function of where a hash first occurs *in that project*, the
+same content-addressed card can carry different numbers in different projects, yet
+stays perfectly consistent within one. Reorder a section, move a card, or drop in a
+new one, and everything renumbers itself at once — there is nothing to keep in sync
+by hand, and no number to ever go stale.
 
 ## References
 
