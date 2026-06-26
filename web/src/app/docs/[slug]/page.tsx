@@ -23,16 +23,30 @@ const textOf = (c: any): string =>
 const components = {
   h2: ({ children }: any) => <h2 id={slug(textOf(children))} className="text-xl font-semibold text-white/85 mt-14 mb-3 scroll-mt-20">{children}</h2>,
   h3: ({ children }: any) => <h3 id={slug(textOf(children))} className="text-base font-medium text-white/80 mt-8 mb-2 scroll-mt-20">{children}</h3>,
-  p: ({ children }: any) => <p className="text-[15px] leading-relaxed text-white/55 mb-4">{children}</p>,
+  p: ({ children }: any) => {
+    // A References entry starts with its citation key, e.g. "[Lam12] …".
+    // Give it an id so inline citation marks can jump straight to it.
+    const m = textOf(children).match(/^\s*\[([A-Za-z0-9+]+)\]/)
+    const id = m ? `ref-${m[1].toLowerCase()}` : undefined
+    return <p id={id} className={`text-[15px] leading-relaxed text-white/55 mb-4${id ? ' scroll-mt-24' : ''}`}>{children}</p>
+  },
   ul: ({ children }: any) => <ul className="list-disc list-inside text-[15px] text-white/55 mb-4 space-y-1">{children}</ul>,
   ol: ({ children }: any) => <ol className="text-[15px] text-white/55 mb-4 space-y-2 list-none">{children}</ol>,
   li: ({ children }: any) => <li>{children}</li>,
   strong: ({ children }: any) => <strong className="text-white/80 font-medium">{children}</strong>,
   em: ({ children }: any) => <em className="italic text-white/45">{children}</em>,
   a: ({ href, children }: any) => {
-    const internal = typeof href === 'string' && href.startsWith('/')
+    const h = typeof href === 'string' ? href : ''
+    // Citation mark: paper-style [Key] that jumps to the References entry. No
+    // underline; bracketed and muted, like a bibliography reference.
+    if (h.startsWith('#ref-')) {
+      return (
+        <a href={h} className="text-white/45 hover:text-white/80 no-underline whitespace-nowrap transition-colors">[{children}]</a>
+      )
+    }
+    const inPage = h.startsWith('/') || h.startsWith('#')
     return (
-      <a href={href} {...(internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+      <a href={h} {...(inPage ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
         className="text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors">{children}</a>
     )
   },

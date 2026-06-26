@@ -1,23 +1,24 @@
-Formalizing Riemannian geometry is the means here, not the end. What we are really after are
-a few open questions about how mathematics is structured, stored, and used once it lives as a
-shared, machine-checked graph. The four below are the ones driving the work.
+Formalizing Riemannian geometry — do Carmo's textbook [doC92](#ref-doc92) as the blueprint —
+is the means here, not the end. What we are really after are a few open questions about how
+mathematics is structured, stored, and used once it lives as a shared, machine-checked graph.
+The four below are the ones driving the work.
 
 ## Formalization as the primary artifact, prose as interface
 
 The idea that mathematics can be a fully formal object — something a machine reads and checks,
-with no appeal to intuition — is old. De Bruijn's Automath did it in the 1960s, and the QED
-Manifesto later imagined a universal library of all mathematics, checked end to end. What we
-are testing is a stronger claim: that this formal object should be the *primary* one, and
-everything familiar — the prose, the diagrams, the numbering, even the Lean syntax — is an
-interface onto it.
+with no appeal to intuition — is old. De Bruijn's Automath did it in the 1960s [dB80](#ref-db80),
+and the QED Manifesto [QED94](#ref-qed94) later imagined a universal library of all mathematics,
+checked end to end. What we are testing is a stronger claim: that this formal object should be
+the *primary* one, and everything familiar — the prose, the diagrams, the numbering, even the
+Lean syntax — is an interface onto it.
 
 The reason to invert the usual order is that prose is a lossy interface. A written proof leaves
 gaps the reader is trusted to fill, and the gaps sometimes hide mistakes; Lamport has argued
-for decades that the structure ordinary proofs omit is exactly where the errors live. Voevodsky
-turned to formalization after finding errors in his own published work that had stood for years
-— for him the machine-checked version became the one you could actually rely on. Take the
-formal proof as the source, then, and the page becomes a rendering of it: generated, linked,
-and replaceable, rather than the thing itself.
+for decades that the structure ordinary proofs omit is exactly where the errors live
+[Lam12](#ref-lam12). Voevodsky turned to formalization after finding errors in his own published
+work that had stood for years [Voe14](#ref-voe14) — for him the machine-checked version became
+the one you could actually rely on. Take the formal proof as the source, then, and the page
+becomes a rendering of it: generated, linked, and replaceable, rather than the thing itself.
 
 That turns the real question into one of interface. If the proof is the artifact, what is the
 right way for a human to meet it — prose for one reader, a diagram for another, the dependency
@@ -42,25 +43,25 @@ statement and every proof as an immutable, content-addressed entry in a hypergra
 is content, so references never rot, and any piece can be reused, merged, or checked on its
 own. The open question is how far the idea carries — what a database *of mathematics itself*
 should be, and what becomes possible once a subject has one. It is the same question Simone
-Severini raises as [infrastructure for mathematics](https://simoneseverini.github.io/infrastructure-for-mathematics.html):
-a decentralized, content-addressed ecosystem whose atoms are the mathematical artifacts
-themselves, not the papers about them. Our model is described in [the data model](/docs/data-model).
+Severini raises as infrastructure for mathematics [Sev26](#ref-sev26): a decentralized,
+content-addressed ecosystem whose atoms are the mathematical artifacts themselves, not the
+papers about them. Our model is described in [the data model](/docs/data-model).
 
 ## How humans will do mathematics together
 
 Mathematics has always been a social activity. A proof becomes trusted not the moment it is
 written but as people read it, look for holes, reformulate it, and build on it — confidence
 is something a community confers over time, not a property of the symbols alone. De Millo,
-Lipton, and Perlis made this argument sharply in 1979, and Thurston put it at the center of
-how the subject actually advances: what mathematicians produce is human understanding, not
-just formal derivations.
+Lipton, and Perlis made this argument sharply in 1979 [DLP79](#ref-dlp79), and Thurston put it
+at the center of how the subject actually advances [Thu94](#ref-thu94): what mathematicians
+produce is human understanding, not just formal derivations.
 
-That social process can scale, and it can decentralize. The [Polymath](https://www.nature.com/articles/461879a)
-experiments showed that hard theorems can be attacked in the open by a loose crowd with no
-central authority. Formalization adds something new: when a proof is machine-checked, trusting
-it no longer depends on who vouches for it — anyone can run the checker. The Lean
-[mathlib](https://arxiv.org/abs/1910.09336) community is already thousands of people
-maintaining one verified library together, which a decade ago would have sounded implausible.
+That social process can scale, and it can decentralize. The Polymath experiments
+[GN09](#ref-gn09) showed that hard theorems can be attacked in the open by a loose crowd with
+no central authority. Formalization adds something new: when a proof is machine-checked,
+trusting it no longer depends on who vouches for it — anyone can run the checker. The Lean
+mathlib community [mathlib20](#ref-mathlib20) is already thousands of people maintaining one
+verified library together, which a decade ago would have sounded implausible.
 
 The open question is what this becomes when the mathematics is a public, machine-checked graph
 rather than a shelf of PDFs and a chain of referees. The social process does not disappear; it
@@ -83,31 +84,31 @@ this is where most concrete contributions land.
 
 ## References
 
-[1] M. P. do Carmo, [*Riemannian Geometry*](https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC).
+**[doC92]** M. P. do Carmo, [*Riemannian Geometry*](https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC).
 Trans. F. Flaherty. Mathematics: Theory &amp; Applications. Birkhäuser, Boston, 1992.
 
-[2] S. Severini, [*Infrastructure for Mathematics*](https://simoneseverini.github.io/infrastructure-for-mathematics.html). 2026.
-
-[3] R. A. De Millo, R. J. Lipton, and A. J. Perlis, *Social Processes and Proofs of Theorems
-and Programs*. Communications of the ACM **22**(5), 271–280, 1979.
-
-[4] W. P. Thurston, [*On Proof and Progress in Mathematics*](https://arxiv.org/abs/math/9404236).
-Bulletin of the American Mathematical Society **30**(2), 161–177, 1994.
-
-[5] T. Gowers and M. Nielsen, [*Massively Collaborative Mathematics*](https://www.nature.com/articles/461879a).
-Nature **461**, 879–881, 2009.
-
-[6] The mathlib Community, [*The Lean Mathematical Library*](https://arxiv.org/abs/1910.09336).
-Certified Programs and Proofs (CPP), 367–381, 2020.
-
-[7] N. G. de Bruijn, *A Survey of the Project Automath*. In *To H. B. Curry: Essays on
+**[dB80]** N. G. de Bruijn, *A Survey of the Project Automath*. In *To H. B. Curry: Essays on
 Combinatory Logic, Lambda Calculus and Formalism*, Academic Press, 579–606, 1980.
 
-[8] *The QED Manifesto*. In *Automated Deduction (CADE-12)*, Lecture Notes in Artificial
+**[QED94]** *The QED Manifesto*. In *Automated Deduction (CADE-12)*, Lecture Notes in Artificial
 Intelligence **814**, 238–251, 1994.
 
-[9] L. Lamport, *How to Write a 21st Century Proof*. Journal of Fixed Point Theory and
+**[Lam12]** L. Lamport, *How to Write a 21st Century Proof*. Journal of Fixed Point Theory and
 Applications **11**(1), 43–63, 2012.
 
-[10] V. Voevodsky, *The Origins and Motivations of Univalent Foundations*. The Institute
+**[Voe14]** V. Voevodsky, *The Origins and Motivations of Univalent Foundations*. The Institute
 Letter (Institute for Advanced Study), Summer 2014.
+
+**[Sev26]** S. Severini, [*Infrastructure for Mathematics*](https://simoneseverini.github.io/infrastructure-for-mathematics.html). 2026.
+
+**[DLP79]** R. A. De Millo, R. J. Lipton, and A. J. Perlis, *Social Processes and Proofs of
+Theorems and Programs*. Communications of the ACM **22**(5), 271–280, 1979.
+
+**[Thu94]** W. P. Thurston, [*On Proof and Progress in Mathematics*](https://arxiv.org/abs/math/9404236).
+Bulletin of the American Mathematical Society **30**(2), 161–177, 1994.
+
+**[GN09]** T. Gowers and M. Nielsen, [*Massively Collaborative Mathematics*](https://www.nature.com/articles/461879a).
+Nature **461**, 879–881, 2009.
+
+**[mathlib20]** The mathlib Community, [*The Lean Mathematical Library*](https://arxiv.org/abs/1910.09336).
+Certified Programs and Proofs (CPP), 367–381, 2020.
