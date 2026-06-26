@@ -1,43 +1,34 @@
-Astrolabe is an attempt to store mathematics as a single, content-addressed
-knowledge graph — something you can read like a textbook, query like a database,
-and verify like a program, all at once. It is open: anyone can add a statement, a
-proof, a better exposition, or a missing link.
+Astrolabe stores mathematics as one content-addressed knowledge graph — a body of
+results you can read like a textbook, query like a database, and check like a
+program, all at once. It is open: anyone can add a statement, a proof, a clearer
+exposition, or a missing link.
 
-## What this is
+## What it is
 
-A body of mathematics, formal and informal, kept in one graph. Every definition,
-lemma, and theorem becomes an immutable, content-addressed card; every
-machine-checked proof becomes another; and the two are linked. Nothing lives as a
-file or a PDF — the artifacts themselves are the atoms, addressed by their
-content, so any piece can be reused, merged, or checked on its own.
+Today mathematics lives in PDFs and in people's heads. We keep it as a graph
+instead. Every definition, theorem, and proof is an immutable, hash-identified
+card; a natural-language statement and its machine-checked Lean proof sit side by
+side, joined by an explicit link; every dependency is an edge. Stored this way, a
+result can be reused, recombined, and checked on its own — by a person or by a
+machine.
 
-Our first project builds Riemannian geometry into such a graph: a public,
-machine-verified textbook anyone can learn from and contribute to. But the
-questions behind it are general — see [Open Questions](/docs/challenge) — and the
-infrastructure is meant to carry any subject.
+## The questions behind it
 
-## How it works
+The interesting part is not any single proof but what opens up once mathematics is
+a shared, machine-checked object: how it should be stored, how its own structure
+can guide its growth, and how people — and increasingly technology — will build it
+together. These are the [Open Questions](/docs/challenge) driving the project, and
+how the graph itself is stored — atoms, edges, identity, derived numbering — is the
+[data model](/docs/data-model).
 
-A subject lives in the graph as two halves of the same mathematics:
+## Projects
 
-- a **natural-language layer** — the statements, transcribed faithfully;
-- a **formal layer** — the same results, written and checked in Lean.
-
-They are joined by cross-source links, so a formal proof and the prose it
-formalizes sit side by side. The formal layer acts as a logical oracle that
-exposes gaps in the prose; the prose's structure, in turn, shows where the
-formalization is still thin. We close that loop, again and again.
-
-## Where to go next
-
-- **[Open Questions](/docs/challenge)** — the core questions Astrolabe is curious
-  about, and why the mathematics is the means rather than the end.
-- **[Astrolabe: Data Model](/docs/data-model)** — how everything is stored: the
-  content-addressed hypergraph, identity hashing, typed relations, and the
-  cross-source bridge.
+The mathematics grows one project at a time. The first is the **Riemannian Geometry
+Challenge** — a public, machine-verified textbook of Riemannian geometry — open from
+the home page.
 
 ## Get involved
 
-Whether you prove a theorem, review a proof, improve the visualization, or fix a
-broken link, there is a place for you here. Open a project from the home page to
-explore what already exists.
+Prove a theorem, transcribe or sharpen an exposition, review a proof, improve the
+visualization, or fix a broken link. Anything that lands is shared, reusable, and
+built on by the next person.
