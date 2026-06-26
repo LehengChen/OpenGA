@@ -24,7 +24,7 @@ export default function Home() {
               <p className="text-sm text-white/40 mt-3">
                 A public, open initiative to build Riemannian geometry into a living, machine-verified
                 textbook — a shared foundation anyone can learn from, contribute to, reuse, and build on.
-                Modeled on do Carmo, made for everyone.
+                Made for everyone.
               </p>
             </div>
             <div className="shrink-0 flex flex-col gap-2 mt-1">

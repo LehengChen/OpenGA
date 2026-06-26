@@ -65,6 +65,24 @@ export default function RiemannianGeometryChallenge() {
           <p className="text-xs text-white/25 mt-16">
             The open problems — current challenges to pick up — go here.
           </p>
+
+          <Section title="References">
+            <ol className="space-y-2 text-sm text-white/45">
+              <li className="list-none">
+                <span className="text-white/35 mr-2">[1]</span>
+                M. P. do Carmo,{' '}
+                <a
+                  href="https://link.springer.com/book/9780817634902"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="italic text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors"
+                >
+                  Riemannian Geometry
+                </a>
+                . Trans. F. Flaherty. Mathematics: Theory &amp; Applications. Birkhäuser, Boston, 1992.
+              </li>
+            </ol>
+          </Section>
         </div>
       </main>
     </div>
