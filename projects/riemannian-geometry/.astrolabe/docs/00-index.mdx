@@ -1,11 +1,19 @@
-# Riemannian Geometry
+# Riemannian Geometry Challenge
 
-A content-addressable knowledge graph of Riemannian geometry: every definition,
-theorem and proof is a node, shared between the **natural-language** exposition
-(`source: tex`) and the **formal verification** in Lean (`source: lean`), linked
-by cross-source edges.
+A public, open effort to build Riemannian geometry into a living, machine-verified
+textbook — a shared foundation anyone can learn from, contribute to, reuse, and
+build on.
 
-Chapters follow do Carmo, *Riemannian Geometry*.
+Every definition, theorem, and proof is a node in one knowledge graph, shared
+between a **natural-language** exposition (`source: tex`) and its **formal
+verification** in Lean (`source: lean`), linked by cross-source edges. You can read
+it like a book, follow the formalization line by line, and see exactly what is
+proven and what is still open.
+
+do Carmo's *Riemannian Geometry* is the blueprint — the order and scope of the
+material, not a ceiling.
+
+## Chapters
 
 - **1.** Riemannian metrics
 - **2.** Connections; the Levi-Civita connection
@@ -13,4 +21,8 @@ Chapters follow do Carmo, *Riemannian Geometry*.
 - **4.** Curvature
 - **7.** Complete manifolds — the Hopf–Rinow theorem  ✦ *(written)*
 
-Each chapter composes the shared nodes via `\entryblock{hash}` / `\entryref{hash}{…}`.
+## Contributing
+
+Pick an open statement and formalize it, transcribe one that is still missing,
+review a proof, or improve a link. Anything that lands is shared and reusable by
+the next person.
