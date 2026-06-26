@@ -67,7 +67,7 @@ export function AtomExample() {
       hash="38c99016b279"
       refs={['38c99016b279']}
       record={[
-        ['sort', 'definition'],
+        ['sort', <>(ref[0].source)<Dim>{'  = (tex)'}</Dim></>],
         ['source', 'tex'],
         ['title', 'Geodesic sphere'],
         ['notes', String.raw`$S_\delta = \exp_p(\{v : \lVert v\rVert = \delta\})$`],

@@ -28,10 +28,10 @@ On disk this is just one file per node, named by its hash; documents reference t
 
 <StorageTree />
 
-As an entry, each is exactly `hash`, `ref`, and a `record` that carries everything else —
-`sort`, `title`, the body, and for an edge its `rel` and `kind`. A real atom (the *geodesic
-sphere* definition) and a real `(lean, tex)` edge (a Lean node *formalizes* the prose
-*geodesic*):
+As an entry, each is `hash`, `ref`, and a `record`. An entry's `sort` is just the `source`
+of its refs — its own for an atom, the pair for an edge — while the edge's `rel` says *how*
+the two ends relate. A real atom (the *geodesic sphere* definition) and a real `(lean, tex)`
+edge whose `rel` is *formalizes*:
 
 <AtomExample />
 
