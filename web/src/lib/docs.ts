@@ -8,6 +8,11 @@ export interface DocMeta {
 
 export const DOCS: DocMeta[] = [
   {
+    slug: 'introduction',
+    title: 'Introduction',
+    eyebrow: 'Riemannian Geometry Challenge',
+  },
+  {
     slug: 'challenge',
     title: 'Riemannian Geometry Challenge',
     eyebrow: 'An open public initiative',
