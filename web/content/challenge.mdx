@@ -1,100 +1,73 @@
-Formalizing Riemannian geometry — do Carmo's textbook [doC92](#ref-doc92) as the blueprint —
-is the means here, not the end. What we are really after are a few open questions about how
-mathematics is structured, stored, and used once it lives as a shared, machine-checked graph.
-The four below are the ones driving the work.
+Formalizing Riemannian geometry is the means here, not the end. What we are really after are a
+few open questions about how mathematics is structured, stored, and used once it lives as a
+shared, machine-checked graph. The four below are the ones driving the work.
 
 ## Formalization as the primary artifact, prose as interface
 
-The idea that mathematics can be a fully formal object — something a machine reads and checks,
-with no appeal to intuition — is old. De Bruijn's Automath did it in the 1960s [dB80](#ref-db80),
-and the QED Manifesto [QED94](#ref-qed94) later imagined a universal library of all mathematics,
-checked end to end. What we are testing is a stronger claim: that this formal object should be
-the *primary* one, and everything familiar — the prose, the diagrams, the numbering, even the
-Lean syntax — is an interface onto it.
+We think the formal object — the definition, the proof a machine can check — should be the
+primary one, and that everything familiar about a piece of mathematics — the prose, the diagrams,
+the numbering, even the Lean syntax — is an interface onto it: a view that can be generated,
+linked, and replaced.
 
 The reason to invert the usual order is that prose is a lossy interface. A written proof leaves
-gaps the reader is trusted to fill, and the gaps sometimes hide mistakes; Lamport has argued
-for decades that the structure ordinary proofs omit is exactly where the errors live
-[Lam12](#ref-lam12). Voevodsky turned to formalization after finding errors in his own published
-work that had stood for years [Voe14](#ref-voe14) — for him the machine-checked version became
-the one you could actually rely on. Take the formal proof as the source, then, and the page
-becomes a rendering of it: generated, linked, and replaceable, rather than the thing itself.
+gaps the reader is trusted to fill, and the gaps sometimes hide mistakes; the machine-checked
+version is the one you can actually rely on. Take the formal proof as the source, then, and a
+page becomes a rendering of it rather than the thing itself.
 
 That turns the real question into one of interface. If the proof is the artifact, what is the
 right way for a human to meet it — prose for one reader, a diagram for another, the dependency
-graph for a third, each a view regenerated from the same source? We are building the formal
-layer and its interfaces at once, to see what a subject looks like when every page is just one
-rendering of the proof underneath. What is still unproven at any moment is live on the
-[Status](/docs/status) page.
+graph for a third, each regenerated from the same source? We are curious what a subject looks
+like when every page is just one rendering of the proof underneath. What is still unproven at any
+moment is live on the [Status](/docs/status) page.
 
 ## How the structure of mathematics navigates its formalization
 
 Mathematics is not a list of results; it is a structure — what rests on what, what generalizes
-what, what is dual to what. Bourbaki built an entire program on the claim that the subject is
-organized by a few underlying structures rather than by its surface topics [Bou50](#ref-bou50),
-and category theory went further, making the relations between objects — morphism, duality,
-generalization — as much the content as the objects themselves [ML86](#ref-ml86).
+what, what is dual to what. We want that structure to be more than a description; we want it to be
+the map.
 
-We want that structure to be more than a description; we want it to be the map. In a formal
-library every result already carries its exact dependencies, so the graph of what-uses-what is
-not folklore but data — and that data can say what to build next, where a gap is hiding, which
-interface a hundred later results will end up needing. Machine provers already lean on it:
-premise selection, picking the few prior facts a goal actually needs out of thousands, is one
-of the harder and more useful problems in automated reasoning [DeepMath16](#ref-deepmath16).
+In a formal library every result already carries its exact dependencies, so the graph of
+what-uses-what is data rather than folklore — and that data can say what to build next, where a
+gap is hiding, which interface a hundred later results will end up needing. We are curious how far
+the shape of a subject can drive its own formalization, instead of a linear march through chapters.
 
-The open question is how far the shape of a subject can drive its own formalization, rather than
-a linear march through chapters — and which relations deserve to be first-class. `uses` and
-`implies` are obvious; `generalizes`, `specializes`, and `dual-to` carry real mathematical
-content, and a graph that records them is a richer object than any bibliography.
+Part of the question is which relations even deserve to be first-class. `uses` and `implies` are
+obvious; `generalizes`, `specializes`, and `dual-to` carry real mathematical content, and a graph
+that records them is a richer object than any table of contents.
 
 ## How to store mathematics
 
-What is the right substrate for a living body of mathematical knowledge? The question predates
-computers as a practical one: the QED Manifesto called for a single checked repository of all
-mathematics [QED94](#ref-qed94), and formats like OMDoc tried to give mathematical documents a
-structured, machine-processable form instead of leaving them as prose [Koh06](#ref-koh06). Both
-met the same wall — a corpus of mathematics is only as valuable as it is composable, and a shelf
-of PDFs is not.
+What is the right substrate for a living body of mathematical knowledge? A corpus of mathematics
+is only as valuable as it is composable, and a shelf of PDFs is not.
 
 We keep every statement and every proof as an immutable, content-addressed entry in a hypergraph:
 identity is the hash of the content, so references never rot, and any piece can be reused, merged,
-or checked on its own. It is the trick Git and Unison use to make code addressable by what it is
-rather than where it sits, and that IPFS uses to make storage decentralized [Ben14](#ref-ben14)
-— turned on mathematics. The model is written up separately [Li26](#ref-li26) and laid out in
-[the data model](/docs/data-model).
+or checked on its own — the same idea that makes code addressable by what it is rather than where
+it sits, turned on mathematics. The model is laid out in [the data model](/docs/data-model).
 
-The open question is how far the idea carries — what a database *of mathematics itself* should
-be, and what becomes possible once a subject has one. It is the question Simone Severini frames
-as infrastructure for mathematics [Sev26](#ref-sev26): a decentralized, content-addressed
-ecosystem whose atoms are the mathematical artifacts themselves, not the papers about them.
+We are curious how far the idea carries — what a database *of mathematics itself* should be, and
+what becomes possible once a subject has one.
 
 ## How humans will do mathematics together
 
 Mathematics has always been a social activity. A proof becomes trusted not the moment it is
-written but as people read it, look for holes, reformulate it, and build on it — confidence
-is something a community confers over time, not a property of the symbols alone. De Millo,
-Lipton, and Perlis made this argument sharply in 1979 [DLP79](#ref-dlp79), and Thurston put it
-at the center of how the subject actually advances [Thu94](#ref-thu94): what mathematicians
-produce is human understanding, not just formal derivations.
+written but as people read it, look for holes, reformulate it, and build on it — confidence is
+something a community confers over time, not a property of the symbols alone.
 
-That social process can scale, and it can decentralize. The Polymath experiments
-[GN09](#ref-gn09) showed that hard theorems can be attacked in the open by a loose crowd with
-no central authority. Formalization adds something new: when a proof is machine-checked,
-trusting it no longer depends on who vouches for it — anyone can run the checker. The Lean
-mathlib community [mathlib20](#ref-mathlib20) is already thousands of people maintaining one
-verified library together, which a decade ago would have sounded implausible.
+Formalization adds something new: when a proof is machine-checked, trusting it no longer depends
+on who vouches for it — anyone can run the checker. So the social process does not disappear; it
+changes shape.
 
-The open question is what this becomes when the mathematics is a public, machine-checked graph
-rather than a shelf of PDFs and a chain of referees. The social process does not disappear; it
-changes shape. How does a stranger attack the prose for a hidden hole, defend a proof that it
-really proves what it claims, or add a piece everyone else can immediately rely on — alone, and
-as a community with no center? We think the way people do mathematics together is about to
-change, and we want to find out how.
+We are curious what that becomes when the mathematics is a public, machine-checked graph rather
+than a shelf of PDFs and a chain of referees. How does a stranger attack the prose for a hidden
+hole, defend a proof that it really proves what it claims, or add a piece everyone else can
+immediately rely on — alone, and as a community with no center? We think the way people do
+mathematics together is about to change, and we want to find out how.
 
 ## How we build it
 
-Underneath the questions is a working system, and every part of it is open to improvement —
-this is where most concrete contributions land.
+Underneath the questions is a working system, and every part of it is open to improvement — this
+is where most concrete contributions land.
 
 - **Visualization** — graph layout that stays legible across thousands of linked results.
 - **The reader** — navigation, search, and cross-references that never lose the reader.
@@ -102,52 +75,3 @@ this is where most concrete contributions land.
 - **Integrity** — stable content hashing, deduplication and merge, referential closure as the graph is rewritten.
 - **The loop** — make audit → formalize → bridge → re-audit robust and, where possible, automatic.
 - **CI and fitness functions** — architectural linters that catch drift before it lands.
-
-## References
-
-**[doC92]** M. P. do Carmo, [*Riemannian Geometry*](https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC).
-Trans. F. Flaherty. Mathematics: Theory &amp; Applications. Birkhäuser, Boston, 1992.
-
-**[dB80]** N. G. de Bruijn, *A Survey of the Project Automath*. In *To H. B. Curry: Essays on
-Combinatory Logic, Lambda Calculus and Formalism*, Academic Press, 579–606, 1980.
-
-**[QED94]** *The QED Manifesto*. In *Automated Deduction (CADE-12)*, Lecture Notes in Artificial
-Intelligence **814**, 238–251, 1994.
-
-**[Lam12]** L. Lamport, *How to Write a 21st Century Proof*. Journal of Fixed Point Theory and
-Applications **11**(1), 43–63, 2012.
-
-**[Voe14]** V. Voevodsky, *The Origins and Motivations of Univalent Foundations*. The Institute
-Letter (Institute for Advanced Study), Summer 2014.
-
-**[Bou50]** N. Bourbaki, *The Architecture of Mathematics*. American Mathematical Monthly
-**57**(4), 221–232, 1950.
-
-**[ML86]** S. Mac Lane, *Mathematics: Form and Function*. Springer-Verlag, New York, 1986.
-
-**[DeepMath16]** A. A. Alemi, F. Chollet, N. Eén, G. Irving, C. Szegedy, and J. Urban,
-[*DeepMath — Deep Sequence Models for Premise Selection*](https://arxiv.org/abs/1606.04442).
-Advances in Neural Information Processing Systems (NeurIPS) **29**, 2016.
-
-**[Koh06]** M. Kohlhase, *OMDoc — An Open Markup Format for Mathematical Documents (Version 1.2)*.
-Lecture Notes in Artificial Intelligence **4180**, Springer, 2006.
-
-**[Ben14]** J. Benet, [*IPFS — Content Addressed, Versioned, P2P File System*](https://arxiv.org/abs/1407.3561).
-arXiv:1407.3561, 2014.
-
-**[Li26]** X. Li, [*Astrolabe: A Content-Addressable Hypergraph for Semantic Knowledge Management*](https://arxiv.org/abs/2604.10435).
-arXiv:2604.10435, 2026.
-
-**[Sev26]** S. Severini, [*Infrastructure for Mathematics*](https://simoneseverini.github.io/infrastructure-for-mathematics.html). 2026.
-
-**[DLP79]** R. A. De Millo, R. J. Lipton, and A. J. Perlis, *Social Processes and Proofs of
-Theorems and Programs*. Communications of the ACM **22**(5), 271–280, 1979.
-
-**[Thu94]** W. P. Thurston, [*On Proof and Progress in Mathematics*](https://arxiv.org/abs/math/9404236).
-Bulletin of the American Mathematical Society **30**(2), 161–177, 1994.
-
-**[GN09]** T. Gowers and M. Nielsen, [*Massively Collaborative Mathematics*](https://www.nature.com/articles/461879a).
-Nature **461**, 879–881, 2009.
-
-**[mathlib20]** The mathlib Community, [*The Lean Mathematical Library*](https://arxiv.org/abs/1910.09336).
-Certified Programs and Proofs (CPP), 367–381, 2020.
