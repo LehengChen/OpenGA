@@ -47,8 +47,10 @@ function EditorPage() {
                     <button onClick={toggleExplorer} className="p-1.5 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Toggle Explorer">
                         <Bars3BottomLeftIcon className="w-4 h-4" />
                     </button>
-                    <button onClick={() => router.push('/')} className="text-white/30 hover:text-white/70 transition-colors" title="Home">←</button>
-                    <span className="text-sm font-medium text-white/70">{projectPath.split('/').pop()}</span>
+                    <button onClick={() => router.push('/')} className="flex items-center gap-1 text-xs text-white/30 hover:text-white/70 transition-colors" title="Back to home">
+                        <span>←</span><span>Back to home</span>
+                    </button>
+                    <span className="text-sm font-medium text-white/70 ml-1">{projectPath.split('/').pop()}</span>
                 </div>
                 <div className="flex items-center gap-1">
                     <button onClick={() => useViewStore.getState().decreaseFontSize()} className="p-1 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Decrease font size">
