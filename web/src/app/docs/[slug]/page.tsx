@@ -41,7 +41,7 @@ const components = {
     // underline; bracketed and muted, like a bibliography reference.
     if (h.startsWith('#ref-')) {
       return (
-        <a href={h} className="text-white/45 hover:text-white/80 no-underline whitespace-nowrap transition-colors">[{children}]</a>
+        <a href={h} className="text-[#e67e22] hover:text-[#ff6b35] no-underline whitespace-nowrap transition-colors">[{children}]</a>
       )
     }
     const inPage = h.startsWith('/') || h.startsWith('#')
