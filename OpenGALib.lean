@@ -1,5 +1,6 @@
 import OpenGALib.Riemannian.Geodesic.HopfRinow
 import OpenGALib.Riemannian.Geodesic.HopfRinow.EVariationLePathELength
+import OpenGALib.Riemannian.Geodesic.SymmetryLemma
 
 /-!
 # OpenGALib — Hopf–Rinow closed-loop slice

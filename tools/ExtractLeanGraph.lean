@@ -1,5 +1,6 @@
 import OpenGALib.Riemannian.Geodesic.HopfRinow
 import OpenGALib.Riemannian.Geodesic.HopfRinow.EVariationLePathELength
+import OpenGALib.Riemannian.Geodesic.SymmetryLemma
 import Lean
 
 /-!
@@ -15,7 +16,8 @@ open Lean Elab Command
 /-- Modules whose declarations become Lean nodes. -/
 def targetModules : List String :=
   ["OpenGALib.Riemannian.Geodesic.HopfRinow",
-   "OpenGALib.Riemannian.Geodesic.HopfRinow.EVariationLePathELength"]
+   "OpenGALib.Riemannian.Geodesic.HopfRinow.EVariationLePathELength",
+   "OpenGALib.Riemannian.Geodesic.SymmetryLemma"]
 
 /-- The module a constant was defined in (project constants only). -/
 def constModule (env : Environment) (d : Name) : Option String :=
