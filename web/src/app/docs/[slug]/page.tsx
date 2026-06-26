@@ -29,10 +29,13 @@ const components = {
   li: ({ children }: any) => <li>{children}</li>,
   strong: ({ children }: any) => <strong className="text-white/80 font-medium">{children}</strong>,
   em: ({ children }: any) => <em className="italic text-white/45">{children}</em>,
-  a: ({ href, children }: any) => (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      className="text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors">{children}</a>
-  ),
+  a: ({ href, children }: any) => {
+    const internal = typeof href === 'string' && href.startsWith('/')
+    return (
+      <a href={href} {...(internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+        className="text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors">{children}</a>
+    )
+  },
   hr: () => <hr className="border-white/10 my-10" />,
   code: ({ children }: any) => <code className="text-cyan-300/80 bg-white/[0.06] px-1.5 py-0.5 rounded text-[13px] font-mono">{children}</code>,
 }

@@ -1,90 +1,45 @@
-An open, public effort to build Riemannian geometry into a living, machine-verified
-textbook — grounded in do Carmo, owned by everyone. Below is the working list of open
-problems. Pick one, close it, and your work becomes part of a foundation anyone can reuse.
+The hard part of this project is not finishing a proof. It is a handful of questions about
+what mathematics *becomes* once it is a living, machine-checked, shared object — and how
+people will work with it. These are the questions we are curious about. Formalizing
+Riemannian geometry, with do Carmo as our blueprint, is how we explore them; it is the
+means, not the end.
 
-The work falls into five kinds. The first two build the textbook, the third keeps it
-honest, and the last two are the graph and the platform that hold it all together. Each
-bullet is a concrete place to start.
+## Formalization as the primary artifact, prose as interface
 
-## Formalization — proving it in Lean
+For centuries the textbook *was* the mathematics, and the formal content lived in the
+reader's head. We invert that. The formal object — the definition, the proof a machine can
+check — is the primary artifact; the prose, the diagrams, the numbering, even the Lean
+syntax are interfaces onto it: views that can be generated, linked, and replaced. What does
+a subject look like when the proof is the source and every page is just one rendering of it,
+and what is the right interface for a human to meet it through? What is still unproven at any
+moment is live on the [Status](/docs/status) page.
 
-Complete the formalization: every result in the textbook, written as a Lean proof a
-machine can check. What is still open is live on the [Status](/docs/status) page.
+## How the structure of mathematics navigates its formalization
 
-## Exposition — the natural-language textbook
+Mathematics is not a list of results; it is a structure — what rests on what, what
+generalizes what, what is dual to what. We want that structure itself to be the map: to say
+what to build next, where a gap is hiding, which interface a hundred later results will end
+up needing. Can the shape of the subject drive its own formalization, instead of a linear
+march through chapters? This is mathematics read as a graph and used as a compass — and the
+question of which relations even matter: `uses`, `implies`, `generalizes`, `dual-to`.
 
-Make the written layer a faithful, readable textbook: every statement transcribed, every
-prose argument complete.
+## How to store mathematics
 
-- **Transcribe the statements still missing**, faithfully, chapter by chapter.
-- **Proof sketches** for results currently stated without one.
-- **Worked examples and exercises** carried over from do Carmo.
-- **Notation consistency** across chapters — one symbol, one meaning.
-- **Strengthen under-linked statements** — long cards with few links usually hide concepts
-  that were never wired in.
+What is the right substrate for a living body of mathematical knowledge? We keep every
+statement and every proof as an immutable, content-addressed entry in a hypergraph: identity
+is content, so references never rot, and any piece can be reused, merged, or checked on its
+own. The open question is how far the idea carries — what a database *of mathematics itself*
+should be, and what becomes possible once a subject has one. The model is described in
+[the data model](/docs/data-model).
 
-## Verification — attack and defense
+## How humans will do mathematics together
 
-Keep the two layers honest by pitting them against each other: the formal side exposes
-holes in the prose, and human review confirms the formal side really proves what it claims.
-
-- **Attack the prose** — use Lean as a logical oracle to surface unstated hypotheses and
-  steps that do not follow.
-- **Defend the proofs** — review each Lean proof for correctness, not just that it compiles.
-- **Bridge faithfulness** — confirm a `(lean, tex)` link formalizes the *same* statement,
-  not a weaker or shifted one.
-- **Flag "proven modulo interface"** — interface fields that are really axioms in disguise.
-- **Audit the derived numbering** against do Carmo's own.
-
-## Meta-mathematics — understanding the structure
-
-Beneath the theorems sits the question of what it means to *understand* one: its real
-antecedents and consequences, the cleanest interface to state it through, and how to
-measure all of that. This is mathematics about the mathematics.
-
-- **Better interfaces** — for each object (a connection, a metric, curvature), the cleanest
-  API a proof should depend on. The interface *is* the reusable surface; a result proven
-  only "modulo interface" is exactly a bet on having chosen it well.
-- **Antecedents and consequences** — make every result's true dependencies, and what it
-  unlocks, explicit as typed edges rather than folklore.
-- **The relation taxonomy** — what *kinds* of mathematical dependency exist: `uses`,
-  `implies`, `specializes`, `generalizes`, `dual-to`, `example-of`.
-- **Hypergraph metrics** — how to measure structure and understanding: coverage, concept
-  density, the length-vs-connectivity heuristic for finding gaps.
-- **Multi-ary hyperedges** — a theorem depends on its hypotheses *jointly*; a binary edge
-  cannot say that. Build the n-ary layer on top of the binary one.
-
-## Knowledge graph — the Astrolabe layer
-
-Keep the content-addressed store itself clean and trustworthy as the graph grows.
-
-- **The self-iterating loop** — make audit → formalize → bridge → re-audit robust and, where
-  possible, automatic.
-- **Deduplication and merge** of equivalent cards.
-- **A coverage dashboard** — what fraction of do Carmo is machine-checked.
-- **Identity and integrity** — stable hashing across re-extraction, referential closure as
-  the graph is rewritten.
-
-## Platform — visualization and tools
-
-Build the public surface: make a graph of thousands of results legible, fast, and a pleasure
-to explore, contribute to, and reuse.
-
-- **Graph layout and visualization** that stays legible at scale.
-- **Reader experience** — navigation, search, and cross-references that do not lose the reader.
-- **The public website and onboarding** for new contributors.
-- **The extract / register / audit toolchain** that moves results between Lean and the store.
-- **CI and fitness functions** — architectural linters that catch drift before it lands.
-
-## How we work together
-
-**Challengers** attack the written mathematics — find the holes the prose hides, the
-assumption never stated, the step that does not follow.
-
-**Reviewers** defend the record — read a proof and confirm it really proves what it claims.
-
-**Contributors** close the gaps — write, formalize, design, connect. Everything that lands
-is shared, reusable, and built on by the next person.
+When mathematics is a public, machine-checked graph instead of a shelf of PDFs, how do people
+read it, trust it, contribute to it, and build on it — alone, and as a decentralized community
+with no central authority? How does a stranger attack the prose for a hidden hole, defend a
+proof that it really proves what it claims, or add a piece everyone else can immediately rely
+on? We think the way people do mathematics together is about to change, and we want to find
+out how.
 
 ## References
 
