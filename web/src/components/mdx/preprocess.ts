@@ -14,6 +14,8 @@ import type { Numbering } from './numbering'
 export function preprocess(content: string, numbering?: Numbering): string {
     let result = processEntryRefs(content, numbering)
     result = processEntryBlocks(result, numbering)
+    // \status → a live formalization-status block (rendered from the in-memory store)
+    result = result.replace(/\\status\b/g, '<div data-status="true"></div>')
     return result
 }
 
