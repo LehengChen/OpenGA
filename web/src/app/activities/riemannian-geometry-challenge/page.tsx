@@ -33,13 +33,13 @@ export default function RiemannianGeometryChallenge() {
             do&nbsp;Carmo&apos;s <span className="italic">Riemannian Geometry</span>. We build a single
             content-addressed knowledge graph in which the natural-language (tex) layer and the formal
             (Lean) layer are linked by cross-source hyperedges, and we advance it with a self-reinforcing
-            tex&nbsp;↔&nbsp;Lean loop. The north star is a fully formalized Hopf–Rinow theorem, and beyond.
+            tex&nbsp;↔&nbsp;Lean loop. Chapter by chapter, the book becomes a machine-checked, navigable graph.
           </p>
 
           <Section title="Challenge tracks">
             <Track name="Graph visualization" blurb="Optimize the layout / rendering algorithm for the hypergraph — make a 1000-node graph legible and fast." />
             <Track name="Frontend design" blurb="The Astrolabe reading / network / detail UI: navigation, card rendering, the cross-source experience." />
-            <Track name="Mathematical completeness" blurb="Discharge the open Lean sorrys — the formalization frontier toward Hopf–Rinow and the comparison theorems." />
+            <Track name="Mathematical completeness" blurb="Discharge the open Lean sorrys — the formalization frontier, advancing chapter by chapter across the book." />
             <Track name="Math content review" blurb="Review the formal proofs and audit the do Carmo transcriptions for fidelity and logical gaps." />
           </Section>
 
