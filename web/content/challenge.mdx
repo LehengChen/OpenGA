@@ -29,23 +29,44 @@ rendering of the proof underneath. What is still unproven at any moment is live 
 
 ## How the structure of mathematics navigates its formalization
 
-Mathematics is not a list of results; it is a structure — what rests on what, what
-generalizes what, what is dual to what. We want that structure itself to be the map: to say
-what to build next, where a gap is hiding, which interface a hundred later results will end
-up needing. Can the shape of the subject drive its own formalization, instead of a linear
-march through chapters? This is mathematics read as a graph and used as a compass — and the
-question of which relations even matter: `uses`, `implies`, `generalizes`, `dual-to`.
+Mathematics is not a list of results; it is a structure — what rests on what, what generalizes
+what, what is dual to what. Bourbaki built an entire program on the claim that the subject is
+organized by a few underlying structures rather than by its surface topics [Bou50](#ref-bou50),
+and category theory went further, making the relations between objects — morphism, duality,
+generalization — as much the content as the objects themselves [ML86](#ref-ml86).
+
+We want that structure to be more than a description; we want it to be the map. In a formal
+library every result already carries its exact dependencies, so the graph of what-uses-what is
+not folklore but data — and that data can say what to build next, where a gap is hiding, which
+interface a hundred later results will end up needing. Machine provers already lean on it:
+premise selection, picking the few prior facts a goal actually needs out of thousands, is one
+of the harder and more useful problems in automated reasoning [DeepMath16](#ref-deepmath16).
+
+The open question is how far the shape of a subject can drive its own formalization, rather than
+a linear march through chapters — and which relations deserve to be first-class. `uses` and
+`implies` are obvious; `generalizes`, `specializes`, and `dual-to` carry real mathematical
+content, and a graph that records them is a richer object than any bibliography.
 
 ## How to store mathematics
 
-What is the right substrate for a living body of mathematical knowledge? We keep every
-statement and every proof as an immutable, content-addressed entry in a hypergraph: identity
-is content, so references never rot, and any piece can be reused, merged, or checked on its
-own. The open question is how far the idea carries — what a database *of mathematics itself*
-should be, and what becomes possible once a subject has one. It is the same question Simone
-Severini raises as infrastructure for mathematics [Sev26](#ref-sev26): a decentralized,
-content-addressed ecosystem whose atoms are the mathematical artifacts themselves, not the
-papers about them. Our model is described in [the data model](/docs/data-model).
+What is the right substrate for a living body of mathematical knowledge? The question predates
+computers as a practical one: the QED Manifesto called for a single checked repository of all
+mathematics [QED94](#ref-qed94), and formats like OMDoc tried to give mathematical documents a
+structured, machine-processable form instead of leaving them as prose [Koh06](#ref-koh06). Both
+met the same wall — a corpus of mathematics is only as valuable as it is composable, and a shelf
+of PDFs is not.
+
+We keep every statement and every proof as an immutable, content-addressed entry in a hypergraph:
+identity is the hash of the content, so references never rot, and any piece can be reused, merged,
+or checked on its own. It is the trick Git and Unison use to make code addressable by what it is
+rather than where it sits, and that IPFS uses to make storage decentralized [Ben14](#ref-ben14)
+— turned on mathematics. The model is written up separately [Li26](#ref-li26) and laid out in
+[the data model](/docs/data-model).
+
+The open question is how far the idea carries — what a database *of mathematics itself* should
+be, and what becomes possible once a subject has one. It is the question Simone Severini frames
+as infrastructure for mathematics [Sev26](#ref-sev26): a decentralized, content-addressed
+ecosystem whose atoms are the mathematical artifacts themselves, not the papers about them.
 
 ## How humans will do mathematics together
 
@@ -98,6 +119,24 @@ Applications **11**(1), 43–63, 2012.
 
 **[Voe14]** V. Voevodsky, *The Origins and Motivations of Univalent Foundations*. The Institute
 Letter (Institute for Advanced Study), Summer 2014.
+
+**[Bou50]** N. Bourbaki, *The Architecture of Mathematics*. American Mathematical Monthly
+**57**(4), 221–232, 1950.
+
+**[ML86]** S. Mac Lane, *Mathematics: Form and Function*. Springer-Verlag, New York, 1986.
+
+**[DeepMath16]** A. A. Alemi, F. Chollet, N. Eén, G. Irving, C. Szegedy, and J. Urban,
+[*DeepMath — Deep Sequence Models for Premise Selection*](https://arxiv.org/abs/1606.04442).
+Advances in Neural Information Processing Systems (NeurIPS) **29**, 2016.
+
+**[Koh06]** M. Kohlhase, *OMDoc — An Open Markup Format for Mathematical Documents (Version 1.2)*.
+Lecture Notes in Artificial Intelligence **4180**, Springer, 2006.
+
+**[Ben14]** J. Benet, [*IPFS — Content Addressed, Versioned, P2P File System*](https://arxiv.org/abs/1407.3561).
+arXiv:1407.3561, 2014.
+
+**[Li26]** X. Li, [*Astrolabe: A Content-Addressable Hypergraph for Semantic Knowledge Management*](https://arxiv.org/abs/2604.10435).
+arXiv:2604.10435, 2026.
 
 **[Sev26]** S. Severini, [*Infrastructure for Mathematics*](https://simoneseverini.github.io/infrastructure-for-mathematics.html). 2026.
 
