@@ -9,14 +9,14 @@ export function LeanNetsEntryRef({ hash, record, color, number, displayText, ofC
     const selectObj = useSelectObjStore(s => s.select)
 
     // Manual mode: \entryref{hash}{text} — use displayText as-is
-    // Auto mode: \entryref{hash} — derived "Sort N.M [of Chapter C]"
+    // Auto mode: \entryref{hash} — derived "Sort chapter.section.item" (the
+    // chapter prefix makes it self-describing, so no "of Chapter C" suffix).
     let text = displayText
     if (!text) {
         const parsed = parseRecord(record)
         const label = parsed ? (SORT_LABELS[parsed.sort] || parsed.sort || '') : ''
         if (number) {
             text = label ? `${label} ${number}` : number
-            if (ofChapter) text += ` of Chapter ${ofChapter}`
         } else if (parsed?.title) {
             text = parsed.title
         } else {

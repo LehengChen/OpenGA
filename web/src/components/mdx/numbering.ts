@@ -13,7 +13,7 @@
  */
 export interface EntryNumber {
     chapter: number
-    num: string        // "§.item", e.g. "2.8"
+    num: string        // "chapter.section.item", e.g. "7.2.8"
 }
 
 export type Numbering = Map<string, EntryNumber>
@@ -65,8 +65,11 @@ export function buildProjectNumbering(
     const sorted = [...docs].sort((a, b) => a.filename.localeCompare(b.filename))
     for (const { filename, content } of sorted) {
         const chapter = chapterOf(content, filename)
-        for (const [hash, num] of numberDoc(content, entries)) {
-            if (!global.has(hash)) global.set(hash, { chapter, num })
+        // Full number is chapter.section.item — the chapter prefix is derived
+        // from the doc's position (its `# Chapter N` / filename), so every card
+        // gets a globally-unique, self-describing number (Hopf–Rinow → 7.2.8).
+        for (const [hash, secItem] of numberDoc(content, entries)) {
+            if (!global.has(hash)) global.set(hash, { chapter, num: `${chapter}.${secItem}` })
         }
     }
     return global
