@@ -18,24 +18,18 @@ export default function Home() {
           <p className="text-sm text-white/40 mb-20">Manage your knowledge network</p>
 
           <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4">Current activity</h2>
-          <div className="flex items-start justify-between gap-8">
-            <div>
-              <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry Challenge</h3>
-              <p className="text-sm text-white/40 mt-3">
-                A public, open initiative to build Riemannian geometry into a living, machine-verified
-                textbook — a shared foundation anyone can learn from, contribute to, reuse, and build on.
-                Made for everyone.
-              </p>
-            </div>
-            <div className="shrink-0 flex flex-col gap-2 mt-1">
-              <Link
-                href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
-                className="px-4 py-1.5 text-xs text-center whitespace-nowrap text-white/65 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
-              >
-                Open the project
-              </Link>
-            </div>
-          </div>
+          <Link
+            href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
+            className="group inline-flex items-center gap-3 text-2xl font-medium text-white/85 hover:text-white transition-colors"
+          >
+            Riemannian Geometry Challenge
+            <span className="text-white/25 group-hover:text-white/70 group-hover:translate-x-1 transition-all duration-200">→</span>
+          </Link>
+          <p className="text-sm text-white/40 mt-3 max-w-2xl">
+            A public, open initiative to build Riemannian geometry into a living, machine-verified
+            textbook — a shared foundation anyone can learn from, contribute to, reuse, and build on.
+            Made for everyone.
+          </p>
         </div>
       </main>
     </div>
