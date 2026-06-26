@@ -7,14 +7,25 @@ formal declaration, every relationship is one immutable, hash-identified entry.
 An Astrolabe store is a flat set of **entries**. Each entry is a triple
 `(hash, ref, record)`:
 
-- **`ref`** — an ordered list of hashes the entry points to.
-  - `|ref| = 1` (a self-reference) → an **atom**: a leaf of content.
-  - `|ref| = 2` → an **edge**: a binary relation.
-  - `|ref| ≥ 3` → a **hyperedge**: an n-ary relation.
+- **`ref`** — an ordered list of the hashes this entry points to.
 - **`record`** — an opaque payload, read by a domain plugin (here: a mathematical
   statement, or a Lean declaration).
 - **`hash`** — `SHA-256(ref₁ ‖ 0x00 ‖ … ‖ record)`, truncated. Identity *is*
   content: the same content always yields the same hash, everywhere it appears.
+
+The length of `ref` is what an entry *is*. Two kinds are primitive:
+
+- an **atom** (`|ref| = 1`, a self-reference) — a leaf of content: a statement, a proof.
+- an **edge** (`|ref| = 2`) — a binary relation between two atoms.
+
+Atoms and edges are already a **traditional graph**: each edge renders as a line
+between two nodes. That is the layer the project runs on today.
+
+A **hyperedge** (`|ref| ≥ 3`) is not a third primitive but a structure built *on* that
+graph. When one node is cited by many results and itself cites many, that whole bundle
+— several nodes joined at once — is one n-ary relation, captured as a single entry.
+
+<GraphLayers />
 
 Because identity is the hash of content, a card can be re-derived, re-referenced,
 deduplicated, and merged without ambiguity — the property the whole loop relies on.
