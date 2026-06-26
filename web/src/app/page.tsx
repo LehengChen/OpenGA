@@ -18,15 +18,20 @@ export default function Home() {
           <p className="text-sm text-white/40 mb-20">Manage your knowledge network</p>
 
           <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4">Projects</h2>
-          <Link
-            href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
-            className="text-2xl font-medium text-white/85 hover:text-white border-b border-white/15 hover:border-white/50 transition-colors pb-0.5"
-          >
-            Riemannian Geometry
-          </Link>
-          <p className="text-sm text-white/40 mt-3">
-            A shared tex + Lean knowledge graph of Riemannian geometry — chapters following do Carmo
-          </p>
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <h3 className="text-2xl font-medium text-white/85">Riemannian Geometry</h3>
+              <p className="text-sm text-white/40 mt-3">
+                A shared tex + Lean knowledge graph of Riemannian geometry — chapters following do Carmo
+              </p>
+            </div>
+            <Link
+              href={`/local/edit?path=${encodeURIComponent(PROJECT_PATH)}`}
+              className="shrink-0 mt-1 px-4 py-1.5 text-xs uppercase tracking-wider text-white/60 hover:text-white border border-white/20 hover:border-white/50 rounded transition-colors"
+            >
+              Open
+            </Link>
+          </div>
 
           <h2 className="text-xs uppercase tracking-wider text-white/30 mb-4 mt-20">Current activity</h2>
           <div className="flex items-start justify-between gap-6">
