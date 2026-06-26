@@ -1,42 +1,44 @@
-A public, open initiative to build Riemannian geometry into a living,
-machine-verified textbook — a shared foundation anyone can learn from,
-contribute to, reuse, and build on.
+Astrolabe is an attempt to store mathematics as a single, content-addressed
+knowledge graph — something you can read like a textbook, query like a database,
+and verify like a program, all at once. It is open: anyone can add a statement, a
+proof, a better exposition, or a missing link.
 
 ## What this is
 
-We are turning a course in Riemannian geometry into a single, content-addressed
-knowledge graph. Every definition, lemma, and theorem becomes an immutable card;
-every formal proof becomes another; and the two are linked. The result is meant
-to be read like a textbook, queried like a database, and verified like a program
-— all at once.
+A body of mathematics, formal and informal, kept in one graph. Every definition,
+lemma, and theorem becomes an immutable, content-addressed card; every
+machine-checked proof becomes another; and the two are linked. Nothing lives as a
+file or a PDF — the artifacts themselves are the atoms, addressed by their
+content, so any piece can be reused, merged, or checked on its own.
 
-Manning P. do Carmo's *Riemannian Geometry* serves as the **blueprint** — the
-order and scope of the material — not a ceiling. The graph is open: anyone can
-add a statement, a proof, a better exposition, or a missing link.
+Our first project builds Riemannian geometry into such a graph: a public,
+machine-verified textbook anyone can learn from and contribute to. But the
+questions behind it are general — see [Open Questions](/docs/challenge) — and the
+infrastructure is meant to carry any subject.
 
 ## How it works
 
-The project has two halves of the same mathematics, stored in one graph:
+A subject lives in the graph as two halves of the same mathematics:
 
 - a **natural-language layer** — the statements, transcribed faithfully;
 - a **formal layer** — the same results, written and checked in Lean.
 
-They are joined by cross-source links, so a Lean proof and the prose it
+They are joined by cross-source links, so a formal proof and the prose it
 formalizes sit side by side. The formal layer acts as a logical oracle that
 exposes gaps in the prose; the prose's structure, in turn, shows where the
 formalization is still thin. We close that loop, again and again.
 
-## Reading these docs
+## Where to go next
 
-- **[Open Questions](/docs/challenge)** — the core questions the project is
-  curious about, and why the mathematics is the means rather than the end.
+- **[Open Questions](/docs/challenge)** — the core questions Astrolabe is curious
+  about, and why the mathematics is the means rather than the end.
 - **[Astrolabe: Data Model](/docs/data-model)** — how everything is stored: the
   content-addressed hypergraph, identity hashing, typed relations, and the
   cross-source bridge.
+- **[Status](/docs/status)** — live formalization progress of the first project.
 
 ## Get involved
 
 Whether you prove a theorem, review a proof, improve the visualization, or fix a
-broken link, there is a place for you here. Start with the
-[Challenge](/docs/challenge), or open the project graph to explore what already
-exists.
+broken link, there is a place for you here. Open a project from the home page to
+explore what already exists.
