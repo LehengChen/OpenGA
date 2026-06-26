@@ -1,89 +1,62 @@
+import fs from 'fs'
+import path from 'path'
+import { compileMDX } from 'next-mdx-remote/rsc'
+import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
 import { Navbar } from '@/components/Navbar'
+import { DocsShell, type TocItem } from './DocsShell'
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="mt-12">
-      <h2 className="text-xs uppercase tracking-[0.2em] text-white/30 mb-4">{title}</h2>
-      <div className="space-y-3 text-[15px] leading-relaxed text-white/55">{children}</div>
-    </section>
-  )
+const TITLE = 'Riemannian Geometry Challenge'
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+const textOf = (c: any): string =>
+  Array.isArray(c) ? c.map(textOf).join('') : typeof c === 'string' ? c : c?.props?.children ? textOf(c.props.children) : ''
+
+// MDX element overrides — the project's dark documentation style.
+const components = {
+  h2: ({ children }: any) => <h2 id={slug(textOf(children))} className="text-xl font-semibold text-white/85 mt-14 mb-3 scroll-mt-20">{children}</h2>,
+  h3: ({ children }: any) => <h3 id={slug(textOf(children))} className="text-base font-medium text-white/80 mt-8 mb-2 scroll-mt-20">{children}</h3>,
+  p: ({ children }: any) => <p className="text-[15px] leading-relaxed text-white/55 mb-4">{children}</p>,
+  ul: ({ children }: any) => <ul className="list-disc list-inside text-[15px] text-white/55 mb-4 space-y-1">{children}</ul>,
+  ol: ({ children }: any) => <ol className="text-[15px] text-white/55 mb-4 space-y-2 list-none">{children}</ol>,
+  li: ({ children }: any) => <li>{children}</li>,
+  strong: ({ children }: any) => <strong className="text-white/80 font-medium">{children}</strong>,
+  em: ({ children }: any) => <em className="italic text-white/45">{children}</em>,
+  a: ({ href, children }: any) => (
+    <a href={href} target="_blank" rel="noopener noreferrer"
+      className="text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors">{children}</a>
+  ),
+  hr: () => <hr className="border-white/10 my-10" />,
+  code: ({ children }: any) => <code className="text-cyan-300/80 bg-white/[0.06] px-1.5 py-0.5 rounded text-[13px] font-mono">{children}</code>,
 }
 
-function Track({ name, blurb }: { name: string; blurb: string }) {
-  return (
-    <div className="border-l border-white/10 pl-4 py-1">
-      <div className="text-white/80 font-medium text-[15px]">{name}</div>
-      <div className="text-sm text-white/45 mt-0.5">{blurb}</div>
-    </div>
-  )
+function parseToc(src: string): TocItem[] {
+  return src.split('\n').filter((l) => /^#{2,3}\s/.test(l)).map((l) => {
+    const level = (l.match(/^#+/) as RegExpMatchArray)[0].length
+    const text = l.replace(/^#+\s+/, '').replace(/[*`_]/g, '')
+    return { level, text, id: slug(text) }
+  })
 }
 
-export default function RiemannianGeometryChallenge() {
+export default async function Page() {
+  const source = fs.readFileSync(path.join(process.cwd(), 'content/riemannian-geometry-challenge.mdx'), 'utf8')
+  const { content } = await compileMDX({
+    source,
+    components,
+    options: { mdxOptions: { remarkPlugins: [remarkGfm, remarkMath], rehypePlugins: [rehypeKatex as any] } },
+  })
+
   return (
-    <div className="h-full flex flex-col bg-[#0a0a0f] text-white">
+    <div className="h-screen flex flex-col bg-[#0a0a0f] text-white">
       <Navbar />
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-8 py-24">
+        <DocsShell title={TITLE} toc={parseToc(source)}>
           <p className="text-xs uppercase tracking-[0.2em] text-white/30 mb-3">An open public initiative</p>
-          <h1 className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-6">
-            Riemannian Geometry Challenge
-          </h1>
-          <p className="text-[15px] leading-relaxed text-white/55 max-w-2xl">
-            We are building Riemannian geometry as a public good: a living, machine-verified textbook
-            that belongs to the whole community — open to learn from, to contribute to, to reuse, and to
-            build on. do&nbsp;Carmo&apos;s <span className="italic">Riemannian Geometry</span> is our starting
-            blueprint; the aim is bigger — a lasting, international foundation for the field that keeps
-            growing, made by everyone, for everyone.
-          </p>
-          <p className="text-[15px] leading-relaxed text-white/55 max-w-2xl mt-4">
-            It is open to anyone — mathematicians, students, programmers, designers. There is no gate. Every
-            piece that lands becomes part of a foundation that others can rely on and reuse, forever.
-          </p>
-
-          <Section title="Ways to contribute">
-            <Track name="Mathematics" blurb="Prove the theorems so a machine can check them; complete the foundations, one result at a time." />
-            <Track name="Review" blurb="Keep the mathematics honest — on the written side and the formal side; find the gap, flag the step that does not follow." />
-            <Track name="Design & visualization" blurb="Make a body of knowledge with thousands of results legible, beautiful, and a pleasure to explore." />
-            <Track name="Tools & infrastructure" blurb="Build the systems that let everyone read, contribute, and reuse — the public plumbing of the textbook." />
-          </Section>
-
-          <Section title="How we work together">
-            <p>
-              <span className="text-white/80">Challengers</span> attack the written mathematics — find the
-              holes the prose hides, the assumption never stated, the step that does not follow.
-            </p>
-            <p>
-              <span className="text-white/80">Reviewers</span> defend the record — read a proof and confirm it
-              really proves what it claims.
-            </p>
-            <p>
-              <span className="text-white/80">Contributors</span> close the gaps — write, formalize, design,
-              connect. Everything that lands is shared, reusable, and built on by the next person.
-            </p>
-          </Section>
-
-          <p className="text-xs text-white/25 mt-16">
-            The open problems — current challenges to pick up — go here.
-          </p>
-
-          <Section title="References">
-            <ol className="space-y-2 text-sm text-white/45">
-              <li className="list-none">
-                <span className="text-white/35 mr-2">[1]</span>
-                M. P. do Carmo,{' '}
-                <a
-                  href="https://books.google.com/books/about/Riemannian_Geometry.html?id=9cekXdo52hEC"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="italic text-white/70 hover:text-white underline decoration-white/20 hover:decoration-white/50 underline-offset-2 transition-colors"
-                >
-                  Riemannian Geometry
-                </a>
-                . Trans. F. Flaherty. Mathematics: Theory &amp; Applications. Birkhäuser, Boston, 1992.
-              </li>
-            </ol>
-          </Section>
-        </div>
+          <h1 className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-8">{TITLE}</h1>
+          {content}
+        </DocsShell>
       </main>
     </div>
   )
