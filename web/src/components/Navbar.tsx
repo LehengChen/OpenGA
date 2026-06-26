@@ -14,6 +14,9 @@ export function Navbar() {
         <Link href="/" className="hover:text-white/75 transition-colors">
           Home
         </Link>
+        <Link href="/activities" className="hover:text-white/75 transition-colors">
+          Activities
+        </Link>
         <a
           href="https://github.com/MathNetwork/Astrolabe"
           target="_blank"
