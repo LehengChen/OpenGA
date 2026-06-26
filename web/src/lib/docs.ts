@@ -26,7 +26,7 @@ export const DOCS: DocMeta[] = [
   },
   {
     slug: 'data-model',
-    title: 'Data Model & Astrolabe',
+    title: 'Astrolabe: Data Model',
     eyebrow: 'How the knowledge is stored',
   },
 ]
