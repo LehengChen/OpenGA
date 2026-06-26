@@ -83,7 +83,7 @@ export function EdgeExample() {
       hash="014c1e2a49fe"
       refs={['264fbf8cb406', '6e6c552589c3']}
       record={[
-        ['sort', '(lean, tex)'],
+        ['sort', <>(lean, tex)<Dim>{'   = (ref[0].sort, ref[1].sort)'}</Dim></>],
         ['rel', 'formalizes'],
         ['kind', 'bipartite'],
         ['notes', 'formalizes «geodesic»'],

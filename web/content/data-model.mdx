@@ -45,8 +45,9 @@ The same store holds both sides of the mathematics:
 - **lean atoms** — the formal declarations that prove them.
 
 They are joined by **cross-source edges** typed `(lean, tex)`: a Lean node that
-*formalizes* a tex concept. The type is inherited from its two ends — such an edge
-is a first-class, hash-identified entry, exactly like any other.
+*formalizes* a tex concept. An edge's `sort` is not its own — it is the pair of its
+endpoints' sorts, `(ref[0].sort, ref[1].sort)`, so the type falls out of the two ends.
+Such an edge is a first-class, hash-identified entry, exactly like any other.
 
 ## Stable identity
 
