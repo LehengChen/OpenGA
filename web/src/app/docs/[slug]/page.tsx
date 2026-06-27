@@ -8,7 +8,6 @@ import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
 import { Navbar } from '@/components/Navbar'
 import { DocsShell, type TocItem } from '@/components/DocsShell'
-import { StatusBoard } from '@/components/StatusBoard'
 import { StorageTree, NumberingFlow, AtomExample, EdgeExample } from '@/components/docs/DocDiagrams'
 import { DOCS } from '@/lib/docs'
 
@@ -72,27 +71,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug: s } = await params
   const doc = DOCS.find((d) => d.slug === s)
   if (!doc) notFound()
-
-  // Live docs (e.g. Status) render from a component, not an MDX file, so their
-  // content reflects the store in real time rather than a stored snapshot.
-  if (doc.live) {
-    const toc: TocItem[] = [
-      { level: 2, text: 'Summary', id: 'summary' },
-      { level: 2, text: 'Open problems', id: 'open-problems' },
-    ]
-    return (
-      <div className="h-screen flex flex-col bg-[#0a0a0f] text-white">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto">
-          <DocsShell docs={DOCS} current={doc.slug} toc={toc}>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/30 mb-3">{doc.eyebrow}</p>
-            <h1 className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-8">{doc.title}</h1>
-            <StatusBoard />
-          </DocsShell>
-        </main>
-      </div>
-    )
-  }
 
   const source = fs.readFileSync(path.join(process.cwd(), `content/${doc.slug}.mdx`), 'utf8')
   const { content } = await compileMDX({
