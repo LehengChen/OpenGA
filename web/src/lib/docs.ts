@@ -9,11 +9,6 @@ export interface DocMeta {
 
 export const DOCS: DocMeta[] = [
   {
-    slug: 'introduction',
-    title: 'Introduction',
-    eyebrow: 'About Astrolabe',
-  },
-  {
     slug: 'challenge',
     title: 'Open Questions',
     eyebrow: 'The questions we are curious about',
