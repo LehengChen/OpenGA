@@ -114,8 +114,8 @@ def main():
 
 
 def register_nodes(stmts, edges):
-    sys.path.insert(0, "/Users/moqian/OpenGALib/web/backend")
-    from astrolabe_app.storage import AstrolabeStorage, validate_store
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from astrolabe_store import AstrolabeStorage, validate_store
     s = AstrolabeStorage(PROJECT)
     def canon(r): return json.dumps(r, sort_keys=True, ensure_ascii=False)
     # purge previous docarmo extraction (idempotent re-run)

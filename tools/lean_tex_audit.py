@@ -11,7 +11,7 @@ iteration:
                             tex concept graph is missing (informal-side repairs).
   4. under-linked tex     — long content / few edges → likely missed concepts.
 
-    web/backend/.venv/bin/python tools/lean_tex_audit.py
+    python3 tools/lean_tex_audit.py
 """
 import json, sys, os
 from collections import Counter, defaultdict
@@ -20,8 +20,8 @@ PROJECT = "/Users/moqian/OpenGALib/projects/riemannian-geometry"
 
 
 def main():
-    sys.path.insert(0, "/Users/moqian/OpenGALib/web/backend")
-    from astrolabe_app.storage import AstrolabeStorage
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from astrolabe_store import AstrolabeStorage
     s = AstrolabeStorage(PROJECT)
     def rec(h):
         r = s.data[h]["record"]; return json.loads(r) if isinstance(r, str) else r

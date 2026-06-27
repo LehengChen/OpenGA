@@ -23,8 +23,7 @@ beyond) is `sorry`-free.
 
 ### 0. Audit — where are we?
 ```bash
-source web/backend/.venv/bin/activate
-python tools/lean_tex_audit.py
+python3 tools/lean_tex_audit.py
 ```
 Prints four signals (see the script): **(1) Lean sorries** = open formal gaps,
 **(2) low-hanging fruit** = tex statements whose prerequisites Lean already
@@ -57,17 +56,15 @@ lake build OpenGALib                          # confirm the root still builds
 ### 3. Extract + register (Lean → store)
 ```bash
 lake env lean tools/ExtractLeanGraph.lean     # → /tmp/lean_graph.json (all OpenGALib.* decls)
-source web/backend/.venv/bin/activate
-python tools/lean_register.py                 # update-only; identity hash H({source,name})
+python3 tools/lean_register.py                 # update-only; identity hash H({source,name})
 ```
 `lean_register.py` is idempotent: a fixed `sorry → proven` updates the same
 node (hash unchanged), and Lean→Lean dependency edges are rebuilt. Tex nodes and
 (lean, tex) bridges are untouched.
 
-> **Always stop the backend before any store write** (`pkill -f "uvicorn astrolabe_app"`),
-> then restart it after (`cd web/backend && nohup .venv/bin/python -m uvicorn
-> astrolabe_app.server:app --host 127.0.0.1 --port 8765 &`). Concurrent writes
-> corrupt the one-file-per-node store.
+> The store is plain `.md` files; the tools read/write them via
+> `tools/astrolabe_store.py` (system `python3`, no backend). The Next.js app only
+> *reads* the store, so there are no concurrent writers to worry about.
 
 ### 4. Bridge (Lean ↔ tex)
 Connect the new Lean node(s) to the do Carmo concept they formalize, as a binary

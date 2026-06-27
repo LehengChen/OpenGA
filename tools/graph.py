@@ -7,11 +7,11 @@ Usage:
   python3 tools/graph.py sorry        # unverified lean nodes (file:line)
   python3 tools/graph.py node <title> # one node + its neighbours
 
-Reads the live store from the backend at 127.0.0.1:8765.
+Reads the live store from the Node API at localhost:3000 (run `npm run dev`).
 """
 import sys, json, urllib.parse, urllib.request
 
-API = "http://127.0.0.1:8765"
+API = "http://localhost:3000"
 PROJECT = "/Users/moqian/OpenGALib/projects/riemannian-geometry"
 
 

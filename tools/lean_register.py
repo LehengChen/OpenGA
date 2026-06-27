@@ -14,7 +14,7 @@ This reads that file and:
 Tex nodes and (lean, tex) cross-source bridges are NOT touched.
 
     lake env lean tools/ExtractLeanGraph.lean          # → /tmp/lean_graph.json
-    web/backend/.venv/bin/python tools/lean_register.py
+    python3 tools/lean_register.py
 """
 import json, sys, os
 
@@ -25,8 +25,8 @@ GRAPH = "/tmp/lean_graph.json"
 
 def main():
     data = json.load(open(GRAPH))
-    sys.path.insert(0, os.path.join(REPO, "web/backend"))
-    from astrolabe_app.storage import AstrolabeStorage, validate_store
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from astrolabe_store import AstrolabeStorage, validate_store
     s = AstrolabeStorage(PROJECT)
     def canon(r): return json.dumps(r, sort_keys=True, ensure_ascii=False)
 

@@ -1,9 +1,11 @@
 """
-AstrolabeStorage — persistence for astrolabe.json.
+AstrolabeStorage — read/write the content-addressed .md store for the CLI tools.
 
 Format: { "<hash>": { "ref": [str, ...], "record": "<string>" }, ... }
 Record is an opaque string — the core layer does not interpret its content.
 """
+from __future__ import annotations  # allow `X | None` annotations on Python 3.9
+
 import hashlib
 import json
 from pathlib import Path

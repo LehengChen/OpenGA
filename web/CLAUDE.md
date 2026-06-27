@@ -2,17 +2,19 @@
 
 ## How AI Should Work With Astrolabe
 
-**Edit files directly.** Modify `astrolabe.json` and `.mdx` files in `.astrolabe/docs/` the same way a human would in VSCode. The app watches for file changes and auto-reloads.
+**Edit files directly.** Modify the per-node `.md` files in `.astrolabe/atoms/` and `.astrolabe/edges/`, and the `.mdx` files in `.astrolabe/docs/`, the same way a human would. The app re-reads the store on each request.
 
-**Do not call REST API for writes.** The REST API is for the app's internal use. AI writes to files; the app reads from files.
+**The web API is read-only.** The Next.js `/api` routes only read the store; writes happen by editing files (the CLI tools use `tools/astrolabe_store.py`).
 
-**Validate after editing.** After modifying `astrolabe.json`, run `python3 -c "from astrolabe_app.storage import validate_store; import json; validate_store(json.load(open('.astrolabe/astrolabe.json')))"` to check well-formedness.
+**Validate after editing.** `python3 -c "import sys; sys.path.insert(0,'tools'); from astrolabe_store import AstrolabeStorage, validate_store; validate_store(AstrolabeStorage('<project-dir>').all_entries())"`
 
 ---
 
 ## Core Data Model (Paper §2)
 
-`astrolabe.json` is a content-addressable flat store:
+The store is a content-addressable set of entries — one `.md` file per node
+(`.astrolabe/atoms/<hash>.md`, `.astrolabe/edges/<hash>.md`: YAML front-matter +
+body). Conceptually each entry is:
 ```json
 {
   "<12-char-hash>": { "ref": ["<hash>", ...], "record": "<JSON string>" }
@@ -74,12 +76,11 @@ Numbering: section from filename prefix, proof excluded, never hardcode numbers.
 
 ## Architecture
 
-- **Frontend**: Next.js + React + d3-force, **Tauri desktop app**
-- **Backend**: Python FastAPI, port 8765
-- **Terminal**: xterm.js panel → Tauri IPC → Claude Code CLI
-- **File watcher**: polls mtime, auto-reloads on change
+- **Frontend**: Next.js + React + d3-force (deployed on Vercel)
+- **API**: Next.js Route Handlers in `src/app/api/*` (Node) — read the `.md` store; no separate server
+- **CLI tools**: Python scripts in `tools/` for the Lean → store pipeline, using `tools/astrolabe_store.py` (system `python3`, no venv needed)
 
 ## Rules
 
-- Use `python3` / `python3 -m pytest`, not `python` (macOS Homebrew)
+- Web dev: `npm run dev` (no backend to start)
 - Communicate with user in Chinese
