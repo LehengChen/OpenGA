@@ -5,12 +5,12 @@ import { ThemeToggle } from './ThemeToggle'
 export function Navbar() {
   return (
     <nav className="h-14 shrink-0 flex items-center px-8 border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur relative z-20">
-      <Link
-        href="/"
+      <a
+        href="https://astrolabe.network/"
         className="text-sm font-semibold tracking-[0.22em] text-white/85 hover:text-white transition-colors"
       >
         ASTROLABE
-      </Link>
+      </a>
       <div className="ml-auto flex items-center gap-6 text-xs text-white/40">
         <a href="https://astrolabe.network/" className="hover:text-white/75 transition-colors">
           Home
