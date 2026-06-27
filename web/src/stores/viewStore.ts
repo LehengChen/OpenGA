@@ -24,7 +24,7 @@ interface ViewState {
 export const useViewStore = create<ViewState>((set, get) => ({
   layoutMode: 'single',
   showLabels: false,
-  activeTab: 'network',
+  activeTab: 'read',
   fontSize: 14,
   numbering: new Map(),
   setLayoutMode: (mode) => set({ layoutMode: mode }),
