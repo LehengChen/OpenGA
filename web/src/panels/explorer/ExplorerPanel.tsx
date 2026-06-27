@@ -11,7 +11,7 @@ import { API_BASE } from '@/lib/apiBase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 export const ExplorerPanel = memo(function ExplorerPanel() {
-    const [pluginsOpen, setPluginsOpen] = useState(true)
+    const [pluginsOpen, setPluginsOpen] = useState(false)
     const [filesOpen, setFilesOpen] = useState(true)
     const [selectedFile, setSelectedFile] = useState<FileEntry | null>(null)
     const projectFiles = useDataStore(s => s.projectFiles)
