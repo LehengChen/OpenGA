@@ -7,8 +7,8 @@ import "@fontsource/stix-two-text/400-italic.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Astrolabe Category",
-  description: "A Categorical Foundation for Knowledge Management",
+  title: "Astrolabe",
+  description: "A content-addressed knowledge graph for mathematics",
 };
 
 export default function RootLayout({
