@@ -5,6 +5,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Bundle the project data (copied to web/projects by the prebuild step) into
+  // the /api serverless functions so they can read the store at runtime.
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./projects/**/*"],
+  },
   // Enable SharedArrayBuffer in dev mode (requires cross-origin isolation)
   async headers() {
     return [

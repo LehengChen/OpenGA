@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { resolveFs } from '@/lib/server/paths'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
   const file = searchParams.get('file')
   if (!projectPath || !file) return Response.json({ detail: 'path and file required' }, { status: 400 })
 
-  const root = path.resolve(projectPath)
+  const root = path.resolve(resolveFs(projectPath))
   const filePath = path.resolve(root, file)
   if (!filePath.startsWith(root)) return Response.json({ detail: 'Access denied' }, { status: 403 })
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile())

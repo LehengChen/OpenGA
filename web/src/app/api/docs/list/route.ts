@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { resolveFs } from '@/lib/server/paths'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
   const projectPath = searchParams.get('path')
   if (!projectPath) return Response.json({ detail: 'path required' }, { status: 400 })
 
-  const docsDir = path.join(projectPath, '.astrolabe', 'docs')
+  const docsDir = path.join(resolveFs(projectPath), '.astrolabe', 'docs')
   if (!fs.existsSync(docsDir)) return Response.json({ files: [] })
 
   const files = fs.readdirSync(docsDir)

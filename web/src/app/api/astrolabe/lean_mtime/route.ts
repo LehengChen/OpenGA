@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { resolveFs } from '@/lib/server/paths'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -8,8 +9,9 @@ export const runtime = 'nodejs'
  *  null if there is no lakefile (the common case for a pure md project). */
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const root = searchParams.get('path')
-  if (!root) return Response.json({ detail: 'path required' }, { status: 400 })
+  const raw = searchParams.get('path')
+  if (!raw) return Response.json({ detail: 'path required' }, { status: 400 })
+  const root = resolveFs(raw)
 
   const hasLake = (d: string) =>
     fs.existsSync(path.join(d, 'lakefile.lean')) || fs.existsSync(path.join(d, 'lakefile.toml'))

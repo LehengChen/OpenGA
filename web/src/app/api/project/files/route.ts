@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { resolveFs } from '@/lib/server/paths'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -36,8 +37,9 @@ function scan(dir: string): Node[] {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const projectPath = searchParams.get('path')
-  if (!projectPath) return Response.json({ detail: 'path required' }, { status: 400 })
+  const raw = searchParams.get('path')
+  if (!raw) return Response.json({ detail: 'path required' }, { status: 400 })
+  const projectPath = resolveFs(raw)
   if (!fs.existsSync(projectPath)) return Response.json([])
   return Response.json(scan(projectPath))
 }

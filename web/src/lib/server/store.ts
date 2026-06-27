@@ -6,12 +6,13 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { parse as parseYaml } from 'yaml'
+import { resolveFs } from './paths'
 
 export interface Entry { ref: string[]; record: string }
 export type Store = Record<string, Entry>
 
 function nodeDirs(projectDir: string): string[] {
-  const base = path.join(projectDir, '.astrolabe')
+  const base = path.join(resolveFs(projectDir), '.astrolabe')
   return [path.join(base, 'atoms'), path.join(base, 'edges'), path.join(base, 'nodes')]
 }
 
