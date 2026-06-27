@@ -11,7 +11,7 @@ export const DOCS: DocMeta[] = [
   {
     slug: 'challenge',
     title: 'Open Questions',
-    eyebrow: 'The questions we are curious about',
+    eyebrow: 'Open Questions',
   },
   {
     slug: 'data-model',

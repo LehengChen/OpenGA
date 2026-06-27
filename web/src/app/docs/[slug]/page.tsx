@@ -22,6 +22,7 @@ const textOf = (c: any): string =>
 
 // MDX element overrides — the project's dark documentation style.
 const components = {
+  h1: ({ children }: any) => <h1 id={slug(textOf(children))} className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-8 mt-1 scroll-mt-20">{children}</h1>,
   h2: ({ children }: any) => <h2 id={slug(textOf(children))} className="text-xl font-semibold text-white/85 mt-14 mb-3 scroll-mt-20">{children}</h2>,
   h3: ({ children }: any) => <h3 id={slug(textOf(children))} className="text-base font-medium text-white/80 mt-8 mb-2 scroll-mt-20">{children}</h3>,
   p: ({ children }: any) => {
@@ -106,7 +107,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <main className="flex-1 overflow-y-auto">
         <DocsShell docs={DOCS} current={doc.slug} toc={parseToc(source)}>
           <p className="text-xs uppercase tracking-[0.2em] text-white/30 mb-3">{doc.eyebrow}</p>
-          <h1 className="text-4xl font-bold tracking-[0.03em] text-white/90 mb-8">{doc.title}</h1>
           {content}
         </DocsShell>
       </main>

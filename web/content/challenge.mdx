@@ -1,82 +1,15 @@
-Formalizing mathematics is the means here, not the end. What we are really after are a few
-open questions about how mathematics is structured, stored, and used once it lives as a
-shared, machine-checked graph. The four below are the ones driving the work.
+# The questions we are curious about
 
-## Formalization as the primary artifact, prose as interface
+The speed at which mathematics is being generated and verified is growing at an unprecedented rate. Here are our questions.
 
-We think the formal object — the definition, the proof a machine can check — should be the
-primary one, and that everything familiar about a piece of mathematics — the prose, the diagrams,
-the numbering, even the Lean syntax — is an interface onto it: a view that can be generated,
-linked, and replaced.
+### How we redefine mathematical product?
 
-The reason to invert the usual order is that prose is a lossy interface. A written proof leaves
-gaps the reader is trusted to fill, and the gaps sometimes hide mistakes; the machine-checked
-version is the one you can actually rely on. Take the formal proof as the source, then, and a
-page becomes a rendering of it rather than the thing itself.
+Can formalized mathematics be the primary output, with natural language as the interaction layer through which we understand it?
 
-That turns the real question into one of interface. If the proof is the artifact, what is the
-right way for a human to meet it — prose for one reader, a diagram for another, the dependency
-graph for a third, each regenerated from the same source? We are curious what a subject looks
-like when every page is just one rendering of the proof underneath.
+### How we store mathematical knowledge?
 
-## How to store mathematics
+When mathematics can be stored as formal code, we can extract its structure at a meta level. What do these structures mean, and how do we put them to use?
 
-What is the right substrate for a living body of mathematical knowledge? A corpus of mathematics
-is only as valuable as it is composable, and a shelf of PDFs is not.
+### How we reorganize mathematical work?
 
-We keep every statement and every proof as an immutable, content-addressed entry in a hypergraph:
-identity is the hash of the content, so references never rot, and any piece can be reused, merged,
-or checked on its own — the same idea that makes code addressable by what it is rather than where
-it sits, turned on mathematics. The model is laid out in [the data model](/docs/data-model).
-
-We are curious how far the idea carries — what a database *of mathematics itself* should be, and
-what becomes possible once a subject has one.
-
-## How the structure of mathematics navigates its formalization
-
-Mathematics is not a list of results; it is a structure — what rests on what, what generalizes
-what, what is dual to what. We want that structure to be more than a description; we want it to be
-the map.
-
-In a formal library every result already carries its exact dependencies, so the graph of
-what-uses-what is data rather than folklore — and that data can say what to build next, where a
-gap is hiding, which interface a hundred later results will end up needing. We are curious how far
-the shape of a subject can drive its own formalization, instead of a linear march through chapters.
-
-Part of the question is which relations even deserve to be first-class. `uses` and `implies` are
-obvious; `generalizes`, `specializes`, and `dual-to` carry real mathematical content, and a graph
-that records them is a richer object than any table of contents.
-
-## How humans will do mathematics together
-
-Mathematics has always been a social activity. A proof becomes trusted not the moment it is
-written but as people read it, look for holes, reformulate it, and build on it — confidence is
-something a community confers over time, not a property of the symbols alone.
-
-Formalization adds something new: when a proof is machine-checked, trusting it no longer depends
-on who vouches for it — anyone can run the checker. So the social process does not disappear; it
-changes shape.
-
-There is a second shift. For most of its history mathematics has been a human craft — the only
-instrument in the room was human judgement. Once the object is formal, far more of the work opens
-up to technology: not just checking a proof, but searching, suggesting, and increasingly helping
-to build the mathematics itself. We are curious how much of the progress, not just the
-bookkeeping, technology can carry.
-
-We are curious what that becomes when the mathematics is a public, machine-checked graph rather
-than a shelf of PDFs and a chain of referees. How does a stranger attack the prose for a hidden
-hole, defend a proof that it really proves what it claims, or add a piece everyone else can
-immediately rely on — alone, and as a community with no center? We think the way people do
-mathematics together is about to change, and we want to find out how.
-
-## How we build it
-
-Underneath the questions is a working system, and every part of it is open to improvement — this
-is where most concrete contributions land.
-
-- **Visualization** — graph layout that stays legible across thousands of linked results.
-- **The reader** — navigation, search, and cross-references that never lose the reader.
-- **The toolchain** — extract, register, and audit results as they move between Lean and the store.
-- **Integrity** — stable content hashing, deduplication and merge, referential closure as the graph is rewritten.
-- **The loop** — make audit → formalize → bridge → re-audit robust and, where possible, automatic.
-- **CI and fitness functions** — architectural linters that catch drift before it lands.
+How do we bring more technology into the evolution of mathematics, and how do we make mathematics itself an anchor whose development in turn gives rise to more technology?
