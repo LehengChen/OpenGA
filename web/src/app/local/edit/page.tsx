@@ -2,7 +2,7 @@
 
 import '@/lib/errorSuppression'
 import { Suspense, useCallback, useRef } from 'react'
-import { Bars3BottomLeftIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { Bars3BottomLeftIcon, MinusIcon, PlusIcon, HomeIcon } from '@heroicons/react/24/outline'
 import { useViewStore } from '@/stores/viewStore'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels'
@@ -47,8 +47,8 @@ function EditorPage() {
                     <button onClick={toggleExplorer} className="p-1.5 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Toggle Explorer">
                         <Bars3BottomLeftIcon className="w-4 h-4" />
                     </button>
-                    <button onClick={() => router.push('/')} className="flex items-center gap-1 text-xs text-white/30 hover:text-white/70 transition-colors" title="Back to home">
-                        <span>←</span><span>Back to home</span>
+                    <button onClick={() => router.push('/')} className="p-1.5 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Home">
+                        <HomeIcon className="w-4 h-4" />
                     </button>
                     <span className="text-sm font-medium text-white/70 ml-1">{projectPath.split('/').pop()}</span>
                 </div>
