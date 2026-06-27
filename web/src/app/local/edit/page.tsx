@@ -1,8 +1,9 @@
 'use client'
 
 import '@/lib/errorSuppression'
-import { Suspense, useCallback, useRef } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Bars3BottomLeftIcon, MinusIcon, PlusIcon, HomeIcon } from '@heroicons/react/24/outline'
+import { API_BASE } from '@/lib/apiBase'
 import { useViewStore } from '@/stores/viewStore'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels'
@@ -18,6 +19,27 @@ function EditorPage() {
 
     const { loading } = useProjectLoader(projectPath)
     useKeyboardShortcuts()
+
+    // Project display title: the index doc's top-level heading (e.g. "Riemannian
+    // Geometry Challenge"), falling back to the title-cased folder name.
+    const titleCase = (s: string) => s.split(/[-_]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    const [title, setTitle] = useState('')
+    useEffect(() => {
+        if (!projectPath) return
+        const p = encodeURIComponent(projectPath)
+        fetch(`${API_BASE}/api/docs/list?path=${p}`)
+            .then(r => r.json())
+            .then(d => {
+                const first = (d.files || [])[0]
+                if (!first) return
+                return fetch(`${API_BASE}/api/docs/read?path=${encodeURIComponent(first.path)}`).then(r => r.json())
+            })
+            .then(d => {
+                const m = d?.content?.match(/^#\s+(.+?)\s*$/m)
+                if (m) setTitle(m[1].trim())
+            })
+            .catch(() => {})
+    }, [projectPath])
 
     const explorerRef = useRef<ImperativePanelHandle>(null)
 
@@ -42,7 +64,7 @@ function EditorPage() {
 
     return (
         <div className="h-screen flex flex-col bg-black text-white">
-            <div className="h-10 flex items-center justify-between px-4 border-b border-white/10 shrink-0">
+            <div className="h-10 flex items-center px-4 border-b border-white/10 shrink-0 relative">
                 <div className="flex items-center gap-2">
                     <button onClick={toggleExplorer} className="p-1.5 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Toggle Explorer">
                         <Bars3BottomLeftIcon className="w-4 h-4" />
@@ -50,9 +72,11 @@ function EditorPage() {
                     <button onClick={() => router.push('/')} className="p-1.5 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Home">
                         <HomeIcon className="w-4 h-4" />
                     </button>
-                    <span className="text-sm font-medium text-white/70 ml-1">{projectPath.split('/').pop()}</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-white/70 pointer-events-none truncate max-w-[50%]">
+                    {title || titleCase(projectPath.split('/').pop() || '')}
+                </span>
+                <div className="flex items-center gap-1 ml-auto">
                     <button onClick={() => useViewStore.getState().decreaseFontSize()} className="p-1 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Decrease font size">
                         <MinusIcon className="w-3 h-3" />
                     </button>
