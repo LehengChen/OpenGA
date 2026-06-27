@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  // Full Next.js server (SSR + /api Route Handlers), deployed on Vercel.
+  // (Was `output: "export"` for the old static/Tauri build.)
   images: {
     unoptimized: true,
   },
