@@ -22,7 +22,7 @@ interface ViewState {
 }
 
 export const useViewStore = create<ViewState>((set, get) => ({
-  layoutMode: 'single',
+  layoutMode: 'split-right',
   showLabels: false,
   activeTab: 'read',
   fontSize: 14,
