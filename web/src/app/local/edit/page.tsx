@@ -4,6 +4,7 @@ import '@/lib/errorSuppression'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Bars3BottomLeftIcon, MinusIcon, PlusIcon, HomeIcon } from '@heroicons/react/24/outline'
 import { API_BASE } from '@/lib/apiBase'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { useViewStore } from '@/stores/viewStore'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels'
@@ -84,6 +85,7 @@ function EditorPage() {
                     <button onClick={() => useViewStore.getState().increaseFontSize()} className="p-1 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" title="Increase font size">
                         <PlusIcon className="w-3 h-3" />
                     </button>
+                    <ThemeToggle className="p-1 ml-1 text-white/30 hover:text-white/70 transition-colors rounded hover:bg-white/5" />
                 </div>
             </div>
 

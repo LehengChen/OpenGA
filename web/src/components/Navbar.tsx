@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ThemeToggle } from './ThemeToggle'
 
 /** Top navigation bar — gives the site a normal-website feel. */
 export function Navbar() {
@@ -25,6 +26,7 @@ export function Navbar() {
         >
           GitHub
         </a>
+        <ThemeToggle className="hover:text-white/75 transition-colors" />
       </div>
     </nav>
   )
