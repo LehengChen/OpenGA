@@ -12,14 +12,14 @@ export function Navbar() {
         ASTROLABE
       </Link>
       <div className="ml-auto flex items-center gap-6 text-xs text-white/40">
-        <Link href="/" className="hover:text-white/75 transition-colors">
+        <a href="https://astrolabe.network/" className="hover:text-white/75 transition-colors">
           Home
-        </Link>
+        </a>
         <Link href="/docs/challenge" className="hover:text-white/75 transition-colors">
           About us
         </Link>
         <a
-          href="https://github.com/MathNetwork/Astrolabe"
+          href="https://github.com/MathNetwork/OpenGA"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-white/75 transition-colors"
