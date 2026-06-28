@@ -31,7 +31,7 @@ export function Navbar() {
           </svg>
         </a>
         <a
-          href="https://discord.gg/CvfrT34ra"
+          href="https://discord.gg/nQdU4q3u9"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Join our Discord"
