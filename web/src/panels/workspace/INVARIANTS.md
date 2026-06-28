@@ -64,3 +64,19 @@ scrolls window/ancestors and would move the top bar.
 - `ReadView` does not reference `selectObjStore` (the document is selection-agnostic)
 - no `.scrollIntoView(` anywhere in the workspace (container-scoped scroll only)
 - `DetailView` *does* read `selectedHash` (the card window is the selection sink)
+
+---
+
+## Theorem 3 — View/UI state has a single source: `viewStore`
+
+All view, layout, and panel-toggle state lives in `src/stores/viewStore.ts` —
+`layoutMode`, `activeTab`, `explorerOpen`, `explorerPluginsOpen`,
+`explorerFilesOpen`. Components **read** these from the store and never keep their
+own copy in local `useState`, so there is exactly one source of truth and no two
+mechanisms can disagree (the bug that made "default to network view" need two
+edits in two places).
+
+**Enforced by:**
+- `viewStore` declares all the UI-state keys above
+- `ExplorerPanel` reads its open/closed state from `useViewStore`, with no local `useState(...Open...)`
+- the editor page drives the Explorer panel from `explorerOpen` (not the panel library's own collapse state — no `react-resizable-panels` in the page)

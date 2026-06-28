@@ -1,13 +1,12 @@
 'use client'
 
 import '@/lib/errorSuppression'
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { Bars3BottomLeftIcon, MinusIcon, PlusIcon, HomeIcon } from '@heroicons/react/24/outline'
 import { API_BASE } from '@/lib/apiBase'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useViewStore } from '@/stores/viewStore'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels'
 import { useProjectLoader } from '@/hooks/useProjectLoader'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { ExplorerPanel } from '@/panels/explorer/ExplorerPanel'
@@ -42,13 +41,10 @@ function EditorPage() {
             .catch(() => {})
     }, [projectPath])
 
-    const explorerRef = useRef<ImperativePanelHandle>(null)
-
-    const toggleExplorer = useCallback(() => {
-        const panel = explorerRef.current
-        if (!panel) return
-        panel.isCollapsed() ? panel.expand() : panel.collapse()
-    }, [])
+    // Explorer open/closed is single-sourced in viewStore (no panel-library state).
+    const explorerOpen = useViewStore(s => s.explorerOpen)
+    const setExplorerOpen = useViewStore(s => s.setExplorerOpen)
+    const toggleExplorer = useCallback(() => setExplorerOpen(!explorerOpen), [explorerOpen, setExplorerOpen])
 
     if (!projectPath) {
         return <div className="h-screen flex items-center justify-center bg-black text-white/40">No project selected</div>
@@ -89,15 +85,16 @@ function EditorPage() {
                 </div>
             </div>
 
-            <PanelGroup direction="horizontal" className="flex-1" autoSaveId="astrolabe-layout-v8">
-                <Panel ref={explorerRef} id="explorer" defaultSize={15} minSize={10} collapsible>
-                    <ExplorerPanel />
-                </Panel>
-                <PanelResizeHandle className="w-px bg-white/10 hover:bg-white/30 transition-colors" />
-                <Panel id="workspace" defaultSize={85} minSize={30}>
+            <div className="flex-1 flex overflow-hidden">
+                {explorerOpen && (
+                    <div className="w-64 shrink-0 overflow-hidden border-r border-white/10">
+                        <ExplorerPanel />
+                    </div>
+                )}
+                <div className="flex-1 min-w-0">
                     <WorkspacePanel />
-                </Panel>
-            </PanelGroup>
+                </div>
+            </div>
         </div>
     )
 }

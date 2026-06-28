@@ -15,6 +15,9 @@ import * as fs from 'fs'
 const ws = fs.readFileSync('src/panels/workspace/WorkspacePanel.tsx', 'utf-8')
 const rv = fs.readFileSync('src/panels/workspace/ReadView.tsx', 'utf-8')
 const dv = fs.readFileSync('src/panels/workspace/DetailView.tsx', 'utf-8')
+const viewStore = fs.readFileSync('src/stores/viewStore.ts', 'utf-8')
+const explorer = fs.readFileSync('src/panels/explorer/ExplorerPanel.tsx', 'utf-8')
+const editorPage = fs.readFileSync('src/app/local/edit/page.tsx', 'utf-8')
 
 describe('Theorem 1 — 切换容器不影响视图内部 (keep-alive)', () => {
     it('每个视图在 JSX 中只挂载一次', () => {
@@ -48,5 +51,23 @@ describe('Theorem 2 — 选中 hash 只改卡片窗口，不动主文档', () =>
 
     it('卡片窗口(DetailView)才是选中的唯一接收方', () => {
         expect(dv).toContain('selectedHash')
+    })
+})
+
+describe('Theorem 3 — 视图/UI 状态单一来源 (viewStore)', () => {
+    it('viewStore 暴露布局/视图/Explorer 的全部 UI 状态', () => {
+        for (const key of ['layoutMode', 'activeTab', 'explorerOpen', 'explorerPluginsOpen', 'explorerFilesOpen'])
+            expect(viewStore).toContain(key)
+    })
+
+    it('Explorer 的开合状态来自 viewStore，不是组件本地 useState', () => {
+        expect(explorer).toContain('useViewStore')
+        // no local `useState(... Open ...)` toggle in the panel
+        expect(explorer).not.toMatch(/useState\([^)]*[Oo]pen/)
+    })
+
+    it('整个 Explorer 面板的开合由 viewStore 驱动（不用面板库的折叠状态）', () => {
+        expect(editorPage).toContain('explorerOpen')
+        expect(editorPage).not.toContain('react-resizable-panels')
     })
 })

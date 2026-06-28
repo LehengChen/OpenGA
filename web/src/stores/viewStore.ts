@@ -10,8 +10,10 @@ interface ViewState {
   activeTab: ViewTab
   fontSize: number  // global font size multiplier (10-20, default 14)
   numbering: Numbering  // project-wide hash → { chapter, num }, derived from first occurrence
+  explorerOpen: boolean         // Explorer: whole left panel expanded (default collapsed)
   explorerPluginsOpen: boolean  // Explorer: PLUGINS section expanded
   explorerFilesOpen: boolean    // Explorer: FILES section expanded
+  setExplorerOpen: (open: boolean) => void
   setExplorerPluginsOpen: (open: boolean) => void
   setExplorerFilesOpen: (open: boolean) => void
   setLayoutMode: (mode: LayoutMode) => void
@@ -31,8 +33,10 @@ export const useViewStore = create<ViewState>((set, get) => ({
   activeTab: 'read',
   fontSize: 14,
   numbering: new Map(),
+  explorerOpen: false,
   explorerPluginsOpen: false,
   explorerFilesOpen: true,
+  setExplorerOpen: (open) => set({ explorerOpen: open }),
   setExplorerPluginsOpen: (open) => set({ explorerPluginsOpen: open }),
   setExplorerFilesOpen: (open) => set({ explorerFilesOpen: open }),
   setLayoutMode: (mode) => set({ layoutMode: mode }),
