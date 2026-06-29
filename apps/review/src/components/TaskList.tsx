@@ -7,6 +7,7 @@ type Props = {
   tasks: ReviewTask[];
   selectedId: string;
   onSelect: (taskId: string) => void;
+  onReview: (taskId: string) => void;
 };
 
 type NestedItemProps = {
@@ -14,12 +15,22 @@ type NestedItemProps = {
   tasks: ReviewTask[];
   selectedId: string;
   onSelect: (taskId: string) => void;
+  onReview: (taskId: string) => void;
   level: number;
   openSet: Set<string>;
   toggle: (id: string) => void;
 };
 
-function NestedItem({ task, tasks, selectedId, onSelect, level, openSet, toggle }: NestedItemProps) {
+function NestedItem({
+  task,
+  tasks,
+  selectedId,
+  onSelect,
+  onReview,
+  level,
+  openSet,
+  toggle
+}: NestedItemProps) {
   const children = childrenFor(tasks, task.id);
   const isOpen = openSet.has(task.id);
   const isSelected = selectedId === task.id;
@@ -29,12 +40,20 @@ function NestedItem({ task, tasks, selectedId, onSelect, level, openSet, toggle 
   const total = tasksTotal(tasks, task.id);
   const mathReview = task.checks?.math_review ?? null;
 
+  const handleRowClick = () => {
+    if (isGroup) {
+      onSelect(task.id);
+    } else {
+      onReview(task.id);
+    }
+  };
+
   return (
     <div className={styles.nestedItem} style={{ marginLeft: `${level * 18}px` }}>
       <button
         className={`${styles.nestedRow} ${isSelected ? styles.selectedNestedRow : ''} ${isGroup ? styles.nestedGroupRow : ''}`}
         type="button"
-        onClick={() => onSelect(task.id)}
+        onClick={handleRowClick}
       >
         {children.length > 0 ? (
           <span
@@ -77,6 +96,7 @@ function NestedItem({ task, tasks, selectedId, onSelect, level, openSet, toggle 
               tasks={tasks}
               selectedId={selectedId}
               onSelect={onSelect}
+              onReview={onReview}
               level={level + 1}
               openSet={openSet}
               toggle={toggle}
@@ -88,7 +108,7 @@ function NestedItem({ task, tasks, selectedId, onSelect, level, openSet, toggle 
   );
 }
 
-export function TaskList({ tasks, selectedId, onSelect }: Props) {
+export function TaskList({ tasks, selectedId, onSelect, onReview }: Props) {
   const [openSet, setOpenSet] = useState<Set<string>>(() => {
     const set = new Set<string>();
     rootTasks(tasks).forEach((root) => {
@@ -117,6 +137,7 @@ export function TaskList({ tasks, selectedId, onSelect }: Props) {
           tasks={tasks}
           selectedId={selectedId}
           onSelect={onSelect}
+          onReview={onReview}
           level={0}
           openSet={openSet}
           toggle={toggle}

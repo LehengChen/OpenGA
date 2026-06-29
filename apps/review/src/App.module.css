@@ -568,9 +568,156 @@
   }
 }
 
+.reviewHeader {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+  margin: 0 auto 18px;
+  max-width: 1500px;
+}
+
+.reviewHeader h1 {
+  margin: 6px 0 10px;
+  color: #111827;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.backButton {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4b5563;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.reviewGrid {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.25fr) minmax(300px, 0.45fr);
+  gap: 18px;
+  margin: 0 auto;
+  max-width: 1500px;
+  align-items: start;
+}
+
+.atomPanel,
+.reviewControls {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #dde2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgb(20 28 46 / 8%);
+}
+
+.atomContent {
+  overflow: auto;
+  margin: 10px 0 0;
+  padding: 14px;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  background: #f7f8fb;
+  color: #20242b;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.reviewNoteInput {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #20242b;
+  font: inherit;
+  resize: vertical;
+}
+
+.reviewNoteInput:focus {
+  border-color: #0f766e;
+  outline: none;
+}
+
+.reviewActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.reviewActions button {
+  flex: 1;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4b5563;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.reviewActions button:hover:not(:disabled),
+.reviewActions button:focus-visible:not(:disabled) {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.reviewActions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primaryButton {
+  border-color: #0f766e !important;
+  background: #0f766e !important;
+  color: #ffffff !important;
+}
+
+.primaryButton:hover:not(:disabled),
+.primaryButton:focus-visible:not(:disabled) {
+  background: #115e59 !important;
+}
+
+.errorText {
+  margin: 10px 0 0;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+@media (max-width: 1180px) {
+  .header,
+  .contentGrid,
+  .reviewGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .detailPanel {
+    position: static;
+  }
+}
+
 @media (max-width: 720px) {
   .appShell {
     padding: 14px;
+  }
+
+  .reviewHeader {
+    grid-template-columns: 1fr;
   }
 
   .progressPanel,
@@ -595,5 +742,9 @@
   .nestedMeta,
   .nestedProgress {
     display: none;
+  }
+
+  .reviewActions {
+    flex-direction: column;
   }
 }

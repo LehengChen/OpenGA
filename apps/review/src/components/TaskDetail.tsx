@@ -6,9 +6,10 @@ type Props = {
   task: ReviewTask;
   tasks: ReviewTask[];
   onSelect: (taskId: string) => void;
+  onReview?: (taskId: string) => void;
 };
 
-export function TaskDetail({ task, tasks, onSelect }: Props) {
+export function TaskDetail({ task, tasks, onSelect, onReview }: Props) {
   const dependents = dependentsFor(tasks, task.id);
   const fileEntries = Object.entries(task.files).filter(([, value]) => Boolean(value));
   const isGroup = task.kind !== 'leaf';
@@ -63,6 +64,14 @@ export function TaskDetail({ task, tasks, onSelect }: Props) {
               <code key={kind}>{path}</code>
             ))}
           </div>
+        </section>
+      ) : null}
+
+      {!isGroup && onReview ? (
+        <section className={styles.detailSection}>
+          <button type="button" className={styles.primaryButton} onClick={() => onReview(task.id)}>
+            Open review page
+          </button>
         </section>
       ) : null}
 
