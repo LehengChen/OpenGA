@@ -1,0 +1,118 @@
+# Chapter 8 — boundary trimmings
+
+_This file was seeded by `tools/apply_atom_boundary_fixes.py` with content removed from atoms during boundary correction._
+
+## Boundary-trimmings
+
+## Trimmed from ch8:3.1
+
+It follows from the existence and uniqueness theorem for geodesics that all the
+geodesics of $H^n$ are of the type described in Proposition 3.1, and are contained
+in planes perpendicular to the hyperplane $x_n=0$. Since such planes are clearly
+isometric to the hyperbolic plane, the completeness of $H^n$ is a consequence of
+the completeness of the hyperbolic plane (cf. Exercise 10, Chap. 7). Another model
+of hyperbolic space is given in Exercise 3 of this chapter.
+
+## Trimmed from ch8:4.2
+
+$
+
+*Proof of \entryref{5b17d1bbe62d}.* $\tilde{M}$ is a simply connected, complete Riemannian
+manifold with constant sectional curvature $K$. Consider first the cases (a) and
+(b) and denote, for convenience, both $H^n$ and $\mathbb{R}^n$ by $\triangle$. Fix
+points $p\in\triangle$, $\tilde{p}\in\tilde{M}$ and a linear isometry
+$i:T_p(\triangle)\to T_{\tilde{p}}(\tilde{M})$. Consider the map
+$f=\exp_{\tilde{p}}\circ\,i\circ\exp_p^{-1}:\triangle\to\tilde{M}$. Since $\triangle$
+and $\tilde{M}$ are complete with non-positive sectional curvature, $f$ is
+well-defined. From the Theorem of Cartan, $f$ is a local isometry. From Lemma 3.3
+of Chap. 7, $f$ is a diffeomorphism, which proves (a) and (b).
+
+For case (c), fix $p\in S^n$, $\tilde{p}\in\tilde{M}$ and a linear isometry
+$i:T_p(S^n)\to T_{\tilde{p}}(\tilde{M})$. Let $q\in S^n$ be the antipodal point of
+$p$ and define $f=\exp_{\tilde{p}}\circ\,i\circ\exp_p^{-1}:S^n-\{q\}\to\tilde{M}$.
+From the Theorem of Cartan, $f$ is a local isometry. Choose $p'\in S^n$,
+$p'\neq p$, $p'\neq q$, set $\tilde{p}'=f(p')$, $i'=df_{p'}$ and define
+$f'=\exp_{\tilde{p}'}\circ\,i'\circ\exp_{p'}^{-1}:S^n-\{q'\}\to\tilde{M}$, where
+$q'$ is the antipodal point of $p'$. On the connected set
+$W=S^n-(\{q\}\cup\{q'\})$ we have $p'\in W$ and $f(p')=\tilde{p}'=f'(p')$,
+$df_{p'}=i'=df'_{p'}$, so by Lemma 4.2, $f=f'$ on $W$. We can then define
+$g:S^n\to\tilde{M}$ by $g(r)=f(r)$ if $r\in S^n-\{q\}$ and $g(r)=f'(r)$ if
+$r\in S^n-\{q'\}$. Then $g$ is a local isometry, hence a local diffeomorphism. By
+the compactness of $S^n$, $g$ is a covering map, and since $\tilde{M}$ is simply
+connected, $g$ is a diffeomorphism. Therefore $g$ is an isometry. $\square$
+
+The complete manifolds with constant sectional curvature are called *space forms*.
+The last theorem reduces the determination of all the space forms to a problem in
+group theory. Recall: a group $G$ *acts* on a set $M$ if there is a map
+$G\times M\to M$, $(g,x)\mapsto gx$, with $ex=x$ and $(g_1 g_2)x=g_1(g_2 x)$; $G$
+acts *freely* if $gx=x$ implies $g=e$; the *orbit* of $x$ is $Gx=\{gx;\ g\in G\}$.
+The action is *transitive* if $Gx=M$. If $M$ is a topological space, $G$ (a group
+of homeomorphisms) acts in a *totally discontinuous manner* if every $x\in M$ has a
+neighborhood $U$ such that $g(U)\cap U=\emptyset$ for all $g\in G$, $g\neq e$; in
+this case $\pi:M\to M/G$ is a regular covering map and $G$ is the group of covering
+transformations.
+
+If $M$ is a Riemannian manifold and $\Gamma$ is a subgroup of the group of
+isometries acting in a totally discontinuous manner, then $M/\Gamma$ has a
+differentiable structure in which $\pi:M\to M/\Gamma$ is a local diffeomorphism,
+and a Riemannian metric making $\pi$ a local isometry. Given $p\in M/\Gamma$,
+choose $\tilde p\in\pi^{-1}(p)$; for $u,v\in T_p(M/\Gamma)$, define
+
+$$
+\langle u,v\rangle=\langle d\pi^{-1}(u),d\pi^{-1}(v)\rangle_{\tilde{p}},
+$$
+
+Since $\pi$ is a regular covering, $\Gamma$ is transitive on $\pi^{-1}(p)$, and
+because $\Gamma$ consists of isometries the definition is independent of the
+choice of $\tilde p$. This is called the *metric on $M/\Gamma$ induced by the
+covering $\pi$*. $M/\Gamma$ is complete iff $M$ is, and has constant curvature iff
+$M$ does. Taking $M=S^n$,
+$\mathbb{R}^n$ or $H^n$, we conclude that $M/\Gamma$ is a complete manifold of
+constant curvature $1$, $0$ or $-1$, respectively.
+
+
+## Trimmed from ch8:4.3
+
+$
+
+The last proposition reduces the problem of finding all the space forms to that of
+determining all the subgroups of the group of isometries that act in a totally
+discontinuous manner on each of the simply connected models. The spherical problem
+($\tilde{M}=S^n$) was solved during the sixties (Wolf). Here we mention only two
+interesting facts.
+
+## Trimmed from ch8:4.5
+
+$
+
+The spaces of constant curvature have an important role in the historical
+development of Riemannian Geometry, due to their relationship with non-Euclidean
+geometry. A non-Euclidean geometry is a complete Riemannian manifold $M$ together
+with a transitive group of isometries $G$ (the non-Euclidean motions) satisfying
+the *Axiom of free mobility*: if $p,\tilde p\in M$, if $\gamma_1,\gamma_2$ are
+geodesics starting at $p$ and forming an angle $\alpha$, and if
+$\tilde\gamma_1,\tilde\gamma_2$ are geodesics starting at $\tilde p$ and forming
+the same angle $\alpha$, then there is a $g\in G$ with $g(p)=\tilde p$,
+$g(\gamma_1)=\tilde\gamma_1$, and $g(\gamma_2)=\tilde\gamma_2$. This corresponds
+to the side-angle-side condition for congruence of triangles in Euclidean geometry
+and implies that $M$ has constant sectional curvature, so the spaces of
+non-Euclidean Geometry are included among the space forms. The cases of $S^n$,
+$P^n$ and $H^n$ are called *spherical*, *elliptic* and *hyperbolic* geometry,
+respectively.
+
+
+## Trimmed from ch8:5.3
+
+$
+
+To conclude this section, we identify some important hypersurfaces of $H^n$. The
+intersection with $H^n$ of hyperplanes of $\mathbb{R}^n$ orthogonal to $\partial H^n$,
+and of spheres with center on $\partial H^n$, are totally geodesic submanifolds of
+$H^n$ (Exercise 2). To determine intersections of planes and spheres in any
+position, it is convenient to use the *ball model*: let
+$B^n=\{p\in\mathbb{R}^n;\ |p|<2\}$ with the metric
+
+$$
+h_{ij}(p)=\frac{\delta_{ij}}{(1-\tfrac14|p|^2)^2}.
+$$
+

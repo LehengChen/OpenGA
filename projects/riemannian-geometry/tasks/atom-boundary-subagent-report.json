@@ -1,0 +1,181 @@
+{
+  "generated_at": "2026-06-29T04:37:55Z",
+  "source": "subagent review of projects/riemannian-geometry/tasks/atom-boundary-review.md candidates",
+  "summary": {
+    "total_reviewed": 16,
+    "confirmed_errors": 14,
+    "no_error": 2
+  },
+  "findings": [
+    {
+      "dcref": "ch0:4.2",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/2a37e4843dff.md",
+      "has_boundary_error": false,
+      "error_kind": "none",
+      "confidence": "high",
+      "notes": "Trailing text is the example's own concluding consequence, not the next statement."
+    },
+    {
+      "dcref": "ch0:5.3",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/c20e049fba4e.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "$[fX,gY]=fX(gY)-gY(fX)=fgXY+fX(g)Y-gfYX-gY(f)X=fg[X,Y]+fX(g)Y-gY(f)X. \\square$",
+      "trimmed_content_belongs": "next_atom",
+      "trimmed_content_preview": "The bracket $[X,Y]$ can also be interpreted as a derivative of $Y$ along the \"trajectories\" of $X$...",
+      "confidence": "high",
+      "notes": "After the proof marker the atom continues with the flow/trajectory exposition that leads into Proposition 5.4."
+    },
+    {
+      "dcref": "ch0:5.5",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/fc5a1bb299dd.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "changing variables, $t\\,g(t,q)=\\int_0^t\\frac{\\partial h(ts,q)}{\\partial(ts)}\\,d(ts)=h(t,q)$.\n$\\square$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "*Topology of manifolds.* Up to here no restriction was put on the topology. Two axioms may fail...",
+      "confidence": "high",
+      "notes": "Everything after the QED marker is chapter-level 'Topology of manifolds' transitional prose that introduces Theorem 5.6."
+    },
+    {
+      "dcref": "ch4:2.5",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/91101fb52f8d.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "$(Z,X,Y,T)=(Y,T,Z,X)$. $\\blacksquare$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "It is convenient to express what was seen above in a coordinate system $(U,\\mathbf{x})$ based at $p\\in M$...",
+      "confidence": "high",
+      "notes": "After the proof the atom keeps an unnumbered coordinate-computation passage introducing $R_{ijk}^\\ell$; ch4:2.6 begins after this passage."
+    },
+    {
+      "dcref": "ch6:2.1",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/73bbdba0e0a8.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "Since $[\\overline{X},\\overline{Y}]=[X,Y]$ on $M$, we conclude $B(X,Y)=B(Y,X)$. $\\square$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "Because $B$ is bilinear, the value $B(X,Y)(p)$ depends only on the values $X(p)$ and $Y(p)$...",
+      "confidence": "high",
+      "notes": "After the proof the text introduces $H_\\eta$ and leads into Definition 2.2; it is transitional prose."
+    },
+    {
+      "dcref": "ch6:2.9",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/1bc6577d8e3a.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "every geodesic $\\gamma$ of $M$ starting from $p$ is a geodesic of $\\overline{M}$ at $p$. $\\square$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "Proposition 2.9 gives the geometric interpretation of sectional curvature...",
+      "confidence": "high",
+      "notes": "Post-proof geometric interpretation, examples, and Cartan's theorem are transitional prose between Proposition 2.9 and Definition 2.10."
+    },
+    {
+      "dcref": "ch7:2.3",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/b293201bcf35.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "...class of complete manifolds.",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "At this stage it is convenient to introduce a distance function on a Riemannian manifold...",
+      "confidence": "high",
+      "notes": "The atom keeps the post-proof remark about the converse, then continues with the transitional paragraph that introduces Definition 2.4."
+    },
+    {
+      "dcref": "ch8:2.1",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/4a37954c3621.md",
+      "has_boundary_error": false,
+      "error_kind": "none",
+      "confidence": "high",
+      "notes": "Text after the proof marker is part of Theorem 2.1's own post-proof remark; the atom stops before transitional prose."
+    },
+    {
+      "dcref": "ch8:3.1",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/b1bc4979d87f.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "x_1 x_n$-plane. The theorem follows now from \\entryref{45bcded293f4}. $\\square$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "It follows from the existence and uniqueness theorem for geodesics that all the geodesics of $H^n$ are...",
+      "confidence": "high",
+      "notes": "After the proof the atom keeps a paragraph about completeness of $H^n$ and an exercise reference; this is transitional prose before section 4."
+    },
+    {
+      "dcref": "ch8:4.2",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/ed5c99ea7483.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "Therefore $g$ is an isometry. \\square",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "The complete manifolds with constant sectional curvature are called *space forms*...",
+      "confidence": "high",
+      "notes": "After the final proof marker the atom contains the chapter-level space-forms/group-actions introduction that precedes Proposition 4.3."
+    },
+    {
+      "dcref": "ch8:4.3",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/25c5af8cc0f8.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "$\\xi$ is an isometry of $M$ onto $\\tilde{M}/\\Gamma$. \\square",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "The last proposition reduces the problem of finding all the space forms to that of determining all the subgroups...",
+      "confidence": "high",
+      "notes": "The atom keeps inter-statement prose introducing the general program of classifying space forms; the next statement 4.4 begins later."
+    },
+    {
+      "dcref": "ch8:4.5",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/b9cdcdcd003d.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "...there exists a geodesic polygon such that $\\alpha=2\\pi$. $\\square$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "The spaces of constant curvature have an important role in the historical development of Riemannian Geometry...",
+      "confidence": "high",
+      "notes": "After the proof there is transitional/historical prose about non-Euclidean geometry and space forms before section 5; there is no ch8:4.6."
+    },
+    {
+      "dcref": "ch8:5.3",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/8a57517fee19.md",
+      "has_boundary_error": true,
+      "error_kind": "swallows_next_statement",
+      "trim_after": "Composing these with $z\\mapsto-\\bar z$ gives the orientation-reversing anti-holomorphic isometries, so together they give all isometries of $H^2$. \\square",
+      "trimmed_content_belongs": "next_atom",
+      "trimmed_content_preview": "To conclude this section, we identify some important hypersurfaces of $H^n$...",
+      "confidence": "high",
+      "notes": "Theorem 5.3 ends at the proof marker; the trailing text defines the ball model $B^n$ and metric $h_{ij}$ that the separate ch8:5.4 atom develops."
+    },
+    {
+      "dcref": "ch9:2.2",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/d19dfbacb4d5.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "and if $V(0)=V(a)=0$ then $f$ is proper. $\\square$",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "To compare the arc length of $c$ with that of neighboring curves we define $L:(-\\varepsilon,\\varepsilon)\\to\\mathbf{R}$...",
+      "confidence": "high",
+      "notes": "After the proof the atom keeps the arc-length and energy-function setup as transitional material for Lemma 2.3."
+    },
+    {
+      "dcref": "ch10:4.9",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/8286f921d5a2.md",
+      "has_boundary_error": true,
+      "error_kind": "swallows_next_statement",
+      "trim_after": "...by \\entryref{cdfac76c48af}. \\blacksquare",
+      "trimmed_content_belongs": "next_atom",
+      "trimmed_content_preview": "Other useful extensions of the Rauch comparison theorem can be found in F. Warner...",
+      "confidence": "high",
+      "notes": "After the proof the atom keeps a bibliographic note and the entire unnumbered Toponogov theorem that follows in the source text."
+    },
+    {
+      "dcref": "ch12:3.1",
+      "current_atom_file": "projects/riemannian-geometry/.astrolabe/atoms/167b9abd6797.md",
+      "has_boundary_error": true,
+      "error_kind": "includes_transitional_prose",
+      "trim_after": "Since \\alpha'+\\beta'+\\gamma'=\\pi, (ii) follows. \\blacksquare",
+      "trimmed_content_belongs": "chapter_doc",
+      "trimmed_content_preview": "From now on, $M$ will denote a complete Riemannian manifold with sectional curvature $K<0$...",
+      "confidence": "high",
+      "notes": "After the proof marker the atom keeps the 'From now on...' paragraph, which is transitional setup for Theorem 3.2."
+    }
+  ]
+}
