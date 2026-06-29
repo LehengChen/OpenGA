@@ -1,0 +1,570 @@
+:global(*) {
+  box-sizing: border-box;
+}
+
+:global(body) {
+  margin: 0;
+  min-width: 320px;
+  color: #20242b;
+  background: #f7f8fb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:global(button) {
+  font: inherit;
+}
+
+:global(code) {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.appShell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(360px, 1.15fr);
+  gap: 20px;
+  align-items: stretch;
+  margin: 0 auto 18px;
+  max-width: 1500px;
+}
+
+.kicker,
+.panelLabel,
+.cardMeta,
+.sectionTitle {
+  margin: 0;
+  color: #5d6573;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 6px 0 10px;
+  max-width: 780px;
+  color: #111827;
+  font-size: clamp(2rem, 4vw, 4.25rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.sourceLine,
+.detailSummary,
+.taskCard p,
+.emptyState {
+  margin: 0;
+  color: #626a78;
+  line-height: 1.55;
+}
+
+.progressPanel {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.35fr) minmax(260px, 1fr);
+  gap: 16px;
+  align-content: start;
+  padding: 18px;
+  border: 1px solid #dde2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgb(20 28 46 / 8%);
+}
+
+.overallValue {
+  margin-top: 4px;
+  color: #0f766e;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.metric span {
+  display: block;
+  color: #4b5563;
+  font-size: 0.82rem;
+}
+
+.metric strong {
+  display: block;
+  margin: 4px 0 8px;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.meter {
+  overflow: hidden;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #e7ebf0;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0f766e, #65a30d);
+}
+
+.statusStrip {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  gap: 8px;
+}
+
+.statusPill,
+.statusBadge,
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef6f5;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 auto 18px;
+  max-width: 1500px;
+  padding: 5px;
+  border: 1px solid #dde2ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.tabs button {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 6px;
+  color: #4b5563;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.tabs button:hover,
+.tabs button:focus-visible,
+.activeTab {
+  color: #111827 !important;
+  background: #eaf4f3 !important;
+  outline: none;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) minmax(360px, 0.55fr);
+  gap: 18px;
+  margin: 0 auto;
+  max-width: 1500px;
+  align-items: start;
+}
+
+.workPanel,
+.detailPanel {
+  min-width: 0;
+  border: 1px solid #dde2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgb(20 28 46 / 8%);
+}
+
+.workPanel {
+  padding: 14px;
+}
+
+.listView {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.taskCard {
+  min-width: 0;
+  min-height: 310px;
+  padding: 16px;
+  border: 1px solid #dde2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.taskCard:hover,
+.taskCard:focus-visible,
+.selectedCard {
+  border-color: #0f766e;
+  box-shadow: 0 12px 30px rgb(15 118 110 / 14%);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.cardTopline,
+.detailHeader,
+.progressRow,
+.chipRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardTopline {
+  justify-content: space-between;
+}
+
+.cardTitle {
+  margin-top: 14px;
+  color: #111827;
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.cardId {
+  margin: 8px 0 12px;
+  color: #7c2d12;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.progressRow {
+  margin-top: 18px;
+}
+
+.progressRow strong {
+  min-width: 42px;
+  color: #111827;
+  text-align: right;
+}
+
+.chipRow {
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.chip {
+  background: #f3f0ff;
+  color: #5b21b6;
+}
+
+.treeView {
+  overflow: hidden;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+}
+
+.treeNode + .treeNode {
+  border-top: 1px solid #e4e8ef;
+}
+
+.treeButton {
+  display: grid;
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-bottom: 1px solid #eef1f5;
+  background: #ffffff;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.treeButton:hover,
+.treeButton:focus-visible,
+.selectedTreeButton {
+  background: #f1fbfa;
+  outline: none;
+}
+
+.treeTitle {
+  align-self: end;
+  font-weight: 800;
+}
+
+.treeMeta {
+  align-self: start;
+  color: #626a78;
+  font-size: 0.82rem;
+}
+
+.dependencyView {
+  display: grid;
+  gap: 16px;
+}
+
+.edgeSection {
+  padding: 4px;
+}
+
+.edgeSection h2 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.edgeList {
+  display: grid;
+  gap: 8px;
+}
+
+.edgeRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dde2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.edgeRow:hover,
+.edgeRow:focus-visible,
+.selectedEdge {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.edgeRow span {
+  min-width: 0;
+}
+
+.edgeRow strong,
+.edgeRow small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.edgeRow small {
+  margin-top: 4px;
+  color: #626a78;
+}
+
+.edgeArrow {
+  color: #7c2d12;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.independentList,
+.linkList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inlineTaskButton,
+.linkList button {
+  padding: 8px 10px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #20242b;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.inlineTaskButton:hover,
+.inlineTaskButton:focus-visible,
+.linkList button:hover,
+.linkList button:focus-visible,
+.selectedInlineTask {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.detailPanel {
+  position: sticky;
+  top: 18px;
+  padding: 18px;
+}
+
+.detailHeader {
+  justify-content: space-between;
+}
+
+.detailPanel h1 {
+  margin: 14px 0 10px;
+  color: #111827;
+  font-size: 1.65rem;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.detailGrid div {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.detailGrid span {
+  display: block;
+  color: #626a78;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.detailGrid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.detailSection {
+  padding-top: 18px;
+  border-top: 1px solid #e4e8ef;
+}
+
+.detailSection + .detailSection {
+  margin-top: 18px;
+}
+
+.checklist {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.checklist label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #20242b;
+}
+
+.checklist input {
+  width: 16px;
+  height: 16px;
+  accent-color: #0f766e;
+}
+
+.detailList {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.fileList {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fileList code {
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 9px;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  background: #f7f8fb;
+  color: #334155;
+  font-size: 0.82rem;
+}
+
+.linkList {
+  margin-top: 10px;
+}
+
+.linkList button {
+  display: grid;
+  max-width: 100%;
+  text-align: left;
+}
+
+.linkList small {
+  margin-top: 4px;
+  color: #626a78;
+  font-weight: 500;
+}
+
+@media (max-width: 1180px) {
+  .header,
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .detailPanel {
+    position: static;
+  }
+
+  .listView {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .appShell {
+    padding: 14px;
+  }
+
+  .progressPanel,
+  .metricGrid,
+  .listView,
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+
+  .tabs button {
+    flex: 1 0 auto;
+  }
+
+  .edgeRow {
+    grid-template-columns: 1fr;
+  }
+
+  .edgeArrow {
+    justify-self: start;
+  }
+}
