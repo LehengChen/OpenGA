@@ -15,7 +15,9 @@
 
 # IDE / AI tooling (local config, not project content)
 .vscode/
-.claude/
+.claude/*
+!.claude/skills/
+!.claude/skills/**
 
 # Overleaf copy
 Thesis_Overleaf/
