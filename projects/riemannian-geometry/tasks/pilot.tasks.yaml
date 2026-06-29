@@ -154,7 +154,7 @@ tasks:
   description: 'Remark ch0:2.3: natural topology'
   status: todo
   checks:
-    math_review: pending
+    math_review: done
   review_notes: []
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/e365d9820656.md
