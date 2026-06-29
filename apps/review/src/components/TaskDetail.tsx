@@ -1,6 +1,6 @@
 import styles from '../App.module.css';
-import { dependentsFor, findTask, taskProgress } from '../lib/progress';
-import { ReviewTask, statusLabels, trustLabels } from '../lib/taskSchema';
+import { dependentsFor, findTask, leafDescendants, taskProgress, tasksDone, tasksTotal } from '../lib/progress';
+import { ReviewTask, statusLabels } from '../lib/taskSchema';
 
 type Props = {
   task: ReviewTask;
@@ -9,130 +9,112 @@ type Props = {
 };
 
 export function TaskDetail({ task, tasks, onSelect }: Props) {
-  const progress = taskProgress(task);
   const dependents = dependentsFor(tasks, task.id);
   const fileEntries = Object.entries(task.files).filter(([, value]) => Boolean(value));
-  const trustEntries = Object.entries(task.trust.checks);
+  const isGroup = task.kind !== 'leaf';
+  const progress = taskProgress(tasks, task.id);
+  const done = tasksDone(tasks, task.id);
+  const total = tasksTotal(tasks, task.id);
+  const leaves = leafDescendants(tasks, task.id);
 
   return (
     <aside className={styles.detailPanel}>
       <div className={styles.detailHeader}>
         <span className={styles.statusBadge}>{statusLabels[task.status]}</span>
-        <span className={styles.cardMeta}>{task.dcref ?? task.kind}</span>
+        <span className={styles.cardMeta}>{task.kind}</span>
       </div>
 
       <h1>{task.title}</h1>
       <p className={styles.detailSummary}>{task.description}</p>
 
-      <div className={styles.detailGrid}>
-        <div>
-          <span>Task</span>
-          <strong>{task.id}</strong>
-        </div>
-        <div>
-          <span>Next role</span>
-          <strong>{task.next_role}</strong>
-        </div>
-        <div>
-          <span>Trust</span>
-          <strong>{trustLabels[task.trust_level]}</strong>
-        </div>
-        <div>
-          <span>Risk</span>
-          <strong>{task.formalization_risk}</strong>
-        </div>
-      </div>
-
-      <section className={styles.detailSection}>
-        <div className={styles.sectionTitle}>Progress</div>
-        <div className={styles.progressRow}>
-          <div className={styles.meter} aria-label={`${progress}% complete`}>
-            <span style={{ width: `${progress}%` }} />
+      {isGroup ? (
+        <section className={styles.detailSection}>
+          <div className={styles.sectionTitle}>Progress</div>
+          <div className={styles.progressRow}>
+            <div className={styles.meter} aria-label={`${progress}% complete`}>
+              <span style={{ width: `${progress}%` }} />
+            </div>
+            <strong>{progress}%</strong>
           </div>
-          <strong>{progress}%</strong>
-        </div>
-      </section>
+          <p className={styles.detailSummary}>{done} of {total} leaf tasks done.</p>
+        </section>
+      ) : null}
 
-      <section className={styles.detailSection}>
-        <div className={styles.sectionTitle}>Trust criteria</div>
-        <div className={styles.checklist}>
-          {trustEntries.length === 0 ? <span className={styles.emptyState}>Aggregate task.</span> : null}
-          {trustEntries.map(([key, value]) => (
-            <label key={key}>
-              <input checked={value === 'done' || value === 'accepted' || value === 'verified'} disabled readOnly type="checkbox" />
-              <span>{key}: {value}</span>
+      {!isGroup && task.checks?.math_review ? (
+        <section className={styles.detailSection}>
+          <div className={styles.sectionTitle}>Review checklist</div>
+          <div className={styles.checklist}>
+            <label>
+              <input checked={task.checks.math_review === 'done'} disabled readOnly type="checkbox" />
+              <span>Math review</span>
             </label>
-          ))}
-        </div>
-      </section>
+          </div>
+          <p className={styles.detailSummary}>
+            Read the atom and verify the mathematical statement and proof are correct.
+          </p>
+        </section>
+      ) : null}
 
-      <section className={styles.detailSection}>
-        <div className={styles.sectionTitle}>Why this matters</div>
-        <p className={styles.detailSummary}>{task.why_it_matters}</p>
-      </section>
-
-      <section className={styles.detailSection}>
-        <div className={styles.sectionTitle}>Files</div>
-        {fileEntries.length === 0 ? (
-          <p className={styles.emptyState}>No files listed.</p>
-        ) : (
+      {!isGroup && fileEntries.length > 0 ? (
+        <section className={styles.detailSection}>
+          <div className={styles.sectionTitle}>Files</div>
           <div className={styles.fileList}>
             {fileEntries.map(([kind, path]) => (
               <code key={kind}>{path}</code>
             ))}
           </div>
-        )}
-      </section>
+        </section>
+      ) : null}
 
       <section className={styles.detailSection}>
         <div className={styles.sectionTitle}>Dependencies</div>
-        <div className={styles.linkList}>
-          {task.depends_on.length === 0 ? <span className={styles.emptyState}>None</span> : null}
-          {task.depends_on.map((dependencyId) => {
-            const dependency = findTask(tasks, dependencyId);
-            return (
-              <button key={dependencyId} type="button" onClick={() => onSelect(dependencyId)}>
-                {dependencyId}
-                {dependency ? <small>{dependency.title}</small> : null}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className={styles.detailSection}>
-        <div className={styles.sectionTitle}>Review evidence</div>
-        <div className={styles.detailGrid}>
-          <div>
-            <span>Required</span>
-            <strong>{task.reviews.required}</strong>
-          </div>
-          <div>
-            <span>Completed</span>
-            <strong>{task.reviews.completed}</strong>
-          </div>
-        </div>
-        {task.reviews.ids.length === 0 ? (
-          <p className={styles.emptyState}>No review records linked yet.</p>
+        {task.depends_on.length === 0 && dependents.length === 0 ? (
+          <p className={styles.emptyState}>No dependencies.</p>
         ) : (
           <div className={styles.linkList}>
-            {task.reviews.ids.map((id) => <span className={styles.chip} key={id}>{id}</span>)}
+            {task.depends_on.map((dependencyId) => {
+              const dependency = findTask(tasks, dependencyId);
+              return (
+                <button key={dependencyId} type="button" onClick={() => onSelect(dependencyId)}>
+                  {dependencyId}
+                  {dependency ? <small>{dependency.title}</small> : null}
+                </button>
+              );
+            })}
+            {dependents.map((dependent) => (
+              <button key={dependent.id} type="button" onClick={() => onSelect(dependent.id)}>
+                {dependent.id}
+                <small>{dependent.title}</small>
+              </button>
+            ))}
           </div>
         )}
       </section>
 
-      <section className={styles.detailSection}>
-        <div className={styles.sectionTitle}>Dependents</div>
-        <div className={styles.linkList}>
-          {dependents.length === 0 ? <span className={styles.emptyState}>None</span> : null}
-          {dependents.map((dependent) => (
-            <button key={dependent.id} type="button" onClick={() => onSelect(dependent.id)}>
-              {dependent.id}
-              <small>{dependent.title}</small>
-            </button>
-          ))}
-        </div>
-      </section>
+      {isGroup && leaves.length > 0 ? (
+        <section className={styles.detailSection}>
+          <div className={styles.sectionTitle}>Leaf tasks</div>
+          <div className={styles.linkList}>
+            {leaves.map((leaf) => (
+              <button key={leaf.id} type="button" onClick={() => onSelect(leaf.id)}>
+                {leaf.id}
+                <small>{leaf.title}</small>
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {task.review_notes.length > 0 ? (
+        <section className={styles.detailSection}>
+          <div className={styles.sectionTitle}>Review notes</div>
+          <ul className={styles.detailList}>
+            {task.review_notes.map((note, index) => (
+              <li key={index}>{note}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </aside>
   );
 }

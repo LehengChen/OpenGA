@@ -1,15 +1,14 @@
 import { useMemo, useState } from 'react';
 import styles from './App.module.css';
-import { DependencyView } from './components/DependencyView';
+import { DagView } from './components/DagView';
 import { ProgressPanel } from './components/ProgressPanel';
 import { TaskDetail } from './components/TaskDetail';
 import { TaskList } from './components/TaskList';
-import { TaskTree } from './components/TaskTree';
 import pilotTasks from './data/pilot.tasks.json';
 import { findTask, rootTasks } from './lib/progress';
 import { TaskDataset } from './lib/taskSchema';
 
-type ViewMode = 'list' | 'tree' | 'dependency';
+type ViewMode = 'list' | 'dag';
 
 const dataset = pilotTasks as TaskDataset;
 
@@ -44,7 +43,7 @@ export default function App() {
           <p className={styles.kicker}>OpenGA Review</p>
           <h1>Riemannian Geometry Review Roadmap</h1>
           <p className={styles.sourceLine}>
-            Read-only pilot roadmap from <code>projects/riemannian-geometry/tasks/pilot.tasks.yaml</code>
+            Pilot roadmap from <code>projects/riemannian-geometry/tasks/pilot.tasks.yaml</code>
           </p>
         </div>
         <ProgressPanel tasks={dataset.tasks} />
@@ -59,18 +58,11 @@ export default function App() {
           List
         </button>
         <button
-          className={viewMode === 'tree' ? styles.activeTab : ''}
+          className={viewMode === 'dag' ? styles.activeTab : ''}
           type="button"
-          onClick={() => setViewMode('tree')}
+          onClick={() => setViewMode('dag')}
         >
-          Tree
-        </button>
-        <button
-          className={viewMode === 'dependency' ? styles.activeTab : ''}
-          type="button"
-          onClick={() => setViewMode('dependency')}
-        >
-          Dependency
+          DAG
         </button>
       </nav>
 
@@ -79,11 +71,8 @@ export default function App() {
           {viewMode === 'list' ? (
             <TaskList tasks={dataset.tasks} selectedId={selectedId} onSelect={setSelectedTask} />
           ) : null}
-          {viewMode === 'tree' ? (
-            <TaskTree tasks={dataset.tasks} selectedId={selectedId} onSelect={setSelectedTask} />
-          ) : null}
-          {viewMode === 'dependency' ? (
-            <DependencyView tasks={dataset.tasks} selectedId={selectedId} onSelect={setSelectedTask} />
+          {viewMode === 'dag' ? (
+            <DagView tasks={dataset.tasks} selectedId={selectedId} onSelect={setSelectedTask} />
           ) : null}
         </div>
 

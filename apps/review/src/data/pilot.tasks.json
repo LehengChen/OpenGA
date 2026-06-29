@@ -11,26 +11,11 @@
       "dcref": null,
       "chapter": null,
       "title": "Riemannian Geometry review pilot",
-      "description": "End-to-end pilot for review roadmap, task trust, and future formalization handoff.",
-      "why_it_matters": "This root task groups the smallest useful pilot. Completing it should show that OpenGA can organize mathematical review, Lean handoff, and evidence tracking without requiring contributors to understand the whole repository.",
+      "description": "Review a small set of Jacobi-field and comparison-geometry statements end-to-end, from atom to Lean-ready.",
       "status": "todo",
-      "trust_level": "seed",
-      "next_role": "maintainer",
-      "difficulty": "medium",
-      "insight": "high",
-      "formalization_risk": "coordination",
-      "files": {},
+      "review_notes": [],
+      "files": [],
       "editable": [],
-      "trust": {
-        "source": "aggregate",
-        "checks": {},
-        "notes": []
-      },
-      "reviews": {
-        "required": 0,
-        "completed": 0,
-        "ids": []
-      },
       "github": {
         "issue": null,
         "pr": null,
@@ -46,31 +31,14 @@
       "dcref": null,
       "chapter": 5,
       "title": "Chapter 5 Jacobi fields pilot cluster",
-      "description": "Cluster for the Jacobi-field part of the pilot roadmap.",
-      "why_it_matters": "Jacobi fields connect variations of geodesics, the differential of the exponential map, conjugate points, and index theory. A trustworthy review here clarifies one of the central routes into comparison geometry.",
+      "description": "Review Chapter 5 statements about Jacobi fields before moving to comparison geometry in later chapters.",
       "status": "todo",
-      "trust_level": "seed",
-      "next_role": "math",
-      "difficulty": "medium",
-      "insight": "high",
-      "formalization_risk": "exp-map-and-jacobi-api",
+      "review_notes": [],
       "files": {
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs-src/05-jacobi.mdx",
         "rendered_doc": "projects/riemannian-geometry/.astrolabe/docs/05-jacobi.mdx"
       },
       "editable": ["projects/riemannian-geometry/.astrolabe/docs-src/05-jacobi.mdx"],
-      "trust": {
-        "source": "aggregate",
-        "checks": {
-          "coverage": "pending"
-        },
-        "notes": []
-      },
-      "reviews": {
-        "required": 0,
-        "completed": 0,
-        "ids": []
-      },
       "github": {
         "issue": null,
         "pr": null,
@@ -86,28 +54,11 @@
       "dcref": null,
       "chapter": null,
       "title": "Constant curvature and sphere theorem pilot cluster",
-      "description": "Cluster for model spaces and later global comparison statements.",
-      "why_it_matters": "These cards test whether the roadmap can represent long-range dependence: local variational ideas feed into model-space geometry and eventually into the sphere theorem narrative.",
+      "description": "Review model-space and global comparison statements in Chapters 8 and 13.",
       "status": "todo",
-      "trust_level": "seed",
-      "next_role": "math",
-      "difficulty": "high",
-      "insight": "high",
-      "formalization_risk": "comparison-geometry-stack",
+      "review_notes": [],
       "files": {},
       "editable": [],
-      "trust": {
-        "source": "aggregate",
-        "checks": {
-          "coverage": "pending"
-        },
-        "notes": []
-      },
-      "reviews": {
-        "required": 0,
-        "completed": 0,
-        "ids": []
-      },
       "github": {
         "issue": null,
         "pr": null,
@@ -124,13 +75,11 @@
       "chapter": 5,
       "title": "Proposition 2.4",
       "description": "Review the Jacobi-field construction from a variation through the exponential map.",
-      "why_it_matters": "This proposition identifies Jacobi fields vanishing at the initial point with variations built from the exponential map. It is a key bridge from natural-language Riemannian geometry to a future Lean API for Jacobi fields and the differential of exp.",
       "status": "todo",
-      "trust_level": "unreviewed",
-      "next_role": "math",
-      "difficulty": "medium",
-      "insight": "high",
-      "formalization_risk": "exp-map-differential",
+      "checks": {
+        "math_review": "pending"
+      },
+      "review_notes": [],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/c944a1ee39aa.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs-src/05-jacobi.mdx",
@@ -140,20 +89,6 @@
         "projects/riemannian-geometry/.astrolabe/atoms/c944a1ee39aa.md",
         "projects/riemannian-geometry/.astrolabe/docs-src/05-jacobi.mdx"
       ],
-      "trust": {
-        "source": "astrolabe_atom",
-        "checks": {
-          "transcription": "pending",
-          "math": "pending",
-          "cross_refs": "pending"
-        },
-        "notes": []
-      },
-      "reviews": {
-        "required": 1,
-        "completed": 0,
-        "ids": []
-      },
       "github": {
         "issue": null,
         "pr": null,
@@ -170,13 +105,11 @@
       "chapter": 8,
       "title": "Isometries of H^n as conformal transformations preserving H^n",
       "description": "Review the classification statement for hyperbolic-space isometries and conformal maps.",
-      "why_it_matters": "This task separates geometric isometries from model-dependent conformal formulas. It is a useful pilot for tasks where natural language, classical formulas, and future formalization APIs do not line up one-to-one.",
       "status": "todo",
-      "trust_level": "unreviewed",
-      "next_role": "math",
-      "difficulty": "medium",
-      "insight": "high",
-      "formalization_risk": "hyperbolic-model-api",
+      "checks": {
+        "math_review": "pending"
+      },
+      "review_notes": [],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/8a57517fee19.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs-src/08-constant-curvature.mdx",
@@ -186,20 +119,6 @@
         "projects/riemannian-geometry/.astrolabe/atoms/8a57517fee19.md",
         "projects/riemannian-geometry/.astrolabe/docs-src/08-constant-curvature.mdx"
       ],
-      "trust": {
-        "source": "astrolabe_atom",
-        "checks": {
-          "transcription": "pending",
-          "math": "pending",
-          "cross_refs": "pending"
-        },
-        "notes": []
-      },
-      "reviews": {
-        "required": 1,
-        "completed": 0,
-        "ids": []
-      },
       "github": {
         "issue": null,
         "pr": null,
@@ -216,13 +135,11 @@
       "chapter": 13,
       "title": "Covering by two balls; Tsukamoto [Ts]",
       "description": "Review the radius estimate used in the sphere theorem argument.",
-      "why_it_matters": "This task sits downstream of comparison geometry. It helps the roadmap show when a statement is mathematically understood but should wait for stronger formal infrastructure before Lean proof work begins.",
       "status": "todo",
-      "trust_level": "unreviewed",
-      "next_role": "math",
-      "difficulty": "high",
-      "insight": "high",
-      "formalization_risk": "rauch-and-global-comparison",
+      "checks": {
+        "math_review": "pending"
+      },
+      "review_notes": [],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/093b05290da4.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs-src/13-sphere-theorem.mdx",
@@ -232,20 +149,6 @@
         "projects/riemannian-geometry/.astrolabe/atoms/093b05290da4.md",
         "projects/riemannian-geometry/.astrolabe/docs-src/13-sphere-theorem.mdx"
       ],
-      "trust": {
-        "source": "astrolabe_atom",
-        "checks": {
-          "transcription": "pending",
-          "math": "pending",
-          "cross_refs": "pending"
-        },
-        "notes": []
-      },
-      "reviews": {
-        "required": 1,
-        "completed": 0,
-        "ids": []
-      },
       "github": {
         "issue": null,
         "pr": null,

@@ -55,7 +55,6 @@
 
 .sourceLine,
 .detailSummary,
-.taskCard p,
 .emptyState {
   margin: 0;
   color: #626a78;
@@ -197,63 +196,108 @@
   padding: 14px;
 }
 
-.listView {
+.nestedList {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 2px;
 }
 
-.taskCard {
-  min-width: 0;
-  min-height: 310px;
-  padding: 16px;
-  border: 1px solid #dde2ea;
-  border-radius: 8px;
+.nestedItem {
+  display: grid;
+  gap: 2px;
+}
+
+.nestedRow {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
   background: #ffffff;
   color: inherit;
   cursor: pointer;
   text-align: left;
   transition:
     border-color 0.15s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+    background 0.15s ease;
 }
 
-.taskCard:hover,
-.taskCard:focus-visible,
-.selectedCard {
+.nestedRow:hover,
+.nestedRow:focus-visible,
+.selectedNestedRow {
   border-color: #0f766e;
-  box-shadow: 0 12px 30px rgb(15 118 110 / 14%);
+  background: #f1fbfa;
   outline: none;
-  transform: translateY(-1px);
 }
 
-.cardTopline,
+.nestedGroupRow {
+  background: #fbfcfe;
+  font-weight: 700;
+}
+
+.nestedToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.nestedToggle:hover {
+  background: #e4e8ef;
+}
+
+.nestedSpacer {
+  width: 20px;
+}
+
+.nestedStatus {
+  min-width: 72px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #eef6f5;
+  color: #0f766e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.nestedTitle {
+  overflow: hidden;
+  color: #111827;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nestedMeta {
+  color: #7c2d12;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.nestedProgress {
+  min-width: 92px;
+  color: #626a78;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: right;
+}
+
 .detailHeader,
-.progressRow,
-.chipRow {
+.progressRow {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.cardTopline {
-  justify-content: space-between;
-}
-
-.cardTitle {
-  margin-top: 14px;
-  color: #111827;
-  font-size: 1.1rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.cardId {
-  margin: 8px 0 12px;
-  color: #7c2d12;
-  font-size: 0.85rem;
-  font-weight: 700;
 }
 
 .progressRow {
@@ -266,130 +310,130 @@
   text-align: right;
 }
 
-.chipRow {
-  flex-wrap: wrap;
-  margin-top: 16px;
+.dagView {
+  overflow: auto;
+  padding: 14px;
 }
 
-.chip {
-  background: #f3f0ff;
-  color: #5b21b6;
+.dagView svg {
+  display: block;
+  max-width: 100%;
 }
 
-.treeView {
-  overflow: hidden;
-  border: 1px solid #e4e8ef;
-  border-radius: 8px;
+.dagEdge {
+  fill: none;
+  stroke: #cbd5e1;
+  stroke-width: 2;
 }
 
-.treeNode + .treeNode {
-  border-top: 1px solid #e4e8ef;
+.dagEdge.selectedDagEdge {
+  stroke: #0f766e;
+  stroke-width: 3;
 }
 
-.treeButton {
-  display: grid;
-  width: 100%;
-  min-height: 58px;
-  border: 0;
-  border-bottom: 1px solid #eef1f5;
-  background: #ffffff;
-  color: inherit;
+.dagNode {
   cursor: pointer;
-  text-align: left;
 }
 
-.treeButton:hover,
-.treeButton:focus-visible,
-.selectedTreeButton {
-  background: #f1fbfa;
-  outline: none;
+.dagNode rect {
+  fill: #ffffff;
+  stroke: #dde2ea;
+  stroke-width: 1.5;
+  transition:
+    fill 0.15s ease,
+    stroke 0.15s ease;
 }
 
-.treeTitle {
-  align-self: end;
-  font-weight: 800;
+.dagNode:hover rect,
+.dagNode:focus rect,
+.dagNode.selectedDagNode rect {
+  fill: #f1fbfa;
+  stroke: #0f766e;
+  stroke-width: 2;
 }
 
-.treeMeta {
-  align-self: start;
+.dagNode.dimmedDagNode rect {
+  opacity: 0.45;
+}
+
+.dagNodeContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  min-width: 0;
+}
+
+.dagNodeContent strong {
+  display: block;
+  overflow: hidden;
+  color: #7c2d12;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dagNodeContent span {
+  display: block;
+  overflow: hidden;
+  margin-top: 3px;
+  color: #111827;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.dagLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e4e8ef;
   color: #626a78;
   font-size: 0.82rem;
 }
 
-.dependencyView {
-  display: grid;
-  gap: 16px;
-}
-
-.edgeSection {
-  padding: 4px;
-}
-
-.edgeSection h2 {
-  margin: 0 0 10px;
-  color: #111827;
-  font-size: 1rem;
-}
-
-.edgeList {
-  display: grid;
-  gap: 8px;
-}
-
-.edgeRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: 12px;
+.dagLegend > span {
+  display: inline-flex;
   align-items: center;
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #dde2ea;
-  border-radius: 8px;
-  background: #ffffff;
-  color: inherit;
-  cursor: pointer;
-  text-align: left;
+  gap: 6px;
 }
 
-.edgeRow:hover,
-.edgeRow:focus-visible,
-.selectedEdge {
-  border-color: #0f766e;
+.dagLegendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
   background: #f1fbfa;
-  outline: none;
+  border: 2px solid #0f766e;
 }
 
-.edgeRow span {
-  min-width: 0;
+.dagLegendUpstream {
+  background: #ffffff;
+  border-color: #cbd5e1;
 }
 
-.edgeRow strong,
-.edgeRow small {
-  display: block;
-  overflow-wrap: anywhere;
+.dagLegendOther {
+  opacity: 0.45;
+  background: #ffffff;
+  border-color: #cbd5e1;
 }
 
-.edgeRow small {
-  margin-top: 4px;
-  color: #626a78;
-}
-
-.edgeArrow {
-  color: #7c2d12;
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.independentList,
 .linkList {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 10px;
 }
 
-.inlineTaskButton,
 .linkList button {
+  display: grid;
+  max-width: 100%;
   padding: 8px 10px;
   border: 1px solid #dde2ea;
   border-radius: 6px;
@@ -397,16 +441,20 @@
   color: #20242b;
   cursor: pointer;
   font-weight: 700;
+  text-align: left;
 }
 
-.inlineTaskButton:hover,
-.inlineTaskButton:focus-visible,
 .linkList button:hover,
-.linkList button:focus-visible,
-.selectedInlineTask {
+.linkList button:focus-visible {
   border-color: #0f766e;
   background: #f1fbfa;
   outline: none;
+}
+
+.linkList small {
+  margin-top: 4px;
+  color: #626a78;
+  font-weight: 500;
 }
 
 .detailPanel {
@@ -509,22 +557,6 @@
   font-size: 0.82rem;
 }
 
-.linkList {
-  margin-top: 10px;
-}
-
-.linkList button {
-  display: grid;
-  max-width: 100%;
-  text-align: left;
-}
-
-.linkList small {
-  margin-top: 4px;
-  color: #626a78;
-  font-weight: 500;
-}
-
 @media (max-width: 1180px) {
   .header,
   .contentGrid {
@@ -533,10 +565,6 @@
 
   .detailPanel {
     position: static;
-  }
-
-  .listView {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -547,7 +575,6 @@
 
   .progressPanel,
   .metricGrid,
-  .listView,
   .detailGrid {
     grid-template-columns: 1fr;
   }
@@ -560,11 +587,13 @@
     flex: 1 0 auto;
   }
 
-  .edgeRow {
-    grid-template-columns: 1fr;
+  .nestedRow {
+    grid-template-columns: auto auto minmax(0, 1fr);
+    gap: 8px;
   }
 
-  .edgeArrow {
-    justify-self: start;
+  .nestedMeta,
+  .nestedProgress {
+    display: none;
   }
 }
