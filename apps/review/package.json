@@ -9,7 +9,7 @@
   "scripts": {
     "copy-tasks": "node scripts/copy-tasks.js",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:client": "vite --host 0.0.0.0",
+    "dev:client": "vite --host 127.0.0.1",
     "dev:server": "tsx server/index.ts",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
