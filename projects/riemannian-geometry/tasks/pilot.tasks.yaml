@@ -23,9 +23,7 @@ tasks:
   dcref: null
   chapter: null
   title: do Carmo — Riemannian Geometry
-  description: Review all statements from do Carmo's Riemannian Geometry, chapter
-    by chapter. Some atoms may contain extraction boundary errors; see projects/riemannian-geometry/tasks/atom-boundary-review.md
-    for a checklist.
+  description: Review all statements from do Carmo's Riemannian Geometry, chapter by chapter. Some atoms may contain extraction boundary errors; see projects/riemannian-geometry/tasks/atom-boundary-review.md for a checklist.
   status: todo
   checks: {}
   review_notes: []
@@ -105,7 +103,7 @@ tasks:
   description: 'Definition ch0:2.1: differentiable manifold'
   status: todo
   checks:
-    math_review: pending
+    math_review: done
   review_notes: []
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/e393a9b2a18c.md
@@ -326,7 +324,7 @@ tasks:
   description: 'Theorem ch0:2.10: local converse, via inverse function theorem'
   status: todo
   checks:
-    math_review: pending
+    math_review: done
   review_notes: []
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/8fdb96c825b0.md
@@ -3823,8 +3821,7 @@ tasks:
   dcref: ch6:2.4
   chapter: 6
   title: hypersurface; principal curvatures; Gauss spherical mapping
-  description: 'Example ch6:2.4: hypersurface; principal curvatures; Gauss spherical
-    mapping'
+  description: 'Example ch6:2.4: hypersurface; principal curvatures; Gauss spherical mapping'
   status: todo
   checks:
     math_review: pending
@@ -4859,8 +4856,7 @@ tasks:
   dcref: ch8:4.5
   chapter: 8
   title: metric of constant negative curvature on surfaces of genus $>1$
-  description: 'Proposition ch8:4.5: metric of constant negative curvature on surfaces
-    of genus $>1$'
+  description: 'Proposition ch8:4.5: metric of constant negative curvature on surfaces of genus $>1$'
   status: todo
   checks:
     math_review: pending
@@ -4959,8 +4955,7 @@ tasks:
   dcref: ch8:5.3
   chapter: 8
   title: isometries of $H^n$ are conformal transformations preserving $H^n$
-  description: 'Theorem ch8:5.3: isometries of $H^n$ are conformal transformations
-    preserving $H^n$'
+  description: 'Theorem ch8:5.3: isometries of $H^n$ are conformal transformations preserving $H^n$'
   status: todo
   checks:
     math_review: pending
@@ -5089,8 +5084,7 @@ tasks:
   dcref: ch9:2.2
   chapter: 9
   title: existence of a variation with given variational field
-  description: 'Proposition ch9:2.2: existence of a variation with given variational
-    field'
+  description: 'Proposition ch9:2.2: existence of a variation with given variational field'
   status: todo
   checks:
     math_review: pending
@@ -5140,8 +5134,7 @@ tasks:
   dcref: ch9:2.4
   chapter: 9
   title: formula for the first variation of the energy of a curve
-  description: 'Proposition ch9:2.4: formula for the first variation of the energy
-    of a curve'
+  description: 'Proposition ch9:2.4: formula for the first variation of the energy of a curve'
   status: todo
   checks:
     math_review: pending
@@ -7046,8 +7039,7 @@ tasks:
   dcref: ch12:3.4
   chapter: 12
   title: commuting isometry is a translation along the same geodesic
-  description: 'Lemma ch12:3.4: commuting isometry is a translation along the same
-    geodesic'
+  description: 'Lemma ch12:3.4: commuting isometry is a translation along the same geodesic'
   status: todo
   checks:
     math_review: pending
@@ -7073,8 +7065,7 @@ tasks:
   dcref: ch12:3.5
   chapter: 12
   title: subgroup leaving a geodesic invariant is infinite cyclic
-  description: 'Lemma ch12:3.5: subgroup leaving a geodesic invariant is infinite
-    cyclic'
+  description: 'Lemma ch12:3.5: subgroup leaving a geodesic invariant is infinite cyclic'
   status: todo
   checks:
     math_review: pending
