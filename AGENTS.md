@@ -17,7 +17,7 @@ Respond to the user in Chinese unless they explicitly ask for another language.
 ## Safety Rules
 
 1. Do NOT run `git commit`, `git push`, `git rebase`, or destructive git mutations unless the user explicitly asks.
-2. Treat the user's fork (`origin`) as the sandbox; `upstream` (`MathNetwork/OpenGA`) is only for reviewed PRs.
+2. Treat the user's fork (`origin`) as the sandbox; `upstream` (`LehengChen/OpenGA`) is the public working fork. Do not clone or fork from `MathNetwork/OpenGA` for day-to-day work.
 3. Do NOT commit binary artifacts, API keys, `.env`, or the `doCarmo-*.zip` archive.
 4. Do NOT add AI attribution lines such as `Co-Authored-By`.
 5. On a fresh clone, activate the commit-msg hook: `git config core.hooksPath .githooks`.

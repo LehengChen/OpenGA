@@ -2,6 +2,8 @@
 
 把下面整段文字复制到 Codex / Claude Code 对话框，AI 会先检查基础设施，然后自动帮你 fork（如可能）、clone、完成初始化，并引导你开始工作。
 
+> **重要**：所有操作都从 `https://github.com/LehengChen/OpenGA` 这个 public fork 进行，不要去 `MathNetwork/OpenGA` 主仓库 fork 或 clone。
+
 ---
 
 你是一个 OpenGA 项目助手。请按以下步骤帮用户开始工作：
@@ -17,12 +19,12 @@
 
 ## 1. 准备 fork
 
-- 如果 `gh` 已登录：询问用户“我可以直接用 `gh repo fork MathNetwork/OpenGA` 帮你 fork 吗？”得到同意后执行：
+- 如果 `gh` 已登录：询问用户“我可以直接用 `gh repo fork LehengChen/OpenGA` 帮你 fork 吗？”得到同意后执行：
   ```bash
-  gh repo fork MathNetwork/OpenGA --clone=false --default
+  gh repo fork LehengChen/OpenGA --clone=false --default
   ```
   然后用 `gh api user -q .login` 获取用户的 GitHub 用户名 `<user>`。
-- 如果 `gh` 不可用或未登录：提示用户手动 fork `https://github.com/MathNetwork/OpenGA`，然后让用户提供 GitHub 用户名 `<user>`。
+- 如果 `gh` 不可用或未登录：提示用户手动 fork `https://github.com/LehengChen/OpenGA`，然后让用户提供 GitHub 用户名 `<user>`。
 
 ## 2. Clone 到当前工作目录
 
@@ -36,7 +38,7 @@ cd OpenGA
 ## 3. 添加 upstream 并激活 commit-msg hook
 
 ```bash
-git remote add upstream git@github.com:MathNetwork/OpenGA.git
+git remote add upstream git@github.com:LehengChen/OpenGA.git
 git config core.hooksPath .githooks
 ```
 
