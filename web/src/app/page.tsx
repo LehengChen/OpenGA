@@ -2,10 +2,16 @@ import Link from 'next/link'
 import ParticleBackground from '@/components/ParticleBackground'
 import { Navbar } from '@/components/Navbar'
 
-// The active project lives outside the web app, as its own folder.
-// Override with NEXT_PUBLIC_PROJECT_PATH when deploying elsewhere.
+// The active project. Resolved (in lib/server/paths) against the app cwd when
+// relative. Override with NEXT_PUBLIC_PROJECT_PATH when deploying elsewhere.
+//   - dev: read the top-level `projects/` source directly (`../` from web/), so
+//     edits show up live without rebuilding the prebuild copy.
+//   - prod: read the copy `prebuild` bundles into `web/projects/`.
 const PROJECT_PATH =
-  process.env.NEXT_PUBLIC_PROJECT_PATH || '/Users/moqian/OpenGALib/projects/riemannian-geometry'
+  process.env.NEXT_PUBLIC_PROJECT_PATH ||
+  (process.env.NODE_ENV === 'development'
+    ? '../projects/riemannian-geometry'
+    : 'projects/riemannian-geometry')
 
 export default function Home() {
   return (
