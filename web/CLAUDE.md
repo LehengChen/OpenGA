@@ -1,5 +1,27 @@
 # Astrolabe — Knowledge Network Visualizer
 
+## Sync with the Astrolabe (Tauri) repo
+
+This `web/` is the **canonical, actively-developed** Astrolabe frontend.
+`MathNetwork/Astrolabe` (the Tauri desktop app) is kept in sync **from here**, one
+way, by the `.github/workflows/sync-astrolabe-ui.yml` workflow: every push to
+`main` touching `web/src/**` mirrors the shared **UI core** into that repo and
+opens a `sync/openga-ui` PR for review.
+
+- **Synced (UI core):** `src/panels/`, `src/plugins/`, `src/components/mdx/`,
+  `src/stores/`, `src/types/`, `src/components/MarkdownRenderer.tsx`,
+  `src/components/ParticleBackground.tsx`, `src/lib/refView.ts`,
+  `src/lib/sortColors.ts`.
+- **NOT synced (per-app):** the data/API layer (`lib/api.ts`, `lib/apiBase.ts`,
+  `lib/server/`, `app/api/`, `hooks/`), the site shell (`app/page.tsx`,
+  `app/layout.tsx`, `Navbar`, `ThemeToggle`, `app/docs/`, `components/docs/`),
+  and `content/` / `projects/` (data).
+
+So: edit shared UI under the synced paths and it flows to the Tauri build; keep
+app-specific behaviour behind the `apiBase` seam in the non-synced paths. The
+sync needs the `ASTROLABE_SYNC_TOKEN` repo secret (Contents + Pull-requests
+write on `MathNetwork/Astrolabe`).
+
 ## How AI Should Work With Astrolabe
 
 **Edit files directly.** Modify the per-node `.md` files in `.astrolabe/atoms/` and `.astrolabe/edges/`, and the `.mdx` files in `.astrolabe/docs/`, the same way a human would. The app re-reads the store on each request.
