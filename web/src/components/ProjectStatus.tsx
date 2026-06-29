@@ -45,29 +45,11 @@ export function ProjectStatus() {
         </div>
       </div>
 
-      <p className="text-[11px] leading-relaxed text-white/30 mt-3 mb-3">
-        Counts only what is written in Lean so far — a live to-do list of open
+      <p className="text-[11px] leading-relaxed text-white/30 mt-3">
+        Counts only what is written in Lean so far — a live tally of open
         <code className="mx-1 bg-white/10 text-cyan-400 px-1 py-0.5 rounded text-[10px] font-mono">sorry</code>s,
         not a completion percentage.
       </p>
-
-      {open.length === 0 ? (
-        <p className="text-[13px] text-white/55">No open <code className="bg-white/10 text-cyan-400 px-1 py-0.5 rounded text-[11px] font-mono">sorry</code> — the formalized library is complete.</p>
-      ) : (
-        <ul className="border-t border-white/[0.07]">
-          {open.map((r) => (
-            <li key={r.name} className="py-2 border-b border-white/[0.07]">
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="text-[13px] text-white/80">{r.title || r.name}</span>
-                <span className="text-[10px] uppercase tracking-wider text-white/30 shrink-0">{r.sort || 'sorry'}</span>
-              </div>
-              <div className="text-[11px] font-mono text-white/30 mt-0.5 truncate">
-                {r.name}{r.file ? ` · ${r.file}${r.line ? `:${r.line}` : ''}` : ''}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   )
 }

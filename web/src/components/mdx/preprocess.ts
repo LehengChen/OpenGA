@@ -16,6 +16,8 @@ export function preprocess(content: string, numbering?: Numbering): string {
     result = processEntryBlocks(result, numbering)
     // \status → a live formalization-status block (rendered from the in-memory store)
     result = result.replace(/\\status\b/g, '<div data-status="true"></div>')
+    // \chapters → a live chapter list (derived from the project's docs)
+    result = result.replace(/\\chapters\b/g, '<div data-chapters="true"></div>')
     return result
 }
 

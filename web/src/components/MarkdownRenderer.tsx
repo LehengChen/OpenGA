@@ -18,6 +18,7 @@ import { InlineMath } from './mdx/InlineMath'
 import { EntryBlock } from './mdx/EntryBlock'
 import { EntryLink } from './mdx/EntryLink'
 import { ProjectStatus } from './ProjectStatus'
+import { ProjectChapters } from './ProjectChapters'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const components: Record<string, any> = {
@@ -46,6 +47,7 @@ const components: Record<string, any> = {
     // Entry components
     div: ({ node, children, ...props }: any) => {
         if (node?.properties?.dataStatus) return <ProjectStatus />
+        if (node?.properties?.dataChapters) return <ProjectChapters />
         const entryId = node?.properties?.dataEntry
         if (entryId) {
             const collapsible = node?.properties?.dataCollapsible

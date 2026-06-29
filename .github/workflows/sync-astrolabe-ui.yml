@@ -50,6 +50,8 @@ jobs:
           for f in \
             components/MarkdownRenderer.tsx \
             components/ParticleBackground.tsx \
+            components/ProjectStatus.tsx \
+            components/ProjectChapters.tsx \
             lib/refView.ts \
             lib/sortColors.ts; do
             mkdir -p "$(dirname "$DST/$f")"
