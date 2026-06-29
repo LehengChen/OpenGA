@@ -631,7 +631,87 @@
   color: #20242b;
   font-size: 0.92rem;
   line-height: 1.6;
-  white-space: pre-wrap;
+}
+
+.atomContent :first-child {
+  margin-top: 0;
+}
+
+.atomContent :last-child {
+  margin-bottom: 0;
+}
+
+.atomContent p {
+  margin: 0.75em 0;
+}
+
+.atomContent h1,
+.atomContent h2,
+.atomContent h3,
+.atomContent h4,
+.atomContent h5,
+.atomContent h6 {
+  margin: 1.2em 0 0.6em;
+  color: #111827;
+  line-height: 1.25;
+}
+
+.atomContent ul,
+.atomContent ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+.atomContent li {
+  margin: 0.25em 0;
+}
+
+.atomContent blockquote {
+  margin: 0.75em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid #0f766e;
+  background: #ffffff;
+  color: #4b5563;
+}
+
+.atomContent code {
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: #eef6f5;
+  color: #0f766e;
+  font-size: 0.88em;
+}
+
+.atomContent pre {
+  overflow: auto;
+  margin: 0.75em 0;
+  padding: 12px;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.atomContent pre code {
+  padding: 0;
+  background: transparent;
+  color: #20242b;
+}
+
+.atomContent table {
+  width: 100%;
+  margin: 0.75em 0;
+  border-collapse: collapse;
+}
+
+.atomContent th,
+.atomContent td {
+  padding: 8px 10px;
+  border: 1px solid #e4e8ef;
+  text-align: left;
+}
+
+.atomContent th {
+  background: #fbfcfe;
+  font-weight: 700;
 }
 
 .reviewNoteInput {

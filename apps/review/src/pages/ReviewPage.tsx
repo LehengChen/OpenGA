@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from '../App.module.css';
+import { AtomViewer } from '../components/AtomViewer';
 import { fetchAtom, fetchNeighbors, submitReview } from '../api';
 import { findTask } from '../lib/progress';
 import type { TaskDataset } from '../lib/taskSchema';
@@ -101,7 +102,7 @@ export function ReviewPage({ dataset }: Props) {
           ) : error ? (
             <p className={styles.emptyState}>Error: {error}</p>
           ) : (
-            <pre className={styles.atomContent}>{atomContent}</pre>
+            <AtomViewer content={atomContent} />
           )}
         </article>
 
