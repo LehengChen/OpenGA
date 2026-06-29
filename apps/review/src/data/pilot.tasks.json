@@ -216,7 +216,7 @@
       "description": "Example ch0:2.4: the real projective space $P^n(\\mathbb{R})$",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
       "review_notes": [],
       "files": {
