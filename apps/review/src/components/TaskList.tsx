@@ -7,7 +7,6 @@ type Props = {
   tasks: ReviewTask[];
   selectedId: string;
   onSelect: (taskId: string) => void;
-  onReview: (taskId: string) => void;
 };
 
 type NestedItemProps = {
@@ -15,7 +14,6 @@ type NestedItemProps = {
   tasks: ReviewTask[];
   selectedId: string;
   onSelect: (taskId: string) => void;
-  onReview: (taskId: string) => void;
   level: number;
   openSet: Set<string>;
   toggle: (id: string) => void;
@@ -26,7 +24,6 @@ function NestedItem({
   tasks,
   selectedId,
   onSelect,
-  onReview,
   level,
   openSet,
   toggle
@@ -38,54 +35,53 @@ function NestedItem({
   const progress = taskProgress(tasks, task.id);
   const done = tasksDone(tasks, task.id);
   const total = tasksTotal(tasks, task.id);
-  const mathReview = task.checks?.math_review ?? null;
+  const mathReview = task.checks?.math_review ?? 'pending';
 
   const handleRowClick = () => {
-    if (isGroup) {
-      onSelect(task.id);
-    } else {
-      onReview(task.id);
-    }
+    onSelect(task.id);
   };
 
   return (
     <div className={styles.nestedItem} style={{ marginLeft: `${level * 18}px` }}>
-      <button
-        className={`${styles.nestedRow} ${isSelected ? styles.selectedNestedRow : ''} ${isGroup ? styles.nestedGroupRow : ''}`}
-        type="button"
-        onClick={handleRowClick}
-      >
+      <div className={styles.nestedRow}>
         {children.length > 0 ? (
-          <span
+          <button
+            type="button"
             className={styles.nestedToggle}
             onClick={(e) => {
               e.stopPropagation();
               toggle(task.id);
             }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') toggle(task.id);
-            }}
+            aria-label={isOpen ? `Collapse ${task.title}` : `Expand ${task.title}`}
+            aria-expanded={isOpen}
           >
             {isOpen ? '▾' : '▸'}
-          </span>
+          </button>
         ) : (
           <span className={styles.nestedSpacer} />
         )}
 
-        <span className={styles.nestedStatus}>{statusLabels[task.status]}</span>
-        <span className={styles.nestedTitle}>{task.title}</span>
-        <span className={styles.nestedMeta}>{task.id}</span>
+        <button
+          className={`${styles.nestedRowButton} ${isSelected ? styles.selectedNestedRow : ''} ${isGroup ? styles.nestedGroupRow : ''}`}
+          type="button"
+          onClick={handleRowClick}
+          aria-pressed={isSelected}
+        >
+          <span className={styles.nestedStatus}>{statusLabels[task.status]}</span>
+          <span className={styles.nestedTitle} title={task.title}>{task.title}</span>
+          <span className={styles.nestedMeta} title={task.id}>{task.id}</span>
 
-        {isGroup ? (
-          <span className={styles.nestedProgress}>{done}/{total} · {progress}%</span>
-        ) : mathReview ? (
-          <span className={styles.nestedProgress}>
-            {mathReview === 'done' ? 'Review done' : 'Review pending'}
-          </span>
-        ) : null}
-      </button>
+          {isGroup ? (
+            <span className={styles.nestedProgress}>{done}/{total} · {progress}%</span>
+          ) : (
+            <span
+              className={`${styles.nestedProgress} ${mathReview === 'done' ? styles.nestedProgressDone : styles.nestedProgressPending}`}
+            >
+              {mathReview === 'done' ? 'Review done' : 'Review pending'}
+            </span>
+          )}
+        </button>
+      </div>
 
       {isOpen && children.length > 0 ? (
         <div className={styles.nestedChildren}>
@@ -96,7 +92,6 @@ function NestedItem({
               tasks={tasks}
               selectedId={selectedId}
               onSelect={onSelect}
-              onReview={onReview}
               level={level + 1}
               openSet={openSet}
               toggle={toggle}
@@ -108,7 +103,7 @@ function NestedItem({
   );
 }
 
-export function TaskList({ tasks, selectedId, onSelect, onReview }: Props) {
+export function TaskList({ tasks, selectedId, onSelect }: Props) {
   const [openSet, setOpenSet] = useState<Set<string>>(() => {
     const set = new Set<string>();
     rootTasks(tasks).forEach((root) => {
@@ -128,16 +123,21 @@ export function TaskList({ tasks, selectedId, onSelect, onReview }: Props) {
     setOpenSet(next);
   };
 
+  const roots = rootTasks(tasks);
+
+  if (roots.length === 0) {
+    return <p className={styles.emptyState}>No tasks available.</p>;
+  }
+
   return (
     <div className={styles.nestedList}>
-      {rootTasks(tasks).map((task) => (
+      {roots.map((task) => (
         <NestedItem
           key={task.id}
           task={task}
           tasks={tasks}
           selectedId={selectedId}
           onSelect={onSelect}
-          onReview={onReview}
           level={0}
           openSet={openSet}
           toggle={toggle}

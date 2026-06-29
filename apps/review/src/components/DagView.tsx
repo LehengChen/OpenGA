@@ -1,6 +1,7 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../App.module.css';
-import { dagEdges, leafTasks, taskDepth, upstreamTasks } from '../lib/progress';
-import { ReviewTask } from '../lib/taskSchema';
+import { leafTasks } from '../lib/progress';
+import type { ReviewTask } from '../lib/taskSchema';
 
 type Props = {
   tasks: ReviewTask[];
@@ -8,137 +9,446 @@ type Props = {
   onSelect: (taskId: string) => void;
 };
 
-const NODE_WIDTH = 168;
-const NODE_HEIGHT = 64;
-const COLUMN_GAP = 64;
-const ROW_GAP = 24;
-const PADDING = 20;
+type Scope = 'chapter' | 'focus' | 'all';
+type DagNode = {
+  task: ReviewTask;
+  x: number;
+  y: number;
+  depth: number;
+};
+
+const NODE_WIDTH = 138;
+const NODE_HEIGHT = 44;
+const COLUMN_GAP = 56;
+const ROW_GAP = 18;
+const PADDING = 24;
+const MAX_NODES_PER_ROW = 5;
+
+function parseDcref(dcref: string | null): { chapter: number; section: number; index: number } {
+  if (!dcref) return { chapter: 0, section: 0, index: 0 };
+  const chPart = dcref.split(':')[0];
+  const rest = dcref.split(':')[1] ?? '0.0';
+  const [sectionStr, indexStr] = rest.split('.');
+  return {
+    chapter: parseInt(chPart.replace('ch', ''), 10) || 0,
+    section: parseInt(sectionStr, 10) || 0,
+    index: parseInt(indexStr, 10) || 0
+  };
+}
+
+function computeDepthInScope(
+  taskId: string,
+  nodeIds: Set<string>,
+  tasksMap: Map<string, ReviewTask>,
+  memo = new Map<string, number>()
+): number {
+  if (memo.has(taskId)) return memo.get(taskId)!;
+  const task = tasksMap.get(taskId);
+  if (!task) {
+    memo.set(taskId, 0);
+    return 0;
+  }
+  const upstreamIds = task.depends_on.filter((id) => nodeIds.has(id));
+  if (upstreamIds.length === 0) {
+    memo.set(taskId, 0);
+    return 0;
+  }
+  const depth = 1 + Math.max(...upstreamIds.map((id) => computeDepthInScope(id, nodeIds, tasksMap, memo)));
+  memo.set(taskId, depth);
+  return depth;
+}
+
+function buildNodes(
+  visibleTasks: ReviewTask[],
+  tasksMap: Map<string, ReviewTask>
+): DagNode[] {
+  const nodeIds = new Set(visibleTasks.map((t) => t.id));
+  const depths = new Map<string, number>();
+  for (const task of visibleTasks) {
+    depths.set(task.id, computeDepthInScope(task.id, nodeIds, tasksMap));
+  }
+
+  const byDepth = new Map<number, ReviewTask[]>();
+  let maxDepth = 0;
+  for (const task of visibleTasks) {
+    const d = depths.get(task.id) ?? 0;
+    maxDepth = Math.max(maxDepth, d);
+    if (!byDepth.has(d)) byDepth.set(d, []);
+    byDepth.get(d)!.push(task);
+  }
+
+  const positions = new Map<string, { x: number; y: number }>();
+  let currentY = 0;
+
+  for (let d = 0; d <= maxDepth; d++) {
+    const row = (byDepth.get(d) ?? []).sort((a, b) => {
+      const pa = parseDcref(a.dcref);
+      const pb = parseDcref(b.dcref);
+      if (pa.section !== pb.section) return pa.section - pb.section;
+      return pa.index - pb.index;
+    });
+
+    const rows = Math.ceil(row.length / MAX_NODES_PER_ROW);
+    const layerHeight = rows * NODE_HEIGHT + (rows - 1) * ROW_GAP;
+    const layerWidth = Math.min(row.length, MAX_NODES_PER_ROW) * NODE_WIDTH +
+      (Math.min(row.length, MAX_NODES_PER_ROW) - 1) * ROW_GAP;
+    const startX = PADDING;
+
+    row.forEach((task, i) => {
+      const rowIndex = Math.floor(i / MAX_NODES_PER_ROW);
+      const colIndex = i % MAX_NODES_PER_ROW;
+      const nodesInThisRow = Math.min(row.length - rowIndex * MAX_NODES_PER_ROW, MAX_NODES_PER_ROW);
+      const rowWidth = nodesInThisRow * NODE_WIDTH + (nodesInThisRow - 1) * ROW_GAP;
+      const centeredStartX = startX + (layerWidth - rowWidth) / 2;
+      positions.set(task.id, {
+        x: centeredStartX + colIndex * (NODE_WIDTH + ROW_GAP),
+        y: currentY + rowIndex * (NODE_HEIGHT + ROW_GAP)
+      });
+    });
+
+    currentY += layerHeight + COLUMN_GAP;
+  }
+
+  return visibleTasks.map((task) => ({
+    task,
+    x: positions.get(task.id)!.x,
+    y: positions.get(task.id)!.y,
+    depth: depths.get(task.id) ?? 0
+  }));
+}
+
+function pathFor(from: { x: number; y: number }, to: { x: number; y: number }): string {
+  const x1 = from.x + NODE_WIDTH;
+  const y1 = from.y + NODE_HEIGHT / 2;
+  const x2 = to.x;
+  const y2 = to.y + NODE_HEIGHT / 2;
+  const c1x = x1 + COLUMN_GAP / 2;
+  const c2x = x2 - COLUMN_GAP / 2;
+  return `M ${x1} ${y1} C ${c1x} ${y1}, ${c2x} ${y2}, ${x2} ${y2}`;
+}
 
 export function DagView({ tasks, selectedId, onSelect }: Props) {
-  const leaves = leafTasks(tasks);
-  const edges = dagEdges(tasks);
+  const tasksMap = useMemo(() => {
+    const map = new Map<string, ReviewTask>();
+    for (const task of tasks) map.set(task.id, task);
+    return map;
+  }, [tasks]);
 
-  const depthMap = new Map<string, number>();
-  for (const task of leaves) {
-    depthMap.set(task.id, taskDepth(tasks, task.id));
-  }
+  const leaves = useMemo(() => leafTasks(tasks), [tasks]);
+  const chapters = useMemo(
+    () => Array.from(new Set(leaves.map((t) => t.chapter).filter((c): c is number => c !== null))).sort((a, b) => a - b),
+    [leaves]
+  );
 
-  const rows = new Map<number, ReviewTask[]>();
-  const maxDepth = Math.max(0, ...depthMap.values());
-  for (let d = 0; d <= maxDepth; d++) {
-    rows.set(
-      d,
-      leaves.filter((t) => depthMap.get(t.id) === d)
-    );
-  }
+  const [scope, setScope] = useState<Scope>('chapter');
+  const [chapterFilter, setChapterFilter] = useState<number>(() => {
+    const selected = tasksMap.get(selectedId);
+    return selected?.chapter ?? chapters[0] ?? 0;
+  });
 
-  const maxRows = Math.max(...Array.from(rows.values()).map((r) => r.length), 1);
-
-  const width = (maxDepth + 1) * (NODE_WIDTH + COLUMN_GAP) + PADDING * 2 - COLUMN_GAP;
-  const height = maxRows * (NODE_HEIGHT + ROW_GAP) + PADDING * 2 - ROW_GAP;
-
-  const nodePositions = new Map<string, { x: number; y: number }>();
-
-  for (let d = 0; d <= maxDepth; d++) {
-    const row = rows.get(d) ?? [];
-    const rowHeight = row.length * NODE_HEIGHT + (row.length - 1) * ROW_GAP;
-    const startY = (height - rowHeight) / 2;
-    for (let i = 0; i < row.length; i++) {
-      const task = row[i];
-      nodePositions.set(task.id, {
-        x: PADDING + d * (NODE_WIDTH + COLUMN_GAP),
-        y: startY + i * (NODE_HEIGHT + ROW_GAP)
-      });
+  useEffect(() => {
+    if (scope === 'chapter') {
+      const selected = tasksMap.get(selectedId);
+      if (selected?.chapter !== null && selected?.chapter !== undefined) {
+        setChapterFilter(selected.chapter);
+      }
     }
-  }
+  }, [selectedId, scope, tasksMap]);
 
-  function pathFor(edge: { from: string; to: string }) {
-    const fromPos = nodePositions.get(edge.from);
-    const toPos = nodePositions.get(edge.to);
-    if (!fromPos || !toPos) return '';
+  const visibleTasks = useMemo(() => {
+    if (scope === 'all') return leaves;
+    if (scope === 'chapter') return leaves.filter((t) => t.chapter === chapterFilter);
 
-    const x1 = fromPos.x + NODE_WIDTH;
-    const y1 = fromPos.y + NODE_HEIGHT / 2;
-    const x2 = toPos.x;
-    const y2 = toPos.y + NODE_HEIGHT / 2;
-    const c1x = x1 + COLUMN_GAP / 2;
-    const c2x = x2 - COLUMN_GAP / 2;
+    // focus scope: selected node + ancestors + descendants up to 2 hops
+    const selected = tasksMap.get(selectedId);
+    if (!selected || selected.kind !== 'leaf') return leaves.slice(0, 20);
 
-    return `M ${x1} ${y1} C ${c1x} ${y1}, ${c2x} ${y2}, ${x2} ${y2}`;
-  }
+    const included = new Set<string>();
+    included.add(selectedId);
+
+    for (let i = 0; i < 2; i++) {
+      const next = new Set<string>();
+      for (const id of included) {
+        const task = tasksMap.get(id);
+        if (!task) continue;
+        task.depends_on.forEach((dep) => { if (tasksMap.get(dep)?.kind === 'leaf') next.add(dep); });
+        task.unlocks.forEach((down) => { if (tasksMap.get(down)?.kind === 'leaf') next.add(down); });
+      }
+      next.forEach((id) => included.add(id));
+    }
+
+    return leaves.filter((t) => included.has(t.id));
+  }, [leaves, scope, chapterFilter, selectedId, tasksMap]);
+
+  const nodes = useMemo(() => buildNodes(visibleTasks, tasksMap), [visibleTasks, tasksMap]);
+  const nodeById = useMemo(() => {
+    const map = new Map<string, DagNode>();
+    for (const n of nodes) map.set(n.task.id, n);
+    return map;
+  }, [nodes]);
+
+  const edges = useMemo(() => {
+    const visibleIds = new Set(visibleTasks.map((t) => t.id));
+    const result: { from: string; to: string }[] = [];
+    const seen = new Set<string>();
+    for (const task of visibleTasks) {
+      for (const depId of task.depends_on) {
+        if (!visibleIds.has(depId)) continue;
+        const key = `${depId}->${task.id}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        result.push({ from: depId, to: task.id });
+      }
+    }
+    return result;
+  }, [visibleTasks]);
+
+  const upstreamMap = useMemo(() => {
+    const unlockers = new Map<string, string[]>();
+    for (const task of visibleTasks) unlockers.set(task.id, []);
+    for (const task of tasks) {
+      for (const unlockedId of task.unlocks) {
+        if (unlockers.has(unlockedId)) {
+          unlockers.get(unlockedId)!.push(task.id);
+        }
+      }
+    }
+
+    const map = new Map<string, Set<string>>();
+    for (const task of visibleTasks) {
+      const upstream = new Set<string>();
+      if (task.parent) upstream.add(task.parent);
+      task.depends_on.forEach((id) => upstream.add(id));
+      unlockers.get(task.id)!.forEach((id) => upstream.add(id));
+      map.set(task.id, upstream);
+    }
+    return map;
+  }, [visibleTasks, tasks]);
+
+  const bounds = useMemo(() => {
+    if (nodes.length === 0) return { width: 400, height: 300 };
+    const maxX = Math.max(...nodes.map((n) => n.x + NODE_WIDTH));
+    const maxY = Math.max(...nodes.map((n) => n.y + NODE_HEIGHT));
+    return {
+      width: Math.max(maxX + PADDING, 400),
+      height: Math.max(maxY + PADDING, 300)
+    };
+  }, [nodes]);
+
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const dragRef = useRef<{ dragging: boolean; startX: number; startY: number; panX: number; panY: number } | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const resetView = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    resetView();
+  }, [scope, chapterFilter]);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    setZoom((z) => Math.min(Math.max(z * delta, 0.25), 3));
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.target === svgRef.current || (e.target as Element).tagName === 'svg') {
+      dragRef.current = {
+        dragging: true,
+        startX: e.clientX,
+        startY: e.clientY,
+        panX: pan.x,
+        panY: pan.y
+      };
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!dragRef.current?.dragging) return;
+    const dx = e.clientX - dragRef.current.startX;
+    const dy = e.clientY - dragRef.current.startY;
+    setPan({ x: dragRef.current.panX + dx, y: dragRef.current.panY + dy });
+  };
+
+  const handleMouseUp = () => {
+    if (dragRef.current) dragRef.current.dragging = false;
+  };
+
+  const handleMouseLeave = () => {
+    if (dragRef.current) dragRef.current.dragging = false;
+  };
+
+  const nodeCountInfo = `${visibleTasks.length} nodes · ${edges.length} edges`;
 
   return (
     <div className={styles.dagView}>
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        <defs>
-          <marker
-            id="dag-arrow"
-            markerWidth="10"
-            markerHeight="10"
-            refX="9"
-            refY="3"
-            orient="auto"
-            markerUnits="strokeWidth"
+      <div className={styles.dagToolbar}>
+        <div className={styles.dagScopeGroup}>
+          <button
+            type="button"
+            className={scope === 'chapter' ? styles.dagScopeActive : ''}
+            onClick={() => setScope('chapter')}
+            aria-pressed={scope === 'chapter'}
           >
-            <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8" />
-          </marker>
-        </defs>
+            Chapter
+          </button>
+          <button
+            type="button"
+            className={scope === 'focus' ? styles.dagScopeActive : ''}
+            onClick={() => setScope('focus')}
+            aria-pressed={scope === 'focus'}
+          >
+            Focus
+          </button>
+          <button
+            type="button"
+            className={scope === 'all' ? styles.dagScopeActive : ''}
+            onClick={() => setScope('all')}
+            aria-pressed={scope === 'all'}
+          >
+            All
+          </button>
+        </div>
 
-        {edges.map((edge) => {
-          const isSelected = selectedId === edge.to || selectedId === edge.from;
-          return (
-            <path
-              key={`${edge.from}-${edge.to}`}
-              d={pathFor(edge)}
-              className={`${styles.dagEdge} ${isSelected ? styles.selectedDagEdge : ''}`}
-              markerEnd="url(#dag-arrow)"
-            />
-          );
-        })}
+        {scope === 'chapter' ? (
+          <select
+            className={styles.dagChapterSelect}
+            value={chapterFilter}
+            onChange={(e) => setChapterFilter(parseInt(e.target.value, 10))}
+            aria-label="Filter by chapter"
+          >
+            {chapters.map((ch) => (
+              <option key={ch} value={ch}>
+                Chapter {ch}
+              </option>
+            ))}
+          </select>
+        ) : null}
 
-        {leaves.map((task) => {
-          const pos = nodePositions.get(task.id);
-          if (!pos) return null;
+        <span className={styles.dagMeta}>{nodeCountInfo}</span>
 
-          const isSelected = selectedId === task.id;
-          const upstream = upstreamTasks(tasks, task.id);
-          const isDimmed = selectedId && selectedId !== task.id && !upstream.some((t) => t.id === selectedId);
-
-          return (
-            <g
-              key={task.id}
-              transform={`translate(${pos.x}, ${pos.y})`}
-              className={`${styles.dagNode} ${isSelected ? styles.selectedDagNode : ''} ${isDimmed ? styles.dimmedDagNode : ''}`}
-              onClick={() => onSelect(task.id)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') onSelect(task.id);
-              }}
-            >
-              <rect width={NODE_WIDTH} height={NODE_HEIGHT} rx={8} ry={8} />
-              <foreignObject x={8} y={8} width={NODE_WIDTH - 16} height={NODE_HEIGHT - 16}>
-                <div className={styles.dagNodeContent}>
-                  <strong>{task.id}</strong>
-                  <span>{task.title}</span>
-                </div>
-              </foreignObject>
-            </g>
-          );
-        })}
-      </svg>
-
-      <div className={styles.dagLegend}>
-        <span>
-          <span className={styles.dagLegendDot} /> Selected
-        </span>
-        <span>
-          <span className={`${styles.dagLegendDot} ${styles.dagLegendUpstream}`} /> Upstream
-        </span>
-        <span>
-          <span className={`${styles.dagLegendDot} ${styles.dagLegendOther}`} /> Other
-        </span>
+        <button
+          type="button"
+          className={styles.dagResetButton}
+          onClick={resetView}
+          aria-label="Reset DAG view"
+        >
+          Reset view
+        </button>
       </div>
+
+      {scope === 'all' && visibleTasks.length > 80 ? (
+        <p className={styles.dagWarning}>
+          Showing all {visibleTasks.length} leaf tasks. The graph may be dense; use Chapter or Focus
+          mode for easier navigation.
+        </p>
+      ) : null}
+
+      {visibleTasks.length === 0 ? (
+        <p className={styles.emptyState}>No tasks match the current scope.</p>
+      ) : (
+        <>
+          <div
+            className={styles.dagCanvas}
+            onWheel={handleWheel}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+          >
+            <svg
+              ref={svgRef}
+              width={bounds.width}
+              height={bounds.height}
+              viewBox={`0 0 ${bounds.width} ${bounds.height}`}
+              style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0' }}
+            >
+              <defs>
+                <marker
+                  id="dag-arrow"
+                  markerWidth="10"
+                  markerHeight="10"
+                  refX="9"
+                  refY="3"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
+                  <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8" />
+                </marker>
+              </defs>
+
+              {edges.map((edge) => {
+                const fromNode = nodeById.get(edge.from);
+                const toNode = nodeById.get(edge.to);
+                if (!fromNode || !toNode) return null;
+                const isSelected = selectedId === edge.to || selectedId === edge.from;
+                return (
+                  <path
+                    key={`${edge.from}-${edge.to}`}
+                    d={pathFor(fromNode, toNode)}
+                    className={`${styles.dagEdge} ${isSelected ? styles.selectedDagEdge : ''}`}
+                    markerEnd="url(#dag-arrow)"
+                  />
+                );
+              })}
+
+              {nodes.map((node) => {
+                const isSelected = selectedId === node.task.id;
+                const upstream = upstreamMap.get(node.task.id)!;
+                const isDimmed = selectedId.length > 0 &&
+                  selectedId !== node.task.id &&
+                  !upstream.has(selectedId) &&
+                  !node.task.depends_on.includes(selectedId) &&
+                  !node.task.unlocks.includes(selectedId);
+
+                return (
+                  <g
+                    key={node.task.id}
+                    transform={`translate(${node.x}, ${node.y})`}
+                    className={`${styles.dagNode} ${isSelected ? styles.selectedDagNode : ''} ${isDimmed ? styles.dimmedDagNode : ''}`}
+                    onClick={() => onSelect(node.task.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${node.task.id}: ${node.task.title}`}
+                    aria-pressed={isSelected}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onSelect(node.task.id);
+                      }
+                    }}
+                  >
+                    <rect width={NODE_WIDTH} height={NODE_HEIGHT} rx={6} ry={6} />
+                    <foreignObject x={6} y={5} width={NODE_WIDTH - 12} height={NODE_HEIGHT - 10}>
+                      <div className={styles.dagNodeContent}>
+                        <strong title={node.task.id}>{node.task.id}</strong>
+                        <span title={node.task.title}>{node.task.title}</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+
+          <div className={styles.dagLegend}>
+            <span>
+              <span className={styles.dagLegendDot} /> Selected
+            </span>
+            <span>
+              <span className={`${styles.dagLegendDot} ${styles.dagLegendUpstream}`} /> Upstream / downstream
+            </span>
+            <span>
+              <span className={`${styles.dagLegendDot} ${styles.dagLegendOther}`} /> Other
+            </span>
+            <span className={styles.dagHint}>Scroll to zoom · drag background to pan</span>
+          </div>
+        </>
+      )}
     </div>
   );
 }

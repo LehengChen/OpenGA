@@ -22,7 +22,7 @@ export async function fetchAtom(taskId: string): Promise<string> {
 
 export async function submitReview(
   taskId: string,
-  payload: { mathReview: boolean; note: string }
+  payload: { mathReview: boolean; note: string; atomContent?: string }
 ): Promise<{ task: ReviewTask; nextId: string | null }> {
   const res = await fetch(`${API_BASE}/tasks/${encodeURIComponent(taskId)}/review`, {
     method: 'POST',

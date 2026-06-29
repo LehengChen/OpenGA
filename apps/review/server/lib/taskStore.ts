@@ -16,31 +16,88 @@ export const jsonPath = path.join(
   'apps/review/src/data/pilot.tasks.json'
 );
 
+class Mutex {
+  private locked = false;
+  private queue: Array<() => void> = [];
+
+  async acquire(): Promise<() => void> {
+    return new Promise((resolve) => {
+      const release = () => {
+        const next = this.queue.shift();
+        if (next) {
+          next();
+        } else {
+          this.locked = false;
+        }
+      };
+
+      if (!this.locked) {
+        this.locked = true;
+        resolve(release);
+      } else {
+        this.queue.push(() => resolve(release));
+      }
+    });
+  }
+}
+
+const writeLock = new Mutex();
+
+export async function withTaskLock<T>(fn: () => T | Promise<T>): Promise<T> {
+  const release = await writeLock.acquire();
+  try {
+    return await fn();
+  } finally {
+    release();
+  }
+}
+
 export function readTasks(): TaskDataset {
   const text = fs.readFileSync(yamlPath, 'utf-8');
   return load(text) as TaskDataset;
+}
+
+function atomicWriteFileSync(filePath: string, content: string): void {
+  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}`;
+  fs.writeFileSync(tmpPath, content, 'utf-8');
+  fs.renameSync(tmpPath, filePath);
 }
 
 export function writeTasks(dataset: TaskDataset): void {
   const yamlText = dump(dataset, {
     indent: 2,
     lineWidth: -1,
-    noArrayIndent: true,
+    seqNoIndent: true,
     sortKeys: false
   });
-  fs.writeFileSync(yamlPath, yamlText, 'utf-8');
+  atomicWriteFileSync(yamlPath, yamlText);
 
   const jsonText = JSON.stringify(dataset, null, 2) + '\n';
-  fs.writeFileSync(jsonPath, jsonText, 'utf-8');
+  atomicWriteFileSync(jsonPath, jsonText);
 }
 
 export function findTask(tasks: ReviewTask[], taskId: string): ReviewTask | undefined {
   return tasks.find((task) => task.id === taskId);
 }
 
+function resolveAtomPath(atomPath: string): string {
+  const resolved = path.resolve(projectRoot, atomPath);
+  const relative = path.relative(projectRoot, resolved);
+  if (path.isAbsolute(relative) || relative.startsWith('..')) {
+    throw new Error('Invalid atom path');
+  }
+  return resolved;
+}
+
 export function readAtom(atomPath: string): string {
-  const fullPath = path.join(projectRoot, atomPath);
+  const fullPath = resolveAtomPath(atomPath);
   return fs.readFileSync(fullPath, 'utf-8');
+}
+
+export function writeAtom(atomPath: string, content: string): void {
+  const fullPath = resolveAtomPath(atomPath);
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+  atomicWriteFileSync(fullPath, content);
 }
 
 export function leafTasksInOrder(tasks: ReviewTask[]): ReviewTask[] {

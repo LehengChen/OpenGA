@@ -37,6 +37,10 @@
 .panelLabel,
 .cardMeta,
 .sectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin: 0;
   color: #5d6573;
   font-size: 0.78rem;
@@ -59,6 +63,10 @@
   margin: 0;
   color: #626a78;
   line-height: 1.55;
+}
+
+.sourceLine {
+  overflow-wrap: anywhere;
 }
 
 .progressPanel {
@@ -208,6 +216,13 @@
 
 .nestedRow {
   display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0;
+  align-items: center;
+}
+
+.nestedRowButton {
+  display: grid;
   grid-template-columns: auto auto minmax(0, 1fr) auto auto;
   gap: 10px;
   align-items: center;
@@ -225,8 +240,8 @@
     background 0.15s ease;
 }
 
-.nestedRow:hover,
-.nestedRow:focus-visible,
+.nestedRowButton:hover,
+.nestedRowButton:focus-visible,
 .selectedNestedRow {
   border-color: #0f766e;
   background: #f1fbfa;
@@ -244,15 +259,24 @@
   justify-content: center;
   width: 20px;
   height: 20px;
+  padding: 0;
+  border: none;
   border-radius: 4px;
+  background: transparent;
   color: #4b5563;
   cursor: pointer;
   font-size: 0.85rem;
   line-height: 1;
 }
 
-.nestedToggle:hover {
+.nestedToggle:hover,
+.nestedToggle:focus-visible {
   background: #e4e8ef;
+  outline: none;
+}
+
+.nestedToggle:focus-visible {
+  box-shadow: 0 0 0 2px #0f766e;
 }
 
 .nestedSpacer {
@@ -293,6 +317,14 @@
   text-align: right;
 }
 
+.nestedProgressDone {
+  color: #0f766e;
+}
+
+.nestedProgressPending {
+  color: #b45309;
+}
+
 .detailHeader,
 .progressRow {
   display: flex;
@@ -311,13 +343,115 @@
 }
 
 .dagView {
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 14px;
+}
+
+.dagToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e4e8ef;
+}
+
+.dagScopeGroup {
+  display: inline-flex;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+}
+
+.dagScopeGroup button {
+  padding: 6px 12px;
+  border: none;
+  background: #f9fafb;
+  color: #4b5563;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dagScopeGroup button + button {
+  border-left: 1px solid #d1d5db;
+}
+
+.dagScopeGroup button:hover,
+.dagScopeGroup button:focus-visible {
+  background: #f3f4f6;
+  outline: none;
+}
+
+.dagScopeGroup button.dagScopeActive {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.dagScopeGroup button.dagScopeActive:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -2px;
+}
+
+.dagChapterSelect {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.82rem;
+}
+
+.dagMeta {
+  margin-left: auto;
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+
+.dagResetButton {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.dagResetButton:hover,
+.dagResetButton:focus-visible {
+  background: #f3f4f6;
+  outline: none;
+}
+
+.dagWarning {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  font-size: 0.82rem;
+}
+
+.dagCanvas {
+  flex: 1;
+  overflow: auto;
+  background: #f8fafc;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  cursor: grab;
+}
+
+.dagCanvas:active {
+  cursor: grabbing;
 }
 
 .dagView svg {
   display: block;
-  max-width: 100%;
 }
 
 .dagEdge {
@@ -346,6 +480,7 @@
 
 .dagNode:hover rect,
 .dagNode:focus rect,
+.dagNode:focus-visible rect,
 .dagNode.selectedDagNode rect {
   fill: #f1fbfa;
   stroke: #0f766e;
@@ -377,15 +512,13 @@
 .dagNodeContent span {
   display: block;
   overflow: hidden;
-  margin-top: 3px;
+  margin-top: 2px;
   color: #111827;
-  font-size: 0.82rem;
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
 }
 
 .dagLegend {
@@ -424,6 +557,12 @@
   border-color: #cbd5e1;
 }
 
+.dagHint {
+  margin-left: auto;
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
 .linkList {
   display: flex;
   flex-wrap: wrap;
@@ -433,6 +572,7 @@
 
 .linkList button {
   display: grid;
+  min-width: 0;
   max-width: 100%;
   padding: 8px 10px;
   border: 1px solid #dde2ea;
@@ -453,6 +593,7 @@
 
 .linkList small {
   margin-top: 4px;
+  overflow-wrap: anywhere;
   color: #626a78;
   font-weight: 500;
 }
@@ -779,6 +920,106 @@
   font-weight: 700;
 }
 
+.reviewStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.reviewStatusDone {
+  background: #ecfdf5;
+  color: #0f766e;
+}
+
+.reviewStatusPending {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.reviewNoteList {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.reviewNoteList li::marker {
+  color: #0f766e;
+}
+
+.atomEditToggle {
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #0f766e;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.atomEditToggle:hover,
+.atomEditToggle:focus-visible {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.atomEditor {
+  width: 100%;
+  min-height: 420px;
+  margin-top: 10px;
+  padding: 14px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #20242b;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.atomEditor:focus {
+  border-color: #0f766e;
+  outline: none;
+}
+
+.refreshButton {
+  min-height: 32px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.refreshButton:hover:not(:disabled),
+.refreshButton:focus-visible:not(:disabled) {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 1180px) {
   .header,
   .contentGrid,
@@ -814,8 +1055,8 @@
     flex: 1 0 auto;
   }
 
-  .nestedRow {
-    grid-template-columns: auto auto minmax(0, 1fr);
+  .nestedRowButton {
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 8px;
   }
 

@@ -8,14 +8,17 @@ import type { TaskDataset } from '../lib/taskSchema';
 
 type Props = {
   dataset: TaskDataset;
+  onRefresh: () => Promise<void>;
 };
 
-export function ReviewPage({ dataset }: Props) {
+export function ReviewPage({ dataset, onRefresh }: Props) {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   const task = taskId ? findTask(dataset.tasks, taskId) : undefined;
 
   const [atomContent, setAtomContent] = useState<string>('');
+  const [originalAtom, setOriginalAtom] = useState<string>('');
+  const [editAtom, setEditAtom] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mathReview, setMathReview] = useState(false);
@@ -34,10 +37,12 @@ export function ReviewPage({ dataset }: Props) {
     setError(null);
     setNote('');
     setSubmitError(null);
+    setEditAtom(false);
 
     Promise.all([fetchAtom(taskId), fetchNeighbors(taskId)])
       .then(([atom, neighborData]) => {
         setAtomContent(atom);
+        setOriginalAtom(atom);
         setNeighbors(neighborData);
         const currentTask = findTask(dataset.tasks, taskId);
         setMathReview(currentTask?.checks?.math_review === 'done');
@@ -50,14 +55,17 @@ export function ReviewPage({ dataset }: Props) {
     return (
       <main className={styles.appShell}>
         <p className={styles.emptyState}>Task not found.</p>
-        <button type="button" onClick={() => navigate('/')}>
+        <button type="button" className={styles.backButton} onClick={() => navigate('/')}>
           Back to list
         </button>
       </main>
     );
   }
 
-  const canSubmit = mathReview || note.trim().length > 0;
+  const savedMathReview = task.checks?.math_review === 'done';
+  const isReviewStateModified = mathReview !== savedMathReview;
+  const isAtomModified = atomContent !== originalAtom;
+  const canSubmit = isReviewStateModified || note.trim().length > 0 || isAtomModified;
 
   const handleSubmit = async () => {
     if (!canSubmit || !taskId) return;
@@ -65,7 +73,12 @@ export function ReviewPage({ dataset }: Props) {
     setSubmitError(null);
 
     try {
-      const result = await submitReview(taskId, { mathReview, note });
+      const result = await submitReview(taskId, {
+        mathReview,
+        note,
+        atomContent: isAtomModified ? atomContent : undefined
+      });
+      await onRefresh();
       if (result.nextId) {
         navigate(`/review/${encodeURIComponent(result.nextId)}`);
       } else {
@@ -91,16 +104,42 @@ export function ReviewPage({ dataset }: Props) {
         <div>
           <p className={styles.kicker}>{task.id}{task.dcref ? ` · ${task.dcref}` : ''}</p>
           <h1>{task.title}</h1>
+          <span
+            className={`${styles.reviewStatusBadge} ${savedMathReview ? styles.reviewStatusDone : styles.reviewStatusPending}`}
+          >
+            {savedMathReview ? '✓ Math review done' : '○ Math review pending'}
+          </span>
         </div>
       </header>
 
       <section className={styles.reviewGrid}>
         <article className={styles.atomPanel}>
-          <div className={styles.sectionTitle}>Atom source</div>
+          <div className={styles.sectionTitle}>
+            <span>Atom source</span>
+            {!loading && !error ? (
+              <button
+                type="button"
+                className={styles.atomEditToggle}
+                onClick={() => setEditAtom((prev) => !prev)}
+              >
+                {editAtom ? 'Preview' : 'Edit source'}
+                {isAtomModified && !editAtom ? ' · modified' : ''}
+              </button>
+            ) : null}
+          </div>
           {loading ? (
             <p className={styles.emptyState}>Loading atom…</p>
           ) : error ? (
-            <p className={styles.emptyState}>Error: {error}</p>
+            <p className={styles.emptyState} role="alert">Error: {error}</p>
+          ) : editAtom ? (
+            <textarea
+              className={styles.atomEditor}
+              value={atomContent}
+              onChange={(e) => setAtomContent(e.target.value)}
+              rows={24}
+              spellCheck={false}
+              aria-label="Atom source editor"
+            />
           ) : (
             <AtomViewer content={atomContent} />
           )}
@@ -108,6 +147,11 @@ export function ReviewPage({ dataset }: Props) {
 
         <aside className={styles.reviewControls}>
           <div className={styles.sectionTitle}>Review checklist</div>
+          <p className={styles.detailSummary}>
+            Current state:{' '}
+            <strong>{savedMathReview ? 'Math review done' : 'Math review pending'}</strong>.
+            Toggle the checkbox to change it.
+          </p>
           <label className={styles.checklist}>
             <input
               checked={mathReview}
@@ -116,22 +160,29 @@ export function ReviewPage({ dataset }: Props) {
             />
             <span>Math review done</span>
           </label>
-          <p className={styles.detailSummary}>
-            Read the atom and verify the mathematical statement and proof are correct.
-          </p>
 
           <div className={styles.sectionTitle} style={{ marginTop: '18px' }}>
             Review notes
           </div>
+          {task.review_notes.length > 0 ? (
+            <ul className={styles.reviewNoteList}>
+              {task.review_notes.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.detailSummary}>No review notes yet.</p>
+          )}
           <textarea
             className={styles.reviewNoteInput}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Add notes, corrections, or questions about this task…"
-            rows={6}
+            placeholder="Add a new note, correction, or question…"
+            rows={4}
+            aria-label="Add a review note"
           />
 
-          {submitError ? <p className={styles.errorText}>{submitError}</p> : null}
+          {submitError ? <p className={styles.errorText} role="alert">{submitError}</p> : null}
 
           <div className={styles.reviewActions}>
             <button

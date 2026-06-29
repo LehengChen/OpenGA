@@ -6,30 +6,34 @@ import {
   prevLeafId,
   readAtom,
   readTasks,
+  withTaskLock,
+  writeAtom,
   writeTasks
 } from '../lib/taskStore.js';
+import { ValidationError } from '../lib/errors.js';
+import type { ReviewTask } from '../../src/lib/taskSchema';
 
 const router = express.Router();
 
-router.get('/', (_req, res) => {
+router.get('/', (_req, res, next) => {
   try {
     const dataset = readTasks();
     res.json(dataset);
   } catch (error) {
-    res.status(500).json({ error: String(error) });
+    next(error);
   }
 });
 
-router.get('/leaves', (_req, res) => {
+router.get('/leaves', (_req, res, next) => {
   try {
     const dataset = readTasks();
     res.json(leafTasksInOrder(dataset.tasks));
   } catch (error) {
-    res.status(500).json({ error: String(error) });
+    next(error);
   }
 });
 
-router.get('/:id/atom', (req, res) => {
+router.get('/:id/atom', (req, res, next) => {
   try {
     const dataset = readTasks();
     const task = findTask(dataset.tasks, req.params.id);
@@ -44,54 +48,109 @@ router.get('/:id/atom', (req, res) => {
     const content = readAtom(task.files.atom);
     res.type('text/markdown').send(content);
   } catch (error) {
-    res.status(500).json({ error: String(error) });
+    next(error);
   }
 });
 
-router.post('/:id/review', express.json(), (req, res) => {
+const MAX_NOTE_LENGTH = 10000;
+
+function validateReviewBody(body: unknown): {
+  mathReview?: boolean;
+  note?: string;
+  atomContent?: string;
+} {
+  if (body === null || typeof body !== 'object') {
+    throw new ValidationError('Request body must be an object');
+  }
+
+  const { mathReview, note, atomContent } = body as Record<string, unknown>;
+
+  if (mathReview !== undefined && typeof mathReview !== 'boolean') {
+    throw new ValidationError('mathReview must be a boolean');
+  }
+
+  if (note !== undefined) {
+    if (typeof note !== 'string') {
+      throw new ValidationError('note must be a string');
+    }
+    if (note.length > MAX_NOTE_LENGTH) {
+      throw new ValidationError(`note must be at most ${MAX_NOTE_LENGTH} characters`);
+    }
+  }
+
+  if (atomContent !== undefined && typeof atomContent !== 'string') {
+    throw new ValidationError('atomContent must be a string');
+  }
+
+  return { mathReview, note, atomContent };
+}
+
+router.post('/:id/review', express.json(), async (req, res, next) => {
   try {
-    const { mathReview, note } = req.body as { mathReview?: boolean; note?: string };
+    const { mathReview, note, atomContent } = validateReviewBody(req.body);
+    const hasAtomEdit = atomContent !== undefined;
+    const trimmedNote = note?.trim();
 
-    if (!mathReview && (!note || note.trim().length === 0)) {
-      res.status(400).json({ error: 'Either mathReview must be true or a note must be provided.' });
-      return;
-    }
+    const result = await withTaskLock(async () => {
+      const dataset = readTasks();
+      const taskIndex = dataset.tasks.findIndex((task) => task.id === req.params.id);
+      if (taskIndex === -1) {
+        return { status: 404, body: { error: 'Task not found' } };
+      }
 
-    const dataset = readTasks();
-    const taskIndex = dataset.tasks.findIndex((task) => task.id === req.params.id);
-    if (taskIndex === -1) {
-      res.status(404).json({ error: 'Task not found' });
-      return;
-    }
+      const task = dataset.tasks[taskIndex];
+      if (task.kind !== 'leaf') {
+        return { status: 400, body: { error: 'Only leaf tasks can be reviewed.' } };
+      }
 
-    const task = dataset.tasks[taskIndex];
-    if (task.kind !== 'leaf') {
-      res.status(400).json({ error: 'Only leaf tasks can be reviewed.' });
-      return;
-    }
+      const currentMathReview = task.checks?.math_review ?? 'pending';
+      const isRevert = mathReview === false && currentMathReview === 'done';
+      const hasReview = mathReview === true || isRevert || (trimmedNote && trimmedNote.length > 0);
 
-    const updatedTask: typeof task = {
-      ...task,
-      checks: {
-        ...(task.checks ?? {}),
-        math_review: mathReview ? 'done' : 'pending'
-      },
-      review_notes: note?.trim() ? [...task.review_notes, note.trim()] : task.review_notes
-    };
+      if (!hasReview && !hasAtomEdit) {
+        return {
+          status: 400,
+          body: {
+            error: 'Please complete the math review, add a note, or edit the atom content.'
+          }
+        };
+      }
 
-    dataset.tasks[taskIndex] = updatedTask;
-    writeTasks(dataset);
+      if (hasAtomEdit) {
+        if (!task.files.atom) {
+          return { status: 400, body: { error: 'No atom file available for this task.' } };
+        }
+        writeAtom(task.files.atom, atomContent);
+      }
 
-    res.json({
-      task: updatedTask,
-      nextId: nextLeafId(dataset.tasks, task.id)
+      const updatedTask: ReviewTask = {
+        ...task,
+        checks: {
+          ...(task.checks ?? {}),
+          math_review: mathReview ? 'done' : 'pending'
+        },
+        review_notes: trimmedNote ? [...task.review_notes, trimmedNote] : task.review_notes
+      };
+
+      dataset.tasks[taskIndex] = updatedTask;
+      writeTasks(dataset);
+
+      return {
+        status: 200,
+        body: {
+          task: updatedTask,
+          nextId: nextLeafId(dataset.tasks, task.id)
+        }
+      };
     });
+
+    res.status(result.status).json(result.body);
   } catch (error) {
-    res.status(500).json({ error: String(error) });
+    next(error);
   }
 });
 
-router.get('/:id/neighbors', (req, res) => {
+router.get('/:id/neighbors', (req, res, next) => {
   try {
     const dataset = readTasks();
     res.json({
@@ -99,7 +158,7 @@ router.get('/:id/neighbors', (req, res) => {
       nextId: nextLeafId(dataset.tasks, req.params.id)
     });
   } catch (error) {
-    res.status(500).json({ error: String(error) });
+    next(error);
   }
 });
 

@@ -84,14 +84,24 @@ export function TaskDetail({ task, tasks, onSelect, onReview }: Props) {
             {task.depends_on.map((dependencyId) => {
               const dependency = findTask(tasks, dependencyId);
               return (
-                <button key={dependencyId} type="button" onClick={() => onSelect(dependencyId)}>
+                <button
+                  key={dependencyId}
+                  type="button"
+                  onClick={() => onSelect(dependencyId)}
+                  title={dependency ? `${dependencyId}: ${dependency.title}` : dependencyId}
+                >
                   {dependencyId}
                   {dependency ? <small>{dependency.title}</small> : null}
                 </button>
               );
             })}
             {dependents.map((dependent) => (
-              <button key={dependent.id} type="button" onClick={() => onSelect(dependent.id)}>
+              <button
+                key={dependent.id}
+                type="button"
+                onClick={() => onSelect(dependent.id)}
+                title={`${dependent.id}: ${dependent.title}`}
+              >
                 {dependent.id}
                 <small>{dependent.title}</small>
               </button>
@@ -105,7 +115,12 @@ export function TaskDetail({ task, tasks, onSelect, onReview }: Props) {
           <div className={styles.sectionTitle}>Leaf tasks</div>
           <div className={styles.linkList}>
             {leaves.map((leaf) => (
-              <button key={leaf.id} type="button" onClick={() => onSelect(leaf.id)}>
+              <button
+                key={leaf.id}
+                type="button"
+                onClick={() => onSelect(leaf.id)}
+                title={`${leaf.id}: ${leaf.title}`}
+              >
                 {leaf.id}
                 <small>{leaf.title}</small>
               </button>
