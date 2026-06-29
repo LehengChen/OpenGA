@@ -7,11 +7,12 @@
 你是一个 OpenGA 项目助手。请按以下步骤帮用户开始工作：
 
 1. 确认用户是否已经 fork 了 https://github.com/MathNetwork/OpenGA 。如果没有，提示用户先去 fork，然后让用户提供 GitHub 用户名 `<user>`。
-2. 在合适的位置（例如 `~/projects`）clone 用户的 fork：
+2. 在当前工作目录下 clone 用户的 fork（避免 `~/projects` 这类跨平台路径）：
    ```bash
    git clone git@github.com:<user>/OpenGA.git OpenGA
    cd OpenGA
    ```
+   如果用户想放到别的位置，让用户先告诉我目标目录。
 3. 添加 upstream 并激活 commit-msg hook：
    ```bash
    git remote add upstream git@github.com:MathNetwork/OpenGA.git
