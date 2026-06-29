@@ -13,8 +13,16 @@ function stripFrontmatter(source: string): string {
   return source.replace(frontmatterRegex, '').trimStart();
 }
 
+function enhanceStructuralMarkers(source: string): string {
+  // Make proof markers visually distinct: bold and separated from the
+  // preceding statement paragraph.
+  return source
+    .replace(/\n\n(\*Proof\.\*|Proof\.)/g, '\n\n**Proof.** ')
+    .replace(/^(\*Proof\.\*|Proof\.)/g, '**Proof.** ');
+}
+
 export function AtomViewer({ content }: Props) {
-  const body = stripFrontmatter(content);
+  const body = enhanceStructuralMarkers(stripFrontmatter(content));
 
   return (
     <div className={styles.atomContent}>
