@@ -157,6 +157,153 @@
   font: inherit;
 }
 
+.dependencies {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e4e8ef;
+}
+
+.dependencies header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dependencies h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.dependencies header span {
+  color: #626a78;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dependencyTree {
+  display: grid;
+  gap: 8px;
+}
+
+.dependencyNode {
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.dependencyNode summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 8px 10px;
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.dependencyName {
+  min-width: 0;
+  flex: 1;
+  color: #111827;
+  font-size: 0.82rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.dependencyBadge,
+.dependencyKind {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.dependencyBadge {
+  background: #e8f3ff;
+  color: #155e75;
+}
+
+.dependencyKind {
+  background: #f2f4f7;
+  color: #4b5563;
+}
+
+.dependencyBody {
+  display: grid;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.dependencyModule {
+  margin: 0;
+  color: #626a78;
+  font-size: 0.74rem;
+  overflow-wrap: anywhere;
+}
+
+.dependencyDoc {
+  margin: 0;
+  padding: 8px 10px;
+  border-left: 3px solid #bfd7ff;
+  background: #f8fbff;
+  color: #3f4856;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.dependencyLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dependencyLinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 8px;
+  border: 1px solid #d7dde8;
+  border-radius: 6px;
+  color: #155e75;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dependencyLinks a:hover,
+.dependencyLinks a:focus-visible {
+  border-color: #0f766e;
+  background: #f1fbfa;
+  outline: none;
+}
+
+.dependencyCode.dependencyCode {
+  max-height: 220px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  background: #fbfcfe;
+  font-size: 0.78rem;
+}
+
+.dependencyChildren {
+  display: grid;
+  gap: 7px;
+  margin-left: 14px;
+  padding-left: 10px;
+  border-left: 2px solid #e4e8ef;
+}
+
 .empty {
   margin: 10px 0 0;
   color: #626a78;

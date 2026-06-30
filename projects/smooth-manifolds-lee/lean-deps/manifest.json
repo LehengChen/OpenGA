@@ -1,0 +1,87 @@
+{
+  "schema": "openga-review.lean-deps.v1",
+  "project": "smooth-manifolds-lee",
+  "importRef": "origin/import/smooth-manifolds-lee",
+  "leanToolchain": "leanprover/lean4:v4.30.0",
+  "generatedReviewTasks": 335,
+  "sourceFiles": 345,
+  "modules": 345,
+  "modulesBuilt": 331,
+  "modulesSkipped": 14,
+  "fullBuildFailed": true,
+  "buildSkipped": false,
+  "skippedModules": [
+    {
+      "module": "SmoothManifoldsLee.Chap02.Sec02_12.Problem_2_11",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_11.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap02.Sec02_12.Problem_2_9_corecheck",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_corecheck.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap02.Sec02_12.Problem_2_9_pre_north",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_pre_north.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap02.Sec02_12.Problem_2_9_prefixcheck",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_prefixcheck.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_35.Example_5_45",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_35/Example_5_45.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_36.Exercise_5_50",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Exercise_5_50.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_36.Proposition_5_49",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Proposition_5_49.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_36.Theorem_5_51.EuclideanHalfSlice",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/EuclideanHalfSlice.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_36.Theorem_5_51.Index",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/Index.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_37.Problem_5_15",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_37/Problem_5_15.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_37.Problem_5_20",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_37/Problem_5_20.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_37.Problem_5_23",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_37/Problem_5_23.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_37.Problem_5_7",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_37/Problem_5_7.lean",
+      "reason": "lake build did not produce an olean file"
+    },
+    {
+      "module": "SmoothManifoldsLee.Chap05.Sec05_37.Problem_5_8",
+      "lean_file": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_37/Problem_5_8.lean",
+      "reason": "lake build did not produce an olean file"
+    }
+  ],
+  "nodes": 3284,
+  "edges": 61188
+}

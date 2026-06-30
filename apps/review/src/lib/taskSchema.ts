@@ -79,6 +79,24 @@ export type TaskSourceItem = {
   content: string;
   meta?: string[];
   description?: string;
+  dependencies?: LeanDependencyNode[];
+};
+
+export type LeanDependencyNode = {
+  id: string;
+  name: string;
+  module: string;
+  source: 'lee' | 'mathlib' | 'other';
+  kind: string;
+  type: string;
+  doc?: string;
+  file?: string | null;
+  line?: number;
+  docsUrl?: string;
+  sourceUrl?: string;
+  truncated?: boolean;
+  repeated?: boolean;
+  children?: LeanDependencyNode[];
 };
 
 export type TaskSource = {

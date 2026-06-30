@@ -11,6 +11,7 @@ import {
   renderFormalStatementItems,
   renderFormalStatements
 } from './lean.js';
+import { dependencyTreesForDeclaration } from './leanDeps.js';
 import {
   loadTextbookEntry,
   normalizeTextbookMarkdown,
@@ -113,7 +114,10 @@ export function readTaskSource(projectId: string, task: ReviewTask): TaskSource 
     }))
   );
   const formalContent = renderFormalStatements(declarations);
-  const formalItems = renderFormalStatementItems(declarations);
+  const formalItems = renderFormalStatementItems(declarations).map((item, index) => ({
+    ...item,
+    dependencies: dependencyTreesForDeclaration(projectId, declarations[index])
+  }));
 
   if (task.review_kind === 'lean_textbook' || config.reviewKind === 'lean_textbook') {
     panels.push({
