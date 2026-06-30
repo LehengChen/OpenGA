@@ -21,6 +21,7 @@ export type TaskSourceRef = {
   textbook_label?: string;
   import_ref?: string;
   lean_file?: string;
+  lean_files?: string[];
 };
 
 export type ReviewTask = {

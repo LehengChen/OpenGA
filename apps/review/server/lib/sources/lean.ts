@@ -305,7 +305,7 @@ export function renderFormalStatementItems(declarations: LeanDeclaration[]): For
     kind: 'lean',
     language: 'lean',
     content: displaySignature(decl),
-    meta: [decl.kind, decl.name],
+    meta: [decl.kind, decl.name, ...(decl.sourceFile ? [decl.sourceFile] : [])],
     description: decl.docstring ?? undefined
   }));
 }
@@ -320,6 +320,9 @@ export function renderFormalStatements(declarations: LeanDeclaration[]): string 
         `## ${decl.fullName}`,
         `Kind: \`${decl.kind}\``
       ];
+      if (decl.sourceFile) {
+        parts.push(`Source: \`${decl.sourceFile}\``);
+      }
       if (decl.docstring) {
         parts.push(decl.docstring);
       }

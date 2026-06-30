@@ -12,6 +12,7 @@ export type LeanDeclaration = {
   fullName: string;
   docstring: string | null;
   signature: string;
+  sourceFile?: string;
 };
 
 export type LeanParsedCommand = {

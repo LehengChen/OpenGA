@@ -51,7 +51,7 @@ export async function fetchTaskSource(projectId: string, taskId: string): Promis
   const res = await fetchWithTimeout(
     `${taskBase(projectId)}/${encodeURIComponent(taskId)}/source`,
     undefined,
-    30000
+    60000
   );
   if (!res.ok) throw new Error(`Failed to fetch task source: ${res.statusText}`);
   return res.json();

@@ -98,6 +98,35 @@ function labelFromLeanFilename(fileName) {
   return `${kind} ${parts.join(separator)}`;
 }
 
+function addSupportingLeanFile(map, ownerPath, leanPath, relation) {
+  if (!map.has(ownerPath)) map.set(ownerPath, []);
+  map.get(ownerPath).push(leanPath);
+  return { path: leanPath, owner: ownerPath, relation };
+}
+
+function nestedOwnerPath(leanPath) {
+  const parts = leanPath.split('/');
+  if (parts.length <= 6) return null;
+  return `${parts.slice(0, 5).join('/')}/${parts[5]}.lean`;
+}
+
+function topLevelOwnerForAuxLean(leanPath, topLevelLeanSet) {
+  const dir = path.dirname(leanPath);
+  const stemParts = path.basename(leanPath, '.lean').split('_');
+  for (let end = stemParts.length - 1; end >= 2; end--) {
+    const ownerStem = stemParts.slice(0, end).join('_');
+    const ownerPath = `${dir}/${ownerStem}.lean`;
+    if (
+      ownerPath !== leanPath &&
+      topLevelLeanSet.has(ownerPath) &&
+      labelFromLeanFilename(`${ownerStem}.lean`)
+    ) {
+      return ownerPath;
+    }
+  }
+  return null;
+}
+
 function slug(input) {
   return input
     .toLowerCase()
@@ -162,20 +191,57 @@ function buildCandidates(sections) {
   const candidates = [];
   const unmatchedTopLevelLean = [];
   const nestedAuxLean = [];
+  const unattachedNestedAuxLean = [];
+  const attachedAuxLean = [];
+  const supportingLeanByOwner = new Map();
+  const paths = leanPaths();
+  const topLevelLeanPaths = paths.filter((leanPath) => leanPath.split('/').length === 6);
+  const topLevelLeanSet = new Set(topLevelLeanPaths);
 
-  for (const leanPath of leanPaths()) {
+  for (const leanPath of paths) {
     const parts = leanPath.split('/');
     if (parts.length > 6) {
       nestedAuxLean.push(leanPath);
+      const ownerPath = nestedOwnerPath(leanPath);
+      if (ownerPath && topLevelLeanSet.has(ownerPath)) {
+        attachedAuxLean.push(
+          addSupportingLeanFile(supportingLeanByOwner, ownerPath, leanPath, 'nested')
+        );
+      } else {
+        unattachedNestedAuxLean.push({
+          path: leanPath,
+          owner: ownerPath,
+          reason: 'top-level owner not found'
+        });
+      }
       continue;
     }
 
+    const label = labelFromLeanFilename(parts[5]);
+    if (!label) {
+      const ownerPath = topLevelOwnerForAuxLean(leanPath, topLevelLeanSet);
+      if (ownerPath) {
+        attachedAuxLean.push(
+          addSupportingLeanFile(supportingLeanByOwner, ownerPath, leanPath, 'noncanonical-top-level')
+        );
+      }
+    }
+  }
+
+  for (const leanPath of topLevelLeanPaths) {
+    const parts = leanPath.split('/');
     const label = labelFromLeanFilename(parts[5]);
     const sectionNumber = sectionNumberFromPath(leanPath);
     const chapterNumber = chapterNumberFromPath(leanPath);
     const sectionInfo = sections.get(sectionNumber);
     if (!label) {
-      unmatchedTopLevelLean.push({ path: leanPath, reason: 'noncanonical filename' });
+      if (!topLevelOwnerForAuxLean(leanPath, topLevelLeanSet)) {
+        unmatchedTopLevelLean.push({
+          path: leanPath,
+          reason: 'noncanonical filename',
+          action: 'manual classification required'
+        });
+      }
       continue;
     }
     const labelInfo = sectionInfo?.labels.get(label);
@@ -184,7 +250,8 @@ function buildCandidates(sections) {
         path: leanPath,
         label,
         section: sectionNumber,
-        reason: 'label not in section JSON'
+        reason: 'label not in section JSON',
+        action: 'manual textbook label or synthetic task required'
       });
       continue;
     }
@@ -194,6 +261,7 @@ function buildCandidates(sections) {
       sectionNumber,
       label,
       leanPath,
+      supportingLeanPaths: supportingLeanByOwner.get(leanPath) ?? [],
       jsonPath: sectionInfo.entryPath,
       jsonIndex: labelInfo.index,
       context: labelInfo.entry.context ?? {}
@@ -207,7 +275,13 @@ function buildCandidates(sections) {
     a.label.localeCompare(b.label)
   );
 
-  return { candidates, unmatchedTopLevelLean, nestedAuxLean };
+  return {
+    candidates,
+    unmatchedTopLevelLean,
+    nestedAuxLean,
+    attachedAuxLean,
+    unattachedNestedAuxLean
+  };
 }
 
 function buildDataset(candidates, sections, previous) {
@@ -292,6 +366,16 @@ function buildDataset(candidates, sections, previous) {
 
       for (const item of items) {
         const id = taskId(chapterNumber, sectionNumber, item.label);
+        const leanFiles = [item.leanPath, ...item.supportingLeanPaths];
+        const source = {
+          textbook_json: item.jsonPath,
+          textbook_label: item.label,
+          import_ref: importRef,
+          lean_file: item.leanPath
+        };
+        if (leanFiles.length > 1) {
+          source.lean_files = leanFiles;
+        }
         const task = {
           id,
           kind: 'leaf',
@@ -315,12 +399,7 @@ function buildDataset(candidates, sections, previous) {
           editable: [],
           github: emptyGithub(),
           review_kind: 'lean_textbook',
-          source: {
-            textbook_json: item.jsonPath,
-            textbook_label: item.label,
-            import_ref: importRef,
-            lean_file: item.leanPath
-          }
+          source
         };
         tasks.push(mergeReviewState(task, previous.get(id)));
       }
@@ -337,13 +416,25 @@ function buildDataset(candidates, sections, previous) {
   };
 }
 
-function report(candidates, sections, unmatchedTopLevelLean, nestedAuxLean) {
+function report(
+  candidates,
+  sections,
+  unmatchedTopLevelLean,
+  nestedAuxLean,
+  attachedAuxLean,
+  unattachedNestedAuxLean
+) {
   const matchedLabels = new Set(candidates.map((item) => `${item.sectionNumber}\t${item.label}`));
+  const importedSections = new Set(candidates.map((item) => item.sectionNumber));
   const jsonWithoutLean = [];
+  const jsonOutsideImportedSections = [];
   for (const [sectionNumber, sectionInfo] of sections) {
     for (const label of sectionInfo.labels.keys()) {
       if (!matchedLabels.has(`${sectionNumber}\t${label}`)) {
-        jsonWithoutLean.push({ section: sectionNumber, label });
+        const target = importedSections.has(sectionNumber)
+          ? jsonWithoutLean
+          : jsonOutsideImportedSections;
+        target.push({ section: sectionNumber, label });
       }
     }
   }
@@ -365,10 +456,14 @@ function report(candidates, sections, unmatchedTopLevelLean, nestedAuxLean) {
     matchedBySection: countBy(candidates, (item) => `section${String(item.sectionNumber).padStart(2, '0')}`),
     unmatchedTopLevelLean,
     nestedAuxLean,
+    attachedAuxLean,
+    unattachedNestedAuxLean,
     jsonLabelsWithoutLean: jsonWithoutLean,
+    jsonLabelsOutsideImportedSections: jsonOutsideImportedSections,
     notes: [
-      'Nested auxiliary Lean files are not emitted as standalone review cards.',
-      'JSON entries without matching Lean files are reported but do not block review generation.'
+      'Auxiliary Lean files are attached to their canonical owner task when a matching owner exists.',
+      'JSON entries without matching Lean files inside imported sections are reported but do not block review generation.',
+      'JSON entries outside imported sections are separated from the current Ch1-Ch5 review queue.'
     ]
   };
 }
@@ -376,15 +471,22 @@ function report(candidates, sections, unmatchedTopLevelLean, nestedAuxLean) {
 fs.mkdirSync(taskDir, { recursive: true });
 const sections = loadTextbookSections();
 const previous = previousTasksById();
-const { candidates, unmatchedTopLevelLean, nestedAuxLean } = buildCandidates(sections);
+const {
+  candidates,
+  unmatchedTopLevelLean,
+  nestedAuxLean,
+  attachedAuxLean,
+  unattachedNestedAuxLean
+} = buildCandidates(sections);
 const dataset = buildDataset(candidates, sections, previous);
 const yamlText = dump(dataset, { indent: 2, lineWidth: -1, seqNoIndent: true, sortKeys: false });
-fs.writeFileSync(outputPath, yamlText, 'utf-8');
-fs.writeFileSync(
-  reportPath,
-  `${JSON.stringify(report(candidates, sections, unmatchedTopLevelLean, nestedAuxLean), null, 2)}\n`,
-  'utf-8'
+const reportText = JSON.stringify(
+  report(candidates, sections, unmatchedTopLevelLean, nestedAuxLean, attachedAuxLean, unattachedNestedAuxLean),
+  null,
+  2
 );
+fs.writeFileSync(outputPath, yamlText, 'utf-8');
+fs.writeFileSync(reportPath, `${reportText}\n`, 'utf-8');
 
 console.log(`Generated ${candidates.length} SmoothManifoldsLee review tasks.`);
 console.log(`Wrote ${path.relative(projectRoot, outputPath)}`);

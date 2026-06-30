@@ -3933,6 +3933,11 @@ tasks:
     textbook_label: Problem 2-9
     import_ref: origin/import/smooth-manifolds-lee
     lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9.lean
+    lean_files:
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_corecheck.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_pre_north.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_prefixcheck.lean
 - id: sml.ch2.sec12.problem-2-10
   kind: leaf
   parent: sml.ch2.sec12
@@ -8307,6 +8312,13 @@ tasks:
     textbook_label: Theorem 5.8
     import_ref: origin/import/smooth-manifolds-lee
     lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean
+    lean_files:
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/Common.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/Index.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalNormalFormAPI.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalSliceAtlas.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalSliceImmersion.lean
 - id: sml.ch5.sec29.remark-5-29-extra-2
   kind: leaf
   parent: sml.ch5.sec29
@@ -9977,6 +9989,10 @@ tasks:
     textbook_label: Theorem 5.51
     import_ref: origin/import/smooth-manifolds-lee
     lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51.lean
+    lean_files:
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/EuclideanHalfSlice.lean
+    - staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/Index.lean
 - id: sml.ch5.sec36.exercise-5-52
   kind: leaf
   parent: sml.ch5.sec36

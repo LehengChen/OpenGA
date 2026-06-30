@@ -50,22 +50,11 @@
   },
   "unmatchedTopLevelLean": [
     {
-      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_corecheck.lean",
-      "reason": "noncanonical filename"
-    },
-    {
-      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_pre_north.lean",
-      "reason": "noncanonical filename"
-    },
-    {
-      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_prefixcheck.lean",
-      "reason": "noncanonical filename"
-    },
-    {
       "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_35/Definition_5_35_extra_4.lean",
       "label": "Definition 5.35-extra-4",
       "section": 35,
-      "reason": "label not in section JSON"
+      "reason": "label not in section JSON",
+      "action": "manual textbook label or synthetic task required"
     }
   ],
   "nestedAuxLean": [
@@ -77,6 +66,59 @@
     "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/EuclideanHalfSlice.lean",
     "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/Index.lean"
   ],
+  "attachedAuxLean": [
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_corecheck.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9.lean",
+      "relation": "noncanonical-top-level"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_pre_north.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9.lean",
+      "relation": "noncanonical-top-level"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_prefixcheck.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9.lean",
+      "relation": "noncanonical-top-level"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/Common.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean",
+      "relation": "nested"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/Index.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean",
+      "relation": "nested"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalNormalFormAPI.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean",
+      "relation": "nested"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalSliceAtlas.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean",
+      "relation": "nested"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalSliceImmersion.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8.lean",
+      "relation": "nested"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/EuclideanHalfSlice.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51.lean",
+      "relation": "nested"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/Index.lean",
+      "owner": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51.lean",
+      "relation": "nested"
+    }
+  ],
+  "unattachedNestedAuxLean": [],
   "jsonLabelsWithoutLean": [
     {
       "section": 8,
@@ -161,7 +203,9 @@
     {
       "section": 37,
       "label": "Problem 5-22"
-    },
+    }
+  ],
+  "jsonLabelsOutsideImportedSections": [
     {
       "section": 38,
       "label": "Definition 6.38-extra-1"
@@ -1136,7 +1180,8 @@
     }
   ],
   "notes": [
-    "Nested auxiliary Lean files are not emitted as standalone review cards.",
-    "JSON entries without matching Lean files are reported but do not block review generation."
+    "Auxiliary Lean files are attached to their canonical owner task when a matching owner exists.",
+    "JSON entries without matching Lean files inside imported sections are reported but do not block review generation.",
+    "JSON entries outside imported sections are separated from the current Ch1-Ch5 review queue."
   ]
 }

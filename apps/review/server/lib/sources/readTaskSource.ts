@@ -29,10 +29,29 @@ function sourceCacheKey(projectId: string, task: ReviewTask, projectReviewKind: 
     reviewKind: task.review_kind ?? projectReviewKind,
     title: task.title,
     leanFile: task.source?.lean_file ?? null,
+    leanFiles: task.source?.lean_files ?? null,
     importRef: task.source?.import_ref ?? null,
     textbookJson: task.source?.textbook_json ?? null,
     textbookLabel: task.source?.textbook_label ?? null
   });
+}
+
+function leanFilesForTask(task: ReviewTask): string[] {
+  const files = task.source?.lean_files?.length
+    ? task.source.lean_files
+    : task.source?.lean_file
+      ? [task.source.lean_file]
+      : [];
+  return [...new Set(files)];
+}
+
+function renderLeanSourceBundle(sources: { file: string; content: string }[]): string | null {
+  if (sources.length === 0) return null;
+  if (sources.length === 1) return sources[0].content;
+
+  return sources
+    .map(({ file, content }) => [`-- Source file: ${file}`, content].join('\n\n'))
+    .join('\n\n');
 }
 
 function renderAlignmentTarget(
@@ -81,10 +100,18 @@ export function readTaskSource(projectId: string, task: ReviewTask): TaskSource 
   }
 
   const textbookEntry = loadTextbookEntry(config, task);
-  const leanSource = task.source?.lean_file
-    ? readLeanFromGit(task.source.import_ref ?? 'origin/import/smooth-manifolds-lee', task.source.lean_file)
-    : null;
-  const declarations = leanSource ? extractLeanDeclarations(leanSource) : [];
+  const importRef = task.source?.import_ref ?? 'origin/import/smooth-manifolds-lee';
+  const leanSources = leanFilesForTask(task).map((file) => ({
+    file,
+    content: readLeanFromGit(importRef, file)
+  }));
+  const leanSource = renderLeanSourceBundle(leanSources);
+  const declarations = leanSources.flatMap(({ file, content }) =>
+    extractLeanDeclarations(content).map((decl) => ({
+      ...decl,
+      sourceFile: file
+    }))
+  );
   const formalContent = renderFormalStatements(declarations);
   const formalItems = renderFormalStatementItems(declarations);
 
