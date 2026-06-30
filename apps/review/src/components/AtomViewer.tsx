@@ -1,7 +1,9 @@
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import styles from '../App.module.css';
+import { isLeanLanguage, LeanCode } from './LeanCodeBlock';
 
 type Props = {
   content: string;
@@ -18,7 +20,26 @@ export function AtomViewer({ content }: Props) {
 
   return (
     <div className={styles.atomContent}>
-      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+      <ReactMarkdown
+        components={{
+          code: ({ className, children }) => {
+            const language = className?.match(/language-(\S+)/)?.[1];
+            const code = String(children).replace(/\n$/, '');
+            return isLeanLanguage(language) ? (
+              <LeanCode code={code} language={language} className={className} />
+            ) : (
+              <code className={className}>{children}</code>
+            );
+          },
+          img: ({ alt }) => (
+            <span className={styles.omittedImage}>
+              {alt ? `Image omitted: ${alt}` : 'Image omitted'}
+            </span>
+          )
+        }}
+        remarkPlugins={[remarkMath]}
+        rehypePlugins={[rehypeKatex]}
+      >
         {body}
       </ReactMarkdown>
     </div>

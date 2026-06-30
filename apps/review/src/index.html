@@ -7,9 +7,40 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>OpenGA Review</title>
+    <style>
+      .boot-shell {
+        min-height: 100vh;
+        margin: 0;
+        padding: 24px;
+        color: #20242b;
+        background: #f7f8fb;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .boot-shell p {
+        margin: 0;
+        color: #5d6573;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .boot-shell h1 {
+        margin: 6px 0 0;
+        color: #111827;
+        font-size: 2rem;
+        line-height: 1.1;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main class="boot-shell">
+        <p>OpenGA Review</p>
+        <h1>Loading review app</h1>
+      </main>
+    </div>
     <script type="module" src="/main.tsx"></script>
   </body>
 </html>

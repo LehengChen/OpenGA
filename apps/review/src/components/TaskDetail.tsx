@@ -9,6 +9,13 @@ type Props = {
   onReview?: (taskId: string) => void;
 };
 
+function checkLabel(key: string): string {
+  return key
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
 export function TaskDetail({ task, tasks, onSelect, onReview }: Props) {
   const dependents = dependentsFor(tasks, task.id);
   const fileEntries = Object.entries(task.files).filter(([, value]) => Boolean(value));
@@ -41,17 +48,19 @@ export function TaskDetail({ task, tasks, onSelect, onReview }: Props) {
         </section>
       ) : null}
 
-      {!isGroup && task.checks?.math_review ? (
+      {!isGroup && task.checks && Object.keys(task.checks).length > 0 ? (
         <section className={styles.detailSection}>
           <div className={styles.sectionTitle}>Review checklist</div>
           <div className={styles.checklist}>
-            <label>
-              <input checked={task.checks.math_review === 'done'} disabled readOnly type="checkbox" />
-              <span>Math review</span>
-            </label>
+            {Object.entries(task.checks).map(([key, value]) => (
+              <label key={key}>
+                <input checked={value === 'done'} disabled readOnly type="checkbox" />
+                <span>{checkLabel(key)}</span>
+              </label>
+            ))}
           </div>
           <p className={styles.detailSummary}>
-            Read the atom and verify the mathematical statement and proof are correct.
+            Open the task to review its declared source material and update the checklist.
           </p>
         </section>
       ) : null}

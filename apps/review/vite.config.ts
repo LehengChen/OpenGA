@@ -4,6 +4,17 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   root: 'src',
   plugins: [react()],
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom/client',
+      'react-router-dom',
+      'react-markdown',
+      'rehype-katex',
+      'remark-math',
+      'katex'
+    ]
+  },
   build: {
     outDir: '../dist',
     emptyOutDir: true

@@ -35,7 +35,6 @@ function NestedItem({
   const progress = taskProgress(tasks, task.id);
   const done = tasksDone(tasks, task.id);
   const total = tasksTotal(tasks, task.id);
-  const mathReview = task.checks?.math_review ?? 'pending';
 
   const handleRowClick = () => {
     onSelect(task.id);
@@ -75,9 +74,9 @@ function NestedItem({
             <span className={styles.nestedProgress}>{done}/{total} · {progress}%</span>
           ) : (
             <span
-              className={`${styles.nestedProgress} ${mathReview === 'done' ? styles.nestedProgressDone : styles.nestedProgressPending}`}
+              className={`${styles.nestedProgress} ${progress === 100 ? styles.nestedProgressDone : styles.nestedProgressPending}`}
             >
-              {mathReview === 'done' ? 'Review done' : 'Review pending'}
+              {progress === 100 ? 'Review done' : `${progress}% pending`}
             </span>
           )}
         </button>
