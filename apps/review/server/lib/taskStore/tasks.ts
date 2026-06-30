@@ -47,12 +47,7 @@ export function findTask(tasks: ReviewTask[], taskId: string): ReviewTask | unde
 }
 
 export function leafTasksInOrder(tasks: ReviewTask[]): ReviewTask[] {
-  const leaves = tasks.filter((task) => task.kind === 'leaf');
-  return leaves.sort((a, b) => {
-    const chapterDiff = (a.chapter ?? Infinity) - (b.chapter ?? Infinity);
-    if (chapterDiff !== 0) return chapterDiff;
-    return (a.dcref ?? '').localeCompare(b.dcref ?? '');
-  });
+  return tasks.filter((task) => task.kind === 'leaf');
 }
 
 export function nextLeafId(tasks: ReviewTask[], currentId: string): string | null {

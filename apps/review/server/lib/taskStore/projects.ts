@@ -22,9 +22,9 @@ const projectConfigs: ProjectConfig[] = [
     id: 'smooth-manifolds-lee',
     title: 'Smooth Manifolds Lee',
     description: 'Semantic review queue for textbook-aligned Lean formalization tasks.',
-    taskPath: 'projects/smooth-manifolds-lee/tasks/section01.tasks.yaml',
+    taskPath: 'projects/smooth-manifolds-lee/tasks/all.tasks.yaml',
     reviewKind: 'lean_textbook',
-    yamlPath: path.join(projectRoot, 'projects/smooth-manifolds-lee/tasks/section01.tasks.yaml'),
+    yamlPath: path.join(projectRoot, 'projects/smooth-manifolds-lee/tasks/all.tasks.yaml'),
     textbookZipPath: process.env.SMOOTH_MANIFOLDS_LEE_ZIP ?? '/root/smooth-manifolds.zip'
   }
 ];

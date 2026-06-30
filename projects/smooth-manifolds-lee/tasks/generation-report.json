@@ -1,0 +1,1142 @@
+{
+  "importRef": "origin/import/smooth-manifolds-lee",
+  "textbookZipPath": "/root/smooth-manifolds.zip",
+  "generatedReviewTasks": 335,
+  "matchedByChapter": {
+    "chapter1": 75,
+    "chapter2": 55,
+    "chapter3": 57,
+    "chapter4": 64,
+    "chapter5": 84
+  },
+  "matchedBySection": {
+    "section01": 20,
+    "section02": 8,
+    "section03": 4,
+    "section04": 17,
+    "section05": 6,
+    "section06": 8,
+    "section07": 12,
+    "section08": 18,
+    "section09": 7,
+    "section10": 9,
+    "section11": 8,
+    "section12": 13,
+    "section13": 8,
+    "section14": 10,
+    "section15": 8,
+    "section16": 9,
+    "section17": 4,
+    "section18": 4,
+    "section19": 7,
+    "section20": 7,
+    "section21": 5,
+    "section22": 7,
+    "section23": 4,
+    "section24": 11,
+    "section25": 9,
+    "section26": 15,
+    "section27": 13,
+    "section28": 9,
+    "section29": 6,
+    "section30": 9,
+    "section31": 10,
+    "section32": 6,
+    "section33": 1,
+    "section34": 1,
+    "section35": 14,
+    "section36": 12,
+    "section37": 16
+  },
+  "unmatchedTopLevelLean": [
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_corecheck.lean",
+      "reason": "noncanonical filename"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_pre_north.lean",
+      "reason": "noncanonical filename"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap02/Sec02_12/Problem_2_9_prefixcheck.lean",
+      "reason": "noncanonical filename"
+    },
+    {
+      "path": "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_35/Definition_5_35_extra_4.lean",
+      "label": "Definition 5.35-extra-4",
+      "section": 35,
+      "reason": "label not in section JSON"
+    }
+  ],
+  "nestedAuxLean": [
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/Common.lean",
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/Index.lean",
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalNormalFormAPI.lean",
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalSliceAtlas.lean",
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_29/Theorem_5_8/LocalSliceImmersion.lean",
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/EuclideanHalfSlice.lean",
+    "staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap05/Sec05_36/Theorem_5_51/Index.lean"
+  ],
+  "jsonLabelsWithoutLean": [
+    {
+      "section": 8,
+      "label": "Proposition 2.12"
+    },
+    {
+      "section": 8,
+      "label": "Example 2.13"
+    },
+    {
+      "section": 12,
+      "label": "Problem 2-2"
+    },
+    {
+      "section": 14,
+      "label": "Proposition 3.14"
+    },
+    {
+      "section": 20,
+      "label": "Problem 3-2"
+    },
+    {
+      "section": 22,
+      "label": "Example 4.11"
+    },
+    {
+      "section": 24,
+      "label": "Example 4.23"
+    },
+    {
+      "section": 29,
+      "label": "Theorem 5.11"
+    },
+    {
+      "section": 31,
+      "label": "Proposition 5.21"
+    },
+    {
+      "section": 33,
+      "label": "Theorem 5.32"
+    },
+    {
+      "section": 33,
+      "label": "Theorem 5.33"
+    },
+    {
+      "section": 34,
+      "label": "Lemma 5.34"
+    },
+    {
+      "section": 36,
+      "label": "Proposition 5.47"
+    },
+    {
+      "section": 36,
+      "label": "Theorem 5.48"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-2"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-3"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-14"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-16"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-17"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-21"
+    },
+    {
+      "section": 37,
+      "label": "Problem 5-22"
+    },
+    {
+      "section": 38,
+      "label": "Definition 6.38-extra-1"
+    },
+    {
+      "section": 38,
+      "label": "Exercise 6.1"
+    },
+    {
+      "section": 38,
+      "label": "Lemma 6.2"
+    },
+    {
+      "section": 38,
+      "label": "Proposition 6.3"
+    },
+    {
+      "section": 38,
+      "label": "Corollary 6.4"
+    },
+    {
+      "section": 38,
+      "label": "Proposition 6.5"
+    },
+    {
+      "section": 38,
+      "label": "Definition 6.38-extra-2"
+    },
+    {
+      "section": 38,
+      "label": "Lemma 6.6"
+    },
+    {
+      "section": 38,
+      "label": "Exercise 6.7"
+    },
+    {
+      "section": 38,
+      "label": "Proposition 6.8"
+    },
+    {
+      "section": 38,
+      "label": "Theorem 6.9"
+    },
+    {
+      "section": 39,
+      "label": "Theorem 6.10"
+    },
+    {
+      "section": 39,
+      "label": "Corollary 6.11"
+    },
+    {
+      "section": 39,
+      "label": "Corollary 6.12"
+    },
+    {
+      "section": 40,
+      "label": "Lemma 6.13"
+    },
+    {
+      "section": 40,
+      "label": "Lemma 6.14"
+    },
+    {
+      "section": 40,
+      "label": "Theorem 6.15"
+    },
+    {
+      "section": 40,
+      "label": "Corollary 6.16"
+    },
+    {
+      "section": 40,
+      "label": "Corollary 6.17"
+    },
+    {
+      "section": 40,
+      "label": "Theorem 6.18"
+    },
+    {
+      "section": 40,
+      "label": "Theorem 6.19"
+    },
+    {
+      "section": 40,
+      "label": "Theorem 6.20"
+    },
+    {
+      "section": 41,
+      "label": "Definition 6.41-extra-1"
+    },
+    {
+      "section": 41,
+      "label": "Theorem 6.21"
+    },
+    {
+      "section": 41,
+      "label": "Corollary 6.22"
+    },
+    {
+      "section": 42,
+      "label": "Definition 6.42-extra-1"
+    },
+    {
+      "section": 42,
+      "label": "Theorem 6.23"
+    },
+    {
+      "section": 42,
+      "label": "Definition 6.42-extra-2"
+    },
+    {
+      "section": 42,
+      "label": "Theorem 6.24"
+    },
+    {
+      "section": 42,
+      "label": "Definition 6.42-extra-3"
+    },
+    {
+      "section": 42,
+      "label": "Proposition 6.25"
+    },
+    {
+      "section": 43,
+      "label": "Theorem 6.26"
+    },
+    {
+      "section": 43,
+      "label": "Corollary 6.27"
+    },
+    {
+      "section": 43,
+      "label": "Definition 6.43-extra-1"
+    },
+    {
+      "section": 43,
+      "label": "Lemma 6.28"
+    },
+    {
+      "section": 43,
+      "label": "Theorem 6.29"
+    },
+    {
+      "section": 44,
+      "label": "Definition 6.44-extra-1"
+    },
+    {
+      "section": 44,
+      "label": "Theorem 6.30"
+    },
+    {
+      "section": 44,
+      "label": "Corollary 6.31"
+    },
+    {
+      "section": 44,
+      "label": "Theorem 6.32"
+    },
+    {
+      "section": 44,
+      "label": "Corollary 6.33"
+    },
+    {
+      "section": 44,
+      "label": "Definition 6.44-extra-2"
+    },
+    {
+      "section": 44,
+      "label": "Proposition 6.34"
+    },
+    {
+      "section": 44,
+      "label": "Definition 6.44-extra-3"
+    },
+    {
+      "section": 44,
+      "label": "Theorem 6.35"
+    },
+    {
+      "section": 44,
+      "label": "Theorem 6.36"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-1"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-2"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-3"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-4"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-5"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-6"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-7"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-8"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-9"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-10"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-11"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-12"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-13"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-14"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-15"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-16"
+    },
+    {
+      "section": 45,
+      "label": "Problem 6-17"
+    },
+    {
+      "section": 46,
+      "label": "Definition 7.46-extra-1"
+    },
+    {
+      "section": 46,
+      "label": "Notation 7.46-extra-2"
+    },
+    {
+      "section": 46,
+      "label": "Proposition 7.1"
+    },
+    {
+      "section": 46,
+      "label": "Exercise 7.2"
+    },
+    {
+      "section": 46,
+      "label": "Definition 7.46-extra-3"
+    },
+    {
+      "section": 46,
+      "label": "Example 7.3"
+    },
+    {
+      "section": 47,
+      "label": "Definition 7.47-extra-1"
+    },
+    {
+      "section": 47,
+      "label": "Example 7.4"
+    },
+    {
+      "section": 47,
+      "label": "Theorem 7.5"
+    },
+    {
+      "section": 47,
+      "label": "Corollary 7.6"
+    },
+    {
+      "section": 48,
+      "label": "Theorem 7.7"
+    },
+    {
+      "section": 48,
+      "label": "Exercise 7.8"
+    },
+    {
+      "section": 48,
+      "label": "Theorem 7.9"
+    },
+    {
+      "section": 48,
+      "label": "Example 7.10"
+    },
+    {
+      "section": 49,
+      "label": "Definition 7.49-extra-1"
+    },
+    {
+      "section": 49,
+      "label": "Proposition 7.11"
+    },
+    {
+      "section": 49,
+      "label": "Lemma 7.12"
+    },
+    {
+      "section": 49,
+      "label": "Definition 7.49-extra-2"
+    },
+    {
+      "section": 49,
+      "label": "Exercise 7.13"
+    },
+    {
+      "section": 49,
+      "label": "Proposition 7.14"
+    },
+    {
+      "section": 49,
+      "label": "Definition 7.49-extra-3"
+    },
+    {
+      "section": 49,
+      "label": "Proposition 7.15"
+    },
+    {
+      "section": 49,
+      "label": "Proposition 7.16"
+    },
+    {
+      "section": 49,
+      "label": "Proposition 7.17"
+    },
+    {
+      "section": 49,
+      "label": "Example 7.18"
+    },
+    {
+      "section": 49,
+      "label": "Example 7.19"
+    },
+    {
+      "section": 49,
+      "label": "Exercise 7.20"
+    },
+    {
+      "section": 49,
+      "label": "Theorem 7.21"
+    },
+    {
+      "section": 50,
+      "label": "Definition 7.50-extra-1"
+    },
+    {
+      "section": 50,
+      "label": "Example 7.22"
+    },
+    {
+      "section": 50,
+      "label": "Definition 7.50-extra-2"
+    },
+    {
+      "section": 50,
+      "label": "Proposition 7.23"
+    },
+    {
+      "section": 50,
+      "label": "Definition 7.50-extra-3"
+    },
+    {
+      "section": 50,
+      "label": "Example 7.24"
+    },
+    {
+      "section": 50,
+      "label": "Theorem 7.25"
+    },
+    {
+      "section": 50,
+      "label": "Definition 7.50-extra-4"
+    },
+    {
+      "section": 50,
+      "label": "Proposition 7.26"
+    },
+    {
+      "section": 50,
+      "label": "Remark 7.50-extra-5"
+    },
+    {
+      "section": 50,
+      "label": "Example 7.27"
+    },
+    {
+      "section": 50,
+      "label": "Example 7.28"
+    },
+    {
+      "section": 50,
+      "label": "Example 7.29"
+    },
+    {
+      "section": 50,
+      "label": "Example 7.30"
+    },
+    {
+      "section": 51,
+      "label": "Definition 7.51-extra-1"
+    },
+    {
+      "section": 51,
+      "label": "Exercise 7.31"
+    },
+    {
+      "section": 51,
+      "label": "Example 7.32"
+    },
+    {
+      "section": 51,
+      "label": "Proposition 7.33"
+    },
+    {
+      "section": 51,
+      "label": "Exercise 7.34"
+    },
+    {
+      "section": 51,
+      "label": "Theorem 7.35"
+    },
+    {
+      "section": 51,
+      "label": "Definition 7.51-extra-2"
+    },
+    {
+      "section": 52,
+      "label": "Definition 7.52-extra-1"
+    },
+    {
+      "section": 52,
+      "label": "Example 7.36"
+    },
+    {
+      "section": 52,
+      "label": "Definition 7.52-extra-2"
+    },
+    {
+      "section": 52,
+      "label": "Proposition 7.37"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-1"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-2"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-3"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-4"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-5"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-6"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-7"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-8"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-9"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-10"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-11"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-12"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-13"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-14"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-15"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-16"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-17"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-18"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-19"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-20"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-21"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-22"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-23"
+    },
+    {
+      "section": 53,
+      "label": "Problem 7-24"
+    },
+    {
+      "section": 54,
+      "label": "Definition 8.54-extra-1"
+    },
+    {
+      "section": 54,
+      "label": "Proposition 8.1"
+    },
+    {
+      "section": 54,
+      "label": "Example 8.2"
+    },
+    {
+      "section": 54,
+      "label": "Example 8.3"
+    },
+    {
+      "section": 54,
+      "label": "Example 8.4"
+    },
+    {
+      "section": 54,
+      "label": "Example 8.5"
+    },
+    {
+      "section": 54,
+      "label": "Definition 8.54-extra-2"
+    },
+    {
+      "section": 54,
+      "label": "Lemma 8.6"
+    },
+    {
+      "section": 54,
+      "label": "Proposition 8.7"
+    },
+    {
+      "section": 54,
+      "label": "Notation 8.54-extra-3"
+    },
+    {
+      "section": 54,
+      "label": "Proposition 8.8"
+    },
+    {
+      "section": 54,
+      "label": "Exercise 8.9"
+    },
+    {
+      "section": 55,
+      "label": "Definition 8.55-extra-1"
+    },
+    {
+      "section": 55,
+      "label": "Example 8.10"
+    },
+    {
+      "section": 55,
+      "label": "Proposition 8.11"
+    },
+    {
+      "section": 55,
+      "label": "Definition 8.55-extra-2"
+    },
+    {
+      "section": 55,
+      "label": "Example 8.12"
+    },
+    {
+      "section": 55,
+      "label": "Lemma 8.13"
+    },
+    {
+      "section": 55,
+      "label": "Definition 8.55-extra-3"
+    },
+    {
+      "section": 56,
+      "label": "Notation 8.56-extra-1"
+    },
+    {
+      "section": 56,
+      "label": "Proposition 8.14"
+    },
+    {
+      "section": 56,
+      "label": "Definition 8.56-extra-2"
+    },
+    {
+      "section": 56,
+      "label": "Proposition 8.15"
+    },
+    {
+      "section": 56,
+      "label": "Notation 8.56-extra-3"
+    },
+    {
+      "section": 57,
+      "label": "Definition 8.57-extra-1"
+    },
+    {
+      "section": 57,
+      "label": "Proposition 8.16"
+    },
+    {
+      "section": 57,
+      "label": "Example 8.17"
+    },
+    {
+      "section": 57,
+      "label": "Exercise 8.18"
+    },
+    {
+      "section": 57,
+      "label": "Proposition 8.19"
+    },
+    {
+      "section": 57,
+      "label": "Definition 8.57-extra-2"
+    },
+    {
+      "section": 57,
+      "label": "Example 8.20"
+    },
+    {
+      "section": 57,
+      "label": "Corollary 8.21"
+    },
+    {
+      "section": 58,
+      "label": "Definition 8.58-extra-1"
+    },
+    {
+      "section": 58,
+      "label": "Proposition 8.22"
+    },
+    {
+      "section": 58,
+      "label": "Proposition 8.23"
+    },
+    {
+      "section": 59,
+      "label": "Example 8.24"
+    },
+    {
+      "section": 59,
+      "label": "Definition 8.59-extra-1"
+    },
+    {
+      "section": 59,
+      "label": "Lemma 8.25"
+    },
+    {
+      "section": 59,
+      "label": "Proposition 8.26"
+    },
+    {
+      "section": 59,
+      "label": "Example 8.27"
+    },
+    {
+      "section": 59,
+      "label": "Proposition 8.28"
+    },
+    {
+      "section": 59,
+      "label": "Exercise 8.29"
+    },
+    {
+      "section": 59,
+      "label": "Proposition 8.30"
+    },
+    {
+      "section": 59,
+      "label": "Corollary 8.31"
+    },
+    {
+      "section": 59,
+      "label": "Corollary 8.32"
+    },
+    {
+      "section": 60,
+      "label": "Definition 8.60-extra-1"
+    },
+    {
+      "section": 60,
+      "label": "Proposition 8.33"
+    },
+    {
+      "section": 60,
+      "label": "Definition 8.60-extra-2"
+    },
+    {
+      "section": 60,
+      "label": "Definition 8.60-extra-3"
+    },
+    {
+      "section": 60,
+      "label": "Definition 8.60-extra-4"
+    },
+    {
+      "section": 60,
+      "label": "Exercise 8.34"
+    },
+    {
+      "section": 60,
+      "label": "Exercise 8.35"
+    },
+    {
+      "section": 60,
+      "label": "Example 8.36"
+    },
+    {
+      "section": 60,
+      "label": "Definition 8.60-extra-5"
+    },
+    {
+      "section": 60,
+      "label": "Theorem 8.37"
+    },
+    {
+      "section": 60,
+      "label": "Notation 8.60-extra-6"
+    },
+    {
+      "section": 60,
+      "label": "Corollary 8.38"
+    },
+    {
+      "section": 60,
+      "label": "Definition 8.60-extra-7"
+    },
+    {
+      "section": 60,
+      "label": "Corollary 8.39"
+    },
+    {
+      "section": 60,
+      "label": "Example 8.40"
+    },
+    {
+      "section": 60,
+      "label": "Proposition 8.41"
+    },
+    {
+      "section": 60,
+      "label": "Corollary 8.42"
+    },
+    {
+      "section": 60,
+      "label": "Exercise 8.43"
+    },
+    {
+      "section": 61,
+      "label": "Theorem 8.44"
+    },
+    {
+      "section": 61,
+      "label": "Definition 8.61-extra-1"
+    },
+    {
+      "section": 61,
+      "label": "Proposition 8.45"
+    },
+    {
+      "section": 62,
+      "label": "Theorem 8.46"
+    },
+    {
+      "section": 62,
+      "label": "Example 8.47"
+    },
+    {
+      "section": 62,
+      "label": "Proposition 8.48"
+    },
+    {
+      "section": 62,
+      "label": "Definition 8.62-extra-1"
+    },
+    {
+      "section": 62,
+      "label": "Theorem 8.49"
+    },
+    {
+      "section": 62,
+      "label": "Corollary 8.50"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-1"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-2"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-3"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-4"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-5"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-6"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-7"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-8"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-9"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-10"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-11"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-12"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-13"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-14"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-15"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-16"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-17"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-18"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-19"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-20"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-21"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-22"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-23"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-24"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-25"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-26"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-27"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-28"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-29"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-30"
+    },
+    {
+      "section": 63,
+      "label": "Problem 8-31"
+    }
+  ],
+  "notes": [
+    "Nested auxiliary Lean files are not emitted as standalone review cards.",
+    "JSON entries without matching Lean files are reported but do not block review generation."
+  ]
+}

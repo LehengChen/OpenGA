@@ -82,6 +82,53 @@ function extractDeclarationFromCommand(command: LeanParsedCommand): LeanDeclarat
   };
 }
 
+function referenceName(text: string, keyword: '#check' | 'recall'): string {
+  const rest = text.slice(keyword.length).trim();
+  const match = rest.match(/^([^\s(:]+)/);
+  return match?.[1] ?? rest.split(/\s+/)[0] ?? keyword;
+}
+
+function stripInlineComment(line: string): string {
+  const index = line.indexOf('--');
+  return index === -1 ? line : line.slice(0, index);
+}
+
+function extractReferenceCommands(source: string): LeanDeclaration[] {
+  const references: LeanDeclaration[] = [];
+  let inBlockComment = false;
+
+  for (const rawLine of source.split(/\r?\n/)) {
+    let line = rawLine;
+    const trimmed = line.trim();
+
+    if (inBlockComment) {
+      if (trimmed.includes('-/')) inBlockComment = false;
+      continue;
+    }
+    if (trimmed.startsWith('/-') && !trimmed.includes('-/')) {
+      inBlockComment = true;
+      continue;
+    }
+    if (trimmed.startsWith('/-') || trimmed.startsWith('--')) continue;
+
+    line = stripInlineComment(line).trim();
+    const keyword = line.startsWith('#check ') ? '#check' : line.startsWith('recall ') ? 'recall' : null;
+    if (!keyword) continue;
+
+    const fullName = referenceName(line, keyword);
+    const nameParts = fullName.split('.');
+    references.push({
+      kind: keyword === '#check' ? 'check' : 'recall',
+      name: nameParts[nameParts.length - 1] || fullName,
+      fullName,
+      docstring: null,
+      signature: line
+    });
+  }
+
+  return references;
+}
+
 function commandTextFromLineRange(source: string, commands: LeanParsedCommand[], index: number): string {
   const lines = source.split(/\r?\n/);
   const startIndex = Math.max(0, commands[index].startLine - 1);
@@ -131,8 +178,9 @@ function extractLeanDeclarationsWithLeanParser(source: string): LeanDeclaration[
       .filter((command) => command.kind === 'Lean.Parser.Command.declaration')
       .map(extractDeclarationFromCommand)
       .filter((decl): decl is LeanDeclaration => decl !== null);
-    leanDeclarationCache.set(cacheKey, declarations);
-    return declarations;
+    const formalStatements = [...extractReferenceCommands(source), ...declarations];
+    leanDeclarationCache.set(cacheKey, formalStatements);
+    return formalStatements;
   } catch (error) {
     console.warn('Lean parser extraction failed; using fallback parser.', error);
     return null;
@@ -232,7 +280,9 @@ function extractLeanDeclarationsFallback(source: string): LeanDeclaration[] {
 }
 
 export function extractLeanDeclarations(source: string): LeanDeclaration[] {
-  return extractLeanDeclarationsWithLeanParser(source) ?? extractLeanDeclarationsFallback(source);
+  const parsed = extractLeanDeclarationsWithLeanParser(source);
+  if (parsed) return parsed;
+  return [...extractReferenceCommands(source), ...extractLeanDeclarationsFallback(source)];
 }
 
 function displaySignature(decl: LeanDeclaration): string {

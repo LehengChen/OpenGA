@@ -8,6 +8,7 @@
   },
   "scripts": {
     "copy-tasks": "node scripts/copy-tasks.js",
+    "generate-lee-tasks": "node scripts/generate-lee-tasks.js",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite --host 127.0.0.1",
     "dev:server": "tsx server/index.ts",
