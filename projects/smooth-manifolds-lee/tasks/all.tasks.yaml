@@ -102,10 +102,9 @@ tasks:
   description: Textbook source and Lean file review for Definition 1-extra-1.
   status: todo
   checks:
-    informal_review: done
+    informal_review: pending
     formal_review: pending
-  review_notes:
-  - 'Initial review: informal statement matches the topological manifold definition. Formal content includes the core TopologicalManifold definition, but also mixes helper material and items closer to Theorem 1.2, so formal alignment needs refinement.'
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_1.lean
@@ -131,10 +130,9 @@ tasks:
   description: Textbook source and Lean file review for Exercise 1.1.
   status: todo
   checks:
-    informal_review: done
+    informal_review: pending
     formal_review: pending
-  review_notes:
-  - 'Initial review: informal statement matches Exercise 1.1. Formal direction is relevant, but several theorem statements appear truncated after local let-bindings, so formal alignment is not yet review-complete.'
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_1.lean
@@ -160,11 +158,9 @@ tasks:
   description: Textbook source and Lean file review for Theorem 1.2.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal statement is correct. Formal tab currently shows no declarations because the source uses recall for TopologicalManifold.dimension_eq_of_homeomorph; recall commands need to be displayed before formal review can pass.'
-  - 'Follow-up review after recall extraction: recall TopologicalManifold.dimension_eq_of_homeomorph directly matches Theorem 1.2, so formal_review is accepted.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Theorem_1_2.lean
@@ -190,11 +186,9 @@ tasks:
   description: Textbook source and Lean file review for Definition 1-extra-2.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal coordinate chart text is correct. Formal statements cover coordinate balls, boxes, centered charts, and centering helpers, but the core chart-as-homeomorphism content is only implicit through OpenPartialHomeomorph/#check and needs better display/tagging.'
-  - 'Follow-up review after #check extraction: OpenPartialHomeomorph, chartAt, and mem_chart_source now display the core chart semantics; coordinate ball/box and centering declarations are acceptable companions.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_2.lean
@@ -220,10 +214,9 @@ tasks:
   description: Textbook source and Lean file review for Example 1.3.
   status: todo
   checks:
-    informal_review: done
+    informal_review: pending
     formal_review: pending
-  review_notes:
-  - 'Initial review: informal graph example is correct. Formal statements cover graph maps and coordinate homeomorphism data, but do not yet state the final topological-manifold/global-chart conclusion or the coordinate-subset generalization.'
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_3.lean
@@ -249,10 +242,9 @@ tasks:
   description: Textbook source and Lean file review for Example 1.4.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal sphere example is correct. Formal statement sphere_topologicalManifold reasonably captures the final conclusion that the unit sphere is a topological manifold.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_4.lean
@@ -278,10 +270,9 @@ tasks:
   description: Textbook source and Lean file review for Example 1.5.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal projective-space example is correct. Formal statements cover real projective space, quotient topology, affine charts, coordinate formulas, inverses, domains, and cover; helper declarations are relevant to the construction.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_5.lean
@@ -307,10 +298,9 @@ tasks:
   description: Textbook source and Lean file review for Exercise 1.6.
   status: todo
   checks:
-    informal_review: done
+    informal_review: pending
     formal_review: pending
-  review_notes:
-  - 'Initial review: informal Exercise 1.6 is correct. Formal statements cover Hausdorff and second-countable properties and chart-domain data, but do not yet show a final TopologicalManifold instance/theorem for real projective space.'
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_6.lean
@@ -336,10 +326,9 @@ tasks:
   description: Textbook source and Lean file review for Exercise 1.7.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal compactness exercise is correct. Formal CompactSpace (RealProjectiveSpace n) statement matches the target, with the sphere restriction idea present in the proof source.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_7.lean
@@ -365,10 +354,9 @@ tasks:
   description: Textbook source and Lean file review for Example 1.8.
   status: todo
   checks:
-    informal_review: done
+    informal_review: pending
     formal_review: pending
-  review_notes:
-  - 'Initial review: informal product-manifold example is correct. Formal isManifold_pi covers the local atlas/manifold core, but does not yet expose Hausdorff, second-countable, TopologicalManifold, or dimension-sum conclusions.'
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_8.lean
@@ -394,10 +382,9 @@ tasks:
   description: Textbook source and Lean file review for Example 1.9.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal torus example is correct. Formal finite product of circles gives the intended manifold structure; minor caveat: Lean permits n = 0 whereas the textbook states positive n.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_9.lean
@@ -423,10 +410,9 @@ tasks:
   description: Textbook source and Lean file review for Lemma 1.10.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal lemma statement is correct. Formal final statement exists_countable_precompact_coordinate_ball_basis matches the lemma; earlier declarations are related definitions/helpers.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Lemma_1_10.lean
@@ -452,11 +438,9 @@ tasks:
   description: Textbook source and Lean file review for Definition 1-extra-3.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal connected/path-connected definitions are correct. Formal tab is empty because the source uses recall commands for ConnectedSpace, PathConnectedSpace, and LocPathConnectedSpace; recall display is needed.'
-  - 'Follow-up review after recall extraction: ConnectedSpace, PathConnectedSpace, and LocPathConnectedSpace match the three recalled definitions, so formal_review is accepted.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_3.lean
@@ -482,11 +466,9 @@ tasks:
   description: Textbook source and Lean file review for Proposition 1.11.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal proposition is correct. Formal tab covers only parts of the result; connected iff path-connected, components/path components, and openness of components are not currently displayed as reviewable formal statements.'
-  - 'Follow-up review after recall extraction: displayed statements now cover locally path-connectedness, connected iff path-connected, component/path-component identification, and countability/open component structure.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_11.lean
@@ -512,11 +494,9 @@ tasks:
   description: Textbook source and Lean file review for Proposition 1.12.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal proposition is correct. Formal tab is empty because the source uses recall for TopologicalManifold.locallyCompactSpace_of_topologicalManifold; recall display is needed.'
-  - 'Follow-up review after recall extraction: TopologicalManifold.locallyCompactSpace_of_topologicalManifold directly matches local compactness of topological manifolds.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_12.lean
@@ -542,11 +522,9 @@ tasks:
   description: Textbook source and Lean file review for Definition 1-extra-4.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal paracompactness definition is correct. Formal tab only shows a refinement existence theorem and does not display LocallyFinite, ParacompactSpace, or the cover/refinement definitions themselves.'
-  - 'Follow-up review after recall extraction: LocallyFinite, ParacompactSpace, IsOpenCover, and locally finite refinement API cover the textbook definitions sufficiently.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_4.lean
@@ -572,11 +550,9 @@ tasks:
   description: Textbook source and Lean file review for Lemma 1.13.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal lemma is correct, with a minor OCR issue where the first cover symbol should be mathcal X. Formal tab is empty because the source uses recall for LocallyFinite.closure and LocallyFinite.closure_iUnion.'
-  - 'Follow-up review after recall extraction: LocallyFinite.closure and LocallyFinite.closure_iUnion match Lemma 1.13 parts (a) and (b).'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Lemma_1_13.lean
@@ -602,11 +578,9 @@ tasks:
   description: Textbook source and Lean file review for Exercise 1.14.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal exercise is correct. Formal tab is empty because the source only recalls the two Lemma 1.13 canonical statements; recall display is needed.'
-  - 'Follow-up review after recall extraction: the recalled LocallyFinite.closure and closure_iUnion results are appropriate as the exercise target/proof result.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_14.lean
@@ -632,10 +606,9 @@ tasks:
   description: Textbook source and Lean file review for Theorem 1.15.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal theorem is correct, with a minor cover-symbol OCR issue. Formal paracompactSpace_of_topologicalManifold matches the main theorem, with related refinement theorems shown as useful companions.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Theorem_1_15.lean
@@ -661,10 +634,9 @@ tasks:
   description: Textbook source and Lean file review for Proposition 1.16.
   status: todo
   checks:
-    informal_review: done
-    formal_review: done
-  review_notes:
-  - 'Initial review: informal proposition is correct. Formal countable_fundamentalGroup_of_topologicalManifold reasonably matches the countability of the fundamental group.'
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
   files:
     textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
     lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_16.lean
