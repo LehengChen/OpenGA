@@ -5,6 +5,7 @@ import {
   nextLeafId,
   prevLeafId,
   readAtom,
+  readTaskSource,
   readTasks,
   withTaskLock,
   writeAtom,
@@ -13,20 +14,25 @@ import {
 import { ValidationError } from '../lib/errors.js';
 import type { ReviewTask } from '../../src/lib/taskSchema';
 
-const router = express.Router();
+const defaultProjectId = 'riemannian-geometry';
+const router = express.Router({ mergeParams: true });
 
-router.get('/', (_req, res, next) => {
+function projectIdFromRequest(req: express.Request): string {
+  return typeof req.params.projectId === 'string' ? req.params.projectId : defaultProjectId;
+}
+
+router.get('/', (req, res, next) => {
   try {
-    const dataset = readTasks();
+    const dataset = readTasks(projectIdFromRequest(req));
     res.json(dataset);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/leaves', (_req, res, next) => {
+router.get('/leaves', (req, res, next) => {
   try {
-    const dataset = readTasks();
+    const dataset = readTasks(projectIdFromRequest(req));
     res.json(leafTasksInOrder(dataset.tasks));
   } catch (error) {
     next(error);
@@ -35,7 +41,7 @@ router.get('/leaves', (_req, res, next) => {
 
 router.get('/:id/atom', (req, res, next) => {
   try {
-    const dataset = readTasks();
+    const dataset = readTasks(projectIdFromRequest(req));
     const task = findTask(dataset.tasks, req.params.id);
     if (!task) {
       res.status(404).json({ error: 'Task not found' });
@@ -52,10 +58,26 @@ router.get('/:id/atom', (req, res, next) => {
   }
 });
 
+router.get('/:id/source', (req, res, next) => {
+  try {
+    const projectId = projectIdFromRequest(req);
+    const dataset = readTasks(projectId);
+    const task = findTask(dataset.tasks, req.params.id);
+    if (!task) {
+      res.status(404).json({ error: 'Task not found' });
+      return;
+    }
+    res.json(readTaskSource(projectId, task));
+  } catch (error) {
+    next(error);
+  }
+});
+
 const MAX_NOTE_LENGTH = 10000;
 
 function validateReviewBody(body: unknown): {
   mathReview?: boolean;
+  checks?: Record<string, boolean>;
   note?: string;
   atomContent?: string;
 } {
@@ -63,10 +85,24 @@ function validateReviewBody(body: unknown): {
     throw new ValidationError('Request body must be an object');
   }
 
-  const { mathReview, note, atomContent } = body as Record<string, unknown>;
+  const { mathReview, checks, note, atomContent } = body as Record<string, unknown>;
 
   if (mathReview !== undefined && typeof mathReview !== 'boolean') {
     throw new ValidationError('mathReview must be a boolean');
+  }
+
+  if (checks !== undefined) {
+    if (checks === null || typeof checks !== 'object' || Array.isArray(checks)) {
+      throw new ValidationError('checks must be an object');
+    }
+    for (const [key, value] of Object.entries(checks as Record<string, unknown>)) {
+      if (!/^[a-z][a-z0-9_]*$/.test(key)) {
+        throw new ValidationError(`Invalid check key: ${key}`);
+      }
+      if (typeof value !== 'boolean') {
+        throw new ValidationError(`Check ${key} must be a boolean`);
+      }
+    }
   }
 
   if (note !== undefined) {
@@ -82,17 +118,18 @@ function validateReviewBody(body: unknown): {
     throw new ValidationError('atomContent must be a string');
   }
 
-  return { mathReview, note, atomContent };
+  return { mathReview, checks: checks as Record<string, boolean> | undefined, note, atomContent };
 }
 
 router.post('/:id/review', express.json(), async (req, res, next) => {
   try {
-    const { mathReview, note, atomContent } = validateReviewBody(req.body);
+    const projectId = projectIdFromRequest(req);
+    const { mathReview, checks, note, atomContent } = validateReviewBody(req.body);
     const hasAtomEdit = atomContent !== undefined;
     const trimmedNote = note?.trim();
 
     const result = await withTaskLock(async () => {
-      const dataset = readTasks();
+      const dataset = readTasks(projectId);
       const taskIndex = dataset.tasks.findIndex((task) => task.id === req.params.id);
       if (taskIndex === -1) {
         return { status: 404, body: { error: 'Task not found' } };
@@ -103,15 +140,24 @@ router.post('/:id/review', express.json(), async (req, res, next) => {
         return { status: 400, body: { error: 'Only leaf tasks can be reviewed.' } };
       }
 
-      const currentMathReview = task.checks?.math_review ?? 'pending';
-      const isRevert = mathReview === false && currentMathReview === 'done';
-      const hasReview = mathReview === true || isRevert || (trimmedNote && trimmedNote.length > 0);
+      const checkUpdates: Record<string, boolean> = {
+        ...(checks ?? {})
+      };
+      if (mathReview !== undefined) {
+        checkUpdates.math_review = mathReview;
+      }
+
+      const hasCheckUpdate = Object.entries(checkUpdates).some(([key, value]) => {
+        const currentValue = task.checks?.[key] ?? 'pending';
+        return (value && currentValue !== 'done') || (!value && currentValue === 'done');
+      });
+      const hasReview = hasCheckUpdate || (trimmedNote && trimmedNote.length > 0);
 
       if (!hasReview && !hasAtomEdit) {
         return {
           status: 400,
           body: {
-            error: 'Please complete the math review, add a note, or edit the atom content.'
+            error: 'Please update a review check, add a note, or edit the atom content.'
           }
         };
       }
@@ -120,20 +166,27 @@ router.post('/:id/review', express.json(), async (req, res, next) => {
         if (!task.files.atom) {
           return { status: 400, body: { error: 'No atom file available for this task.' } };
         }
+        if (!task.editable.includes(task.files.atom)) {
+          return { status: 400, body: { error: 'This task does not allow atom source edits.' } };
+        }
         writeAtom(task.files.atom, atomContent);
+      }
+
+      const nextChecks = {
+        ...(task.checks ?? {})
+      };
+      for (const [key, value] of Object.entries(checkUpdates)) {
+        nextChecks[key] = value ? 'done' : 'pending';
       }
 
       const updatedTask: ReviewTask = {
         ...task,
-        checks: {
-          ...(task.checks ?? {}),
-          math_review: mathReview ? 'done' : 'pending'
-        },
+        checks: nextChecks,
         review_notes: trimmedNote ? [...task.review_notes, trimmedNote] : task.review_notes
       };
 
       dataset.tasks[taskIndex] = updatedTask;
-      writeTasks(dataset);
+      writeTasks(projectId, dataset);
 
       return {
         status: 200,
@@ -152,7 +205,7 @@ router.post('/:id/review', express.json(), async (req, res, next) => {
 
 router.get('/:id/neighbors', (req, res, next) => {
   try {
-    const dataset = readTasks();
+    const dataset = readTasks(projectIdFromRequest(req));
     res.json({
       prevId: prevLeafId(dataset.tasks, req.params.id),
       nextId: nextLeafId(dataset.tasks, req.params.id)

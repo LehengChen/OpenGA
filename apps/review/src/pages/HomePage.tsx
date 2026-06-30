@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styles from '../App.module.css';
@@ -12,6 +12,7 @@ import type { TaskDataset } from '../lib/taskSchema';
 type ViewMode = 'list' | 'dag';
 
 type Props = {
+  projectId: string;
   dataset: TaskDataset;
   onRefresh: () => Promise<void>;
 };
@@ -24,7 +25,7 @@ function initialTaskId(tasks: TaskDataset['tasks']) {
   return rootTasks(tasks)[0]?.id ?? tasks[0]?.id ?? '';
 }
 
-export function HomePage({ dataset, onRefresh }: Props) {
+export function HomePage({ projectId, dataset, onRefresh }: Props) {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedId, setSelectedId] = useState(() => initialTaskId(dataset.tasks));
@@ -35,12 +36,18 @@ export function HomePage({ dataset, onRefresh }: Props) {
     return findTask(dataset.tasks, selectedId) ?? rootTasks(dataset.tasks)[0] ?? dataset.tasks[0];
   }, [selectedId, dataset.tasks]);
 
+  useEffect(() => {
+    if (!findTask(dataset.tasks, selectedId)) {
+      setSelectedId(initialTaskId(dataset.tasks));
+    }
+  }, [dataset.tasks, selectedId]);
+
   const setSelectedTask = (taskId: string) => {
     setSelectedId(taskId);
   };
 
   const startReview = (taskId: string) => {
-    navigate(`/review/${encodeURIComponent(taskId)}`);
+    navigate(`/projects/${encodeURIComponent(projectId)}/review/${encodeURIComponent(taskId)}`);
   };
 
   return (
@@ -48,10 +55,14 @@ export function HomePage({ dataset, onRefresh }: Props) {
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>OpenGA Review</p>
-          <h1>Riemannian Geometry Review Roadmap</h1>
+          <h1>{dataset.title ?? dataset.project}</h1>
           <p className={styles.sourceLine}>
-            Pilot roadmap from <code>projects/riemannian-geometry/tasks/pilot.tasks.yaml</code>
+            {dataset.description ? `${dataset.description} ` : null}
+            Task data from <code>{dataset.project}</code>
           </p>
+          <button type="button" className={styles.backButton} onClick={() => navigate('/')}>
+            Projects
+          </button>
           <button
             type="button"
             className={styles.refreshButton}

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import tasksRouter from './routes/tasks.js';
 import { ValidationError } from './lib/errors.js';
+import { listProjects } from './lib/taskStore.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -31,14 +32,27 @@ function devCors(
 app.use(devCors);
 app.use(express.json());
 
+app.get('/api/projects', (_req, res) => {
+  res.json(listProjects());
+});
+
+app.use('/api/projects/:projectId/tasks', tasksRouter);
 app.use('/api/tasks', tasksRouter);
 
-// In production, serve the built frontend statically.
-const distPath = path.join(__dirname, '../dist');
-app.use(express.static(distPath));
-app.get(/.*/, (_req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '../dist');
+  app.use(express.static(distPath));
+  app.get(/.*/, (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+} else {
+  app.get(/.*/, (_req, res) => {
+    res
+      .status(404)
+      .type('text/plain')
+      .send('Review API server is running. Open http://localhost:5173/ for the Vite dev app.');
+  });
+}
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ValidationError) {

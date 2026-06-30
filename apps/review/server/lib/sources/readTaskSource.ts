@@ -1,0 +1,139 @@
+import type {
+  ReviewTask,
+  TaskSource,
+  TaskSourcePanel
+} from '../../../src/lib/taskSchema';
+import { readAtom } from '../taskStore/atoms.js';
+import { getProjectConfig } from '../taskStore/projects.js';
+import {
+  extractLeanDeclarations,
+  readLeanFromGit,
+  renderFormalStatementItems,
+  renderFormalStatements
+} from './lean.js';
+import {
+  loadTextbookEntry,
+  normalizeTextbookMarkdown,
+  renderTextbookEntry
+} from './textbook.js';
+import type { TextbookEntry } from './types.js';
+
+const readOnlySourceCache = new Map<string, TaskSource>();
+
+function sourceCacheKey(projectId: string, task: ReviewTask, projectReviewKind: string): string | null {
+  if (task.files.atom) return null;
+
+  return JSON.stringify({
+    projectId,
+    taskId: task.id,
+    reviewKind: task.review_kind ?? projectReviewKind,
+    title: task.title,
+    leanFile: task.source?.lean_file ?? null,
+    importRef: task.source?.import_ref ?? null,
+    textbookJson: task.source?.textbook_json ?? null,
+    textbookLabel: task.source?.textbook_label ?? null
+  });
+}
+
+function renderAlignmentTarget(
+  task: ReviewTask,
+  textbookEntry: TextbookEntry | null,
+  formalCount: number
+): string {
+  const pieces = [
+    `# ${task.title}`,
+    task.source?.textbook_label ? `Textbook label: \`${task.source.textbook_label}\`` : null,
+    '',
+    '## Informal Statement',
+    textbookEntry
+      ? normalizeTextbookMarkdown(textbookEntry.content ?? '')
+      : 'No textbook source is configured for this task.',
+    '',
+    '## Formal Statements To Tag',
+    formalCount > 0
+      ? `${formalCount} Lean declarations are available in the Formal statements tab. Review them one by one against the informal statement.`
+      : 'No Lean declarations were detected in this source file.',
+    '',
+    '## Review Decision',
+    '- `informal_review`: the informal textbook statement is the intended source item.',
+    '- `formal_review`: the displayed Lean declarations are a reasonable formalization of the informal statement.'
+  ];
+  return pieces.filter((item): item is string => item !== null).join('\n').trim();
+}
+
+export function readTaskSource(projectId: string, task: ReviewTask): TaskSource {
+  const config = getProjectConfig(projectId);
+  const cacheKey = sourceCacheKey(projectId, task, config.reviewKind);
+  const cached = cacheKey ? readOnlySourceCache.get(cacheKey) : undefined;
+  if (cached) return cached;
+
+  const panels: TaskSourcePanel[] = [];
+
+  if (task.files.atom) {
+    panels.push({
+      id: 'atom',
+      title: 'Atom source',
+      kind: 'markdown',
+      language: 'markdown',
+      content: readAtom(task.files.atom),
+      editable: task.editable.includes(task.files.atom)
+    });
+  }
+
+  const textbookEntry = loadTextbookEntry(config, task);
+  const leanSource = task.source?.lean_file
+    ? readLeanFromGit(task.source.import_ref ?? 'origin/import/smooth-manifolds-lee', task.source.lean_file)
+    : null;
+  const declarations = leanSource ? extractLeanDeclarations(leanSource) : [];
+  const formalContent = renderFormalStatements(declarations);
+  const formalItems = renderFormalStatementItems(declarations);
+
+  if (task.review_kind === 'lean_textbook' || config.reviewKind === 'lean_textbook') {
+    panels.push({
+      id: 'alignment',
+      title: 'Review target',
+      kind: 'markdown',
+      language: 'markdown',
+      content: renderAlignmentTarget(task, textbookEntry, formalItems.length),
+      editable: false
+    });
+  }
+
+  if (textbookEntry !== null && task.source?.textbook_label) {
+    panels.push({
+      id: 'textbook',
+      title: 'Informal source',
+      kind: 'markdown',
+      language: 'markdown',
+      content: renderTextbookEntry(textbookEntry, task.source.textbook_label),
+      editable: false
+    });
+  }
+
+  if (declarations.length > 0) {
+    panels.push({
+      id: 'formal',
+      title: 'Formal statements',
+      kind: 'markdown',
+      language: 'markdown',
+      content: formalContent,
+      items: formalItems,
+      editable: false
+    });
+  }
+
+  if (leanSource !== null) {
+    panels.push({
+      id: 'lean',
+      title: 'Lean source',
+      kind: 'lean',
+      language: 'lean',
+      content: leanSource,
+      editable: false
+    });
+  }
+
+  const source = { taskId: task.id, panels };
+  if (cacheKey) readOnlySourceCache.set(cacheKey, source);
+  return source;
+}

@@ -1,0 +1,649 @@
+schema: openga-review.tasks.v2
+project: smooth-manifolds-lee
+title: Smooth Manifolds Lee — Section 1
+description: Semantic review pilot for Lee's Introduction to Smooth Manifolds, Section 1, paired with the imported Lean staging files.
+review_kind: lean_textbook
+tasks:
+- id: sml.book
+  kind: root
+  parent: null
+  depends_on: []
+  unlocks:
+  - sml.ch1
+  dcref: null
+  chapter: null
+  title: Lee — Introduction to Smooth Manifolds
+  description: Review textbook-aligned Lean formalization tasks before deciding what should be ported into OpenGALib.
+  status: todo
+  checks: {}
+  review_notes: []
+  files: {}
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+- id: sml.ch1
+  kind: cluster
+  parent: sml.book
+  depends_on: []
+  unlocks:
+  - sml.ch1.sec1
+  dcref: null
+  chapter: 1
+  title: Chapter 1 — Smooth Manifolds
+  description: Chapter 1 source entries from the Lee textbook JSON paired with imported Lean files.
+  status: todo
+  checks: {}
+  review_notes: []
+  files: {}
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+- id: sml.ch1.sec1
+  kind: cluster
+  parent: sml.ch1
+  depends_on: []
+  unlocks:
+  - sml.ch1.sec1.definition-1-extra-1
+  - sml.ch1.sec1.exercise-1-1
+  - sml.ch1.sec1.theorem-1-2
+  - sml.ch1.sec1.definition-1-extra-2
+  - sml.ch1.sec1.example-1-3
+  - sml.ch1.sec1.example-1-4
+  - sml.ch1.sec1.example-1-5
+  - sml.ch1.sec1.exercise-1-6
+  - sml.ch1.sec1.exercise-1-7
+  - sml.ch1.sec1.example-1-8
+  - sml.ch1.sec1.example-1-9
+  - sml.ch1.sec1.lemma-1-10
+  - sml.ch1.sec1.definition-1-extra-3
+  - sml.ch1.sec1.proposition-1-11
+  - sml.ch1.sec1.proposition-1-12
+  - sml.ch1.sec1.definition-1-extra-4
+  - sml.ch1.sec1.lemma-1-13
+  - sml.ch1.sec1.exercise-1-14
+  - sml.ch1.sec1.theorem-1-15
+  - sml.ch1.sec1.proposition-1-16
+  dcref: lee-sm:1.1
+  chapter: 1
+  title: Section 1 — Topological Manifolds
+  description: First pilot batch for textbook-source and Lean-code review.
+  status: todo
+  checks: {}
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+- id: sml.ch1.sec1.definition-1-extra-1
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:definition:1-extra-1
+  chapter: 1
+  title: Definition 1-extra-1
+  description: Textbook source and Lean file review for Definition 1-extra-1.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_1.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Definition 1-extra-1
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_1.lean
+- id: sml.ch1.sec1.exercise-1-1
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:exercise:1.1
+  chapter: 1
+  title: Exercise 1.1
+  description: Textbook source and Lean file review for Exercise 1.1.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_1.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Exercise 1.1
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_1.lean
+- id: sml.ch1.sec1.theorem-1-2
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:theorem:1.2
+  chapter: 1
+  title: Theorem 1.2
+  description: Textbook source and Lean file review for Theorem 1.2.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Theorem_1_2.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Theorem 1.2
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Theorem_1_2.lean
+- id: sml.ch1.sec1.definition-1-extra-2
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:definition:1-extra-2
+  chapter: 1
+  title: Definition 1-extra-2
+  description: Coordinate chart and coordinate-ball source/code review.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_2.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Definition 1-extra-2
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_2.lean
+- id: sml.ch1.sec1.example-1-3
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:example:1.3
+  chapter: 1
+  title: Example 1.3
+  description: Textbook source and Lean file review for Example 1.3.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_3.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Example 1.3
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_3.lean
+- id: sml.ch1.sec1.example-1-4
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:example:1.4
+  chapter: 1
+  title: Example 1.4
+  description: Textbook source and Lean file review for Example 1.4.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_4.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Example 1.4
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_4.lean
+- id: sml.ch1.sec1.example-1-5
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:example:1.5
+  chapter: 1
+  title: Example 1.5
+  description: Textbook source and Lean file review for Example 1.5.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_5.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Example 1.5
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_5.lean
+- id: sml.ch1.sec1.exercise-1-6
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:exercise:1.6
+  chapter: 1
+  title: Exercise 1.6
+  description: Textbook source and Lean file review for Exercise 1.6.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_6.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Exercise 1.6
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_6.lean
+- id: sml.ch1.sec1.exercise-1-7
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:exercise:1.7
+  chapter: 1
+  title: Exercise 1.7
+  description: Textbook source and Lean file review for Exercise 1.7.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_7.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Exercise 1.7
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_7.lean
+- id: sml.ch1.sec1.example-1-8
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:example:1.8
+  chapter: 1
+  title: Example 1.8
+  description: Textbook source and Lean file review for Example 1.8.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_8.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Example 1.8
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_8.lean
+- id: sml.ch1.sec1.example-1-9
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:example:1.9
+  chapter: 1
+  title: Example 1.9
+  description: Textbook source and Lean file review for Example 1.9.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_9.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Example 1.9
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Example_1_9.lean
+- id: sml.ch1.sec1.lemma-1-10
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks:
+  - sml.ch1.sec1.proposition-1-12
+  - sml.ch1.sec1.proposition-1-16
+  dcref: lee-sm:lemma:1.10
+  chapter: 1
+  title: Lemma 1.10
+  description: Textbook source and Lean file review for Lemma 1.10.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Lemma_1_10.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Lemma 1.10
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Lemma_1_10.lean
+- id: sml.ch1.sec1.definition-1-extra-3
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:definition:1-extra-3
+  chapter: 1
+  title: Definition 1-extra-3
+  description: Textbook source and Lean file review for Definition 1-extra-3.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_3.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Definition 1-extra-3
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_3.lean
+- id: sml.ch1.sec1.proposition-1-11
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:proposition:1.11
+  chapter: 1
+  title: Proposition 1.11
+  description: Textbook source and Lean file review for Proposition 1.11.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_11.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Proposition 1.11
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_11.lean
+- id: sml.ch1.sec1.proposition-1-12
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on:
+  - sml.ch1.sec1.lemma-1-10
+  unlocks: []
+  dcref: lee-sm:proposition:1.12
+  chapter: 1
+  title: Proposition 1.12
+  description: Textbook source and Lean file review for Proposition 1.12.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_12.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Proposition 1.12
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_12.lean
+- id: sml.ch1.sec1.definition-1-extra-4
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:definition:1-extra-4
+  chapter: 1
+  title: Definition 1-extra-4
+  description: Textbook source and Lean file review for Definition 1-extra-4.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_4.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Definition 1-extra-4
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Definition_1_extra_4.lean
+- id: sml.ch1.sec1.lemma-1-13
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks:
+  - sml.ch1.sec1.exercise-1-14
+  dcref: lee-sm:lemma:1.13
+  chapter: 1
+  title: Lemma 1.13
+  description: Textbook source and Lean file review for Lemma 1.13.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Lemma_1_13.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Lemma 1.13
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Lemma_1_13.lean
+- id: sml.ch1.sec1.exercise-1-14
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on:
+  - sml.ch1.sec1.lemma-1-13
+  unlocks: []
+  dcref: lee-sm:exercise:1.14
+  chapter: 1
+  title: Exercise 1.14
+  description: Textbook source and Lean file review for Exercise 1.14.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_14.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Exercise 1.14
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Exercise_1_14.lean
+- id: sml.ch1.sec1.theorem-1-15
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on: []
+  unlocks: []
+  dcref: lee-sm:theorem:1.15
+  chapter: 1
+  title: Theorem 1.15
+  description: Textbook source and Lean file review for Theorem 1.15.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Theorem_1_15.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Theorem 1.15
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Theorem_1_15.lean
+- id: sml.ch1.sec1.proposition-1-16
+  kind: leaf
+  parent: sml.ch1.sec1
+  depends_on:
+  - sml.ch1.sec1.lemma-1-10
+  unlocks: []
+  dcref: lee-sm:proposition:1.16
+  chapter: 1
+  title: Proposition 1.16
+  description: Textbook source and Lean file review for Proposition 1.16.
+  status: todo
+  checks:
+    informal_review: pending
+    formal_review: pending
+  review_notes: []
+  files:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    lean_source: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_16.lean
+  editable: []
+  github:
+    issue: null
+    pr: null
+    discussion: null
+  review_kind: lean_textbook
+  source:
+    textbook_json: sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee/section01.json
+    textbook_label: Proposition 1.16
+    import_ref: origin/import/smooth-manifolds-lee
+    lean_file: staging/SmoothManifoldsLee/SmoothManifoldsLee/Chap01/Sec01/Proposition_1_16.lean
