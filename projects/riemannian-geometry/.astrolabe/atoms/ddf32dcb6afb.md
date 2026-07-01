@@ -13,6 +13,7 @@ center $p$. Let $\gamma:[0,1]\to B$ be a geodesic segment with $\gamma(0)=p$. If
 $c:[0,1]\to M$ is any piecewise differentiable curve joining $\gamma(0)$ to
 $\gamma(1)$, then $\ell(\gamma)\le\ell(c)$, and if equality holds then
 $\gamma([0,1])=c([0,1])$.
+
 *Proof.* Suppose first $c([0,1])\subset B$. For $t\ne 0$ write uniquely
 $c(t)=\exp_p(r(t)\,v(t))=f(r(t),t)$, $|v(t)|=1$, $r:(0,1]\to\mathbb{R}$ positive
 piecewise differentiable. Then except at finitely many points
