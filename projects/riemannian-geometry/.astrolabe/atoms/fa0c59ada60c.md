@@ -8,6 +8,8 @@ source: tex
 src: docarmo
 title: Gauss
 ---
+We identify $T_pM$ with $T_v(T_pM)$ at $v\in T_pM$, writing $T_pM\approx T_v(T_pM)$.
+
 Let $p\in M$ and $v\in T_pM$ with $\exp_p v$ defined, and $w\in T_pM\approx T_v(T_pM)$.
 Then
 

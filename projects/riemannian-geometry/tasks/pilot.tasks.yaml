@@ -1820,8 +1820,9 @@ tasks:
   description: 'Definition ch3:2.1: geodesic'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.61-62 checked: geodesic definition, speed constancy/normalization convention, and coordinate geodesic equation (1) are faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/6e6c552589c3.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1845,8 +1846,9 @@ tasks:
   description: 'Theorem ch3:2.2: flow of a vector field'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.63 checked: vector-field flow theorem statement is faithful; hypotheses on open set, point, local domain, uniqueness, and smoothness are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/29e91d319760.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1869,8 +1871,9 @@ tasks:
   description: 'Lemma ch3:2.3: the geodesic field'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.63 checked: lemma statement and proof are faithful. Note: proof depends on the first-order system (1-prime) introduced in the intervening tangent-bundle paragraph after 2.1; extraction order worth checking for formalization.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/b40fd48159ae.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1894,8 +1897,9 @@ tasks:
   description: 'Definition ch3:2.4: geodesic field / geodesic flow'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.63 checked: geodesic field / geodesic flow definition is faithful. Corrected the final transition sentence so it no longer ends abruptly and includes the canonical projection $\pi:TM\to M$ from the original text.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/c9e99e264b48.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1920,8 +1924,9 @@ tasks:
   description: 'Proposition ch3:2.5: local existence/uniqueness of geodesics'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.64 checked: local existence/uniqueness proposition is faithful; the open set, $\delta$, $\varepsilon_1$, domain $\mathcal{U}$, and uniqueness at $t=0$ are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/dec3db54a25e.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1944,8 +1949,9 @@ tasks:
   description: 'Lemma ch3:2.6: homogeneity of a geodesic'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.64 checked: homogeneity lemma and proof are faithful; scaling of the interval $(-\delta/a,\delta/a)$ and identity $\gamma(t,q,av)=\gamma(at,q,v)$ are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/89639ee4b222.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1970,8 +1976,9 @@ tasks:
   description: 'Proposition ch3:2.7: uniform interval of definition'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.64-65 checked: uniform interval proposition and proof are faithful; the use of homogeneity with $\delta v/2$ and choice $\varepsilon<\delta\varepsilon_1/2$ are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/6b083d8aac49.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -1994,8 +2001,9 @@ tasks:
   description: 'Remark ch3:2.8: large velocity'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.65 checked: large-velocity remark is faithful. Note: the following exponential-map construction is present in the chapter doc rather than as a leaf atom; extraction order worth checking for future formalization.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/0d1cb6190af7.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2018,8 +2026,9 @@ tasks:
   description: 'Proposition ch3:2.9: exp_q is a local diffeomorphism'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.65 checked: local diffeomorphism statement and proof are faithful; $d(\exp_q)_0=\mathrm{Id}$ and the inverse-function-theorem step are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/6df06bf3db9e.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2042,8 +2051,9 @@ tasks:
   description: 'Example ch3:2.10: Euclidean space'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.66 checked: Euclidean-space example is faithful; geodesics as straight lines and exponential as identity under the usual tangent-space identification are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/47fd30d65a79.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2067,8 +2077,9 @@ tasks:
   description: 'Example ch3:2.11: the sphere'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.66-67 checked: sphere example is faithful; great-circle characterization, use of uniqueness, antipodal point behavior, and restricted domain on $S^n-\{q\}$ are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/ab0d5657b4ac.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2122,8 +2133,9 @@ tasks:
   description: 'Definition ch3:3.1: piecewise differentiable curve'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.67 checked: piecewise differentiable curve definition is faithful; partition, vertices, one-sided tangent limits, vertex angle, and parallel-transport extension are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/794c3d6cc891.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2146,8 +2158,9 @@ tasks:
   description: 'Definition ch3:3.2: minimizing geodesic'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.67 checked: minimizing geodesic definition is faithful; comparison is with arbitrary piecewise differentiable curves joining the endpoints.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/cf696395a771.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2170,8 +2183,9 @@ tasks:
   description: 'Definition ch3:3.3: parametrized surface'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.67-68 checked: parametrized-surface definition is faithful; connected set $A$, $U\subset A\subset\overline U$, vertex-angle condition, extension meaning of differentiability, fields along $s$, and covariant partial derivatives are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/b7028e5e1b4a.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2194,8 +2208,9 @@ tasks:
   description: 'Lemma ch3:3.4: symmetry'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.68 checked: symmetry lemma and proof are faithful. Moved the post-proof tangent-space identification out of this lemma because it is setup for Gauss lemma 3.5, not part of the proof.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/6b1a0f4815d1.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2218,8 +2233,9 @@ tasks:
   description: 'Lemma ch3:3.5: Gauss'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.69-70 checked: Gauss lemma and proof are faithful. Added the tangent-space identification preamble from the text immediately preceding 3.5 so the notation $T_pM\approx T_v(T_pM)$ is locally explained.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/fa0c59ada60c.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2244,8 +2260,9 @@ tasks:
   description: 'Proposition ch3:3.6: geodesics locally minimize'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.70-71 checked: local minimizing proposition and proof are faithful; normal-neighborhood/normal-ball terminology, radial decomposition, Gauss-lemma orthogonality, equality case, and non-contained curve case are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/ddf32dcb6afb.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2271,8 +2288,9 @@ tasks:
   description: 'Theorem ch3:3.7: totally normal neighborhood'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.72 checked: totally normal neighborhood theorem and proof are faithful; the displayed matrix $\begin{pmatrix}I&I\\0&I\end{pmatrix}$ matches the source, and the choice of $\mathcal{U}^{\prime}$ and $W\times W\subset W^{\prime}$ is preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/f29bd1e6ebb3.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2296,8 +2314,9 @@ tasks:
   description: 'Remark ch3:3.8: uniqueness and differentiable dependence'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.72-73 checked: uniqueness and differentiable-dependence remark is faithful; dependence through $F^{-1}(q_1,q_2)=(q_1,v)$ and the totally normal neighborhood terminology are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/ae1f6b0745bc.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2324,8 +2343,9 @@ tasks:
   description: 'Corollary ch3:3.9: minimizing curve is a geodesic'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.73 checked: minimizing-curve corollary and proof are faithful. Moved the post-proof isometry sentence to the following Lobatchevski-plane example, where the source uses it as setup.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/cc6d29130e63.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2350,8 +2370,9 @@ tasks:
   description: 'Example ch3:3.10: the Lobatchevski plane'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.73-74 checked: Lobatchevski-plane example is faithful. Added the isometry setup sentence from the text immediately preceding 3.10 so the Möbius-transform argument has its original context.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/45bcded293f4.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2398,8 +2419,9 @@ tasks:
   description: 'Lemma ch3:4.1: geodesic tangent to a sphere stays outside'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.74-76 checked: tangent-to-sphere lemma and proof are faithful; unit-speed reduction, squared distance function, Gauss-lemma criticality, compactness/shrinking argument, and strict local minimum conclusion are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/317503003357.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx
@@ -2424,8 +2446,9 @@ tasks:
   description: 'Proposition ch3:4.2: convex neighborhoods'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.76-77 checked: convex-neighborhood proposition and proof are faithful; choices of $c,\delta,W,\beta$, the unique geodesic of length $<2\delta<c$, and the contradiction with Lemma 4.1 are preserved.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/49a53e470b68.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/03-geodesics.mdx

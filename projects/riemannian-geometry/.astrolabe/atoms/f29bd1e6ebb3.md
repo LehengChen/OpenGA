@@ -12,6 +12,7 @@ For any $p\in M$ there exist a neighborhood $W$ of $p$ and a number $\delta>0$
 such that for every $q\in W$, $\exp_q$ is a diffeomorphism on
 $B_\delta(0)\subset T_qM$ and $\exp_q(B_\delta(0))\supset W$; that is, $W$ is a
 normal neighborhood of each of its points.
+
 *Proof.* Let $\varepsilon$, $V$, $\mathcal{U}$ be as in \entryref{6b083d8aac49}, with
 $\mathcal{U}\subset TU$, $V\subset\mathbf{x}(U)$. Define $F:\mathcal{U}\to M\times M$
 by $F(q,v)=(q,\exp_q v)$. Around $F(p,0)=(p,p)$ take coordinates

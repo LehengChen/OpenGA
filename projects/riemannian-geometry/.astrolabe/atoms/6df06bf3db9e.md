@@ -11,6 +11,7 @@ title: exp_q is a local diffeomorphism
 Given $q\in M$, there exists $\varepsilon>0$ such that
 $\exp_q:B_\varepsilon(0)\subset T_qM\to M$ is a diffeomorphism of
 $B_\varepsilon(0)$ onto an open subset of $M$.
+
 *Proof.* Compute $d(\exp_q)_0$:
 
 $$
