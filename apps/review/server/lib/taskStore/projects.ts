@@ -8,6 +8,11 @@ export type ProjectConfig = ReviewProject & {
   textbookZipPath?: string;
 };
 
+const smoothManifoldsLeeZipPath = path.join(
+  projectRoot,
+  'projects/smooth-manifolds-lee/sources/smooth-manifolds.zip'
+);
+
 const projectConfigs: ProjectConfig[] = [
   {
     id: defaultProjectId,
@@ -25,7 +30,7 @@ const projectConfigs: ProjectConfig[] = [
     taskPath: 'projects/smooth-manifolds-lee/tasks/all.tasks.yaml',
     reviewKind: 'lean_textbook',
     yamlPath: path.join(projectRoot, 'projects/smooth-manifolds-lee/tasks/all.tasks.yaml'),
-    textbookZipPath: process.env.SMOOTH_MANIFOLDS_LEE_ZIP ?? '/root/smooth-manifolds.zip'
+    textbookZipPath: process.env.SMOOTH_MANIFOLDS_LEE_ZIP ?? smoothManifoldsLeeZipPath
   }
 ];
 

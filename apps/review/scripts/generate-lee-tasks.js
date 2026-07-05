@@ -7,7 +7,9 @@ import { dump, load } from 'js-yaml';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '../../..');
 const importRef = process.env.SMOOTH_MANIFOLDS_LEE_IMPORT_REF ?? 'origin/import/smooth-manifolds-lee';
-const textbookZipPath = process.env.SMOOTH_MANIFOLDS_LEE_ZIP ?? '/root/smooth-manifolds.zip';
+const textbookZipPath =
+  process.env.SMOOTH_MANIFOLDS_LEE_ZIP ??
+  path.join(projectRoot, 'projects/smooth-manifolds-lee/sources/smooth-manifolds.zip');
 const jsonPrefix =
   'sections-1to8-Introduction-to-Smooth-Manifolds-Second-Edition-2013-by-John-M.-Lee';
 const taskDir = path.join(projectRoot, 'projects/smooth-manifolds-lee/tasks');

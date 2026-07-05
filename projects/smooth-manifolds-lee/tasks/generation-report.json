@@ -1,6 +1,6 @@
 {
   "importRef": "origin/import/smooth-manifolds-lee",
-  "textbookZipPath": "/root/smooth-manifolds.zip",
+  "textbookZipPath": "projects/smooth-manifolds-lee/sources/smooth-manifolds.zip",
   "generatedReviewTasks": 335,
   "matchedByChapter": {
     "chapter1": 75,

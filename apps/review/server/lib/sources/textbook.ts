@@ -38,7 +38,7 @@ export function loadTextbookEntry(config: ProjectConfig, task: ReviewTask): Text
       content: [
         `Textbook source zip not found: ${config.textbookZipPath}`,
         '',
-        'Set SMOOTH_MANIFOLDS_LEE_ZIP to a local zip path or place smooth-manifolds.zip at /root/smooth-manifolds.zip.'
+        'The default copy is tracked at projects/smooth-manifolds-lee/sources/smooth-manifolds.zip. Set SMOOTH_MANIFOLDS_LEE_ZIP only if you want to use another local copy.'
       ].join('\n')
     };
   }
