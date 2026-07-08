@@ -129,7 +129,8 @@ tasks:
   status: todo
   checks:
     math_review: pending
-  review_notes: []
+  review_notes:
+  - 'Checked reference: \entryref{e393a9b2a18c} points to ch0:2.1, the differentiable-manifold definition containing the change-of-parameters condition used here.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/f17d0aa32ddb.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/00-manifolds.mdx
@@ -907,7 +908,8 @@ tasks:
   status: todo
   checks:
     math_review: pending
-  review_notes: []
+  review_notes:
+  - 'Forward dependency / extraction order worth checking: this atom refers to \entryref{fc5a1bb299dd} (ch0:5.5), which appears later. Target exists and seems intentional; do not treat as an error without source-text comparison.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/453ecde8947b.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/00-manifolds.mdx
@@ -933,7 +935,8 @@ tasks:
   status: todo
   checks:
     math_review: pending
-  review_notes: []
+  review_notes:
+  - 'Forward dependency / extraction order worth checking: this atom refers to \entryref{b89377b6ed34} (ch0:5.6), which appears later. Target exists and seems intentional; do not treat as an error without source-text comparison.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/fc5a1bb299dd.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/00-manifolds.mdx
@@ -2586,7 +2589,8 @@ tasks:
   status: todo
   checks:
     math_review: pending
-  review_notes: []
+  review_notes:
+  - 'Forward dependency / extraction order worth checking: the local text says "the next" and refers to \entryref{d314772a2ae3} (ch4:2.6), which appears later. Target exists and seems intentional; do not treat as an error without source-text comparison.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/b29bd6004493.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx
@@ -5972,7 +5976,8 @@ tasks:
   status: todo
   checks:
     math_review: pending
-  review_notes: []
+  review_notes:
+  - 'Forward dependency / extraction order worth checking: this atom refers to \entryref{e19f0adfb150} (ch10:3.2) and \entryref{e42a427100fe} (ch10:3.3), both of which appear later. Targets exist and seem intentional; do not treat as errors without source-text comparison.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/d483a90d3a7d.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/10-rauch.mdx
