@@ -21,9 +21,26 @@ function projectIdFromRequest(req: express.Request): string {
   return typeof req.params.projectId === 'string' ? req.params.projectId : defaultProjectId;
 }
 
+// The declaration kind (definition/theorem/remark/…) of a leaf task, read from
+// its atom's `sort` frontmatter field.
+function atomSort(atomPath: string | undefined): string | undefined {
+  if (!atomPath) return undefined;
+  try {
+    const front = /^---\s*\n([\s\S]*?)\n---/.exec(readAtom(atomPath));
+    if (!front) return undefined;
+    const match = /^sort:\s*(.+)$/m.exec(front[1]);
+    return match ? match[1].trim() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 router.get('/', (req, res, next) => {
   try {
     const dataset = readTasks(projectIdFromRequest(req));
+    for (const task of dataset.tasks) {
+      if (task.kind === 'leaf' && task.files.atom) task.sort = atomSort(task.files.atom);
+    }
     res.json(dataset);
   } catch (error) {
     next(error);

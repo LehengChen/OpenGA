@@ -360,6 +360,33 @@
   text-transform: uppercase;
 }
 
+.kindTag {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #eef2f7;
+  color: #4b5563;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.kindBadge {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: #eef2f7;
+  color: #0f766e;
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .nestedTitle {
   overflow: hidden;
   color: #111827;

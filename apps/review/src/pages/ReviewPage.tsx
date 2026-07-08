@@ -5,7 +5,7 @@ import { LeanCodeBlock } from '../components/LeanCodeBlock';
 import { SourceItemCards } from '../components/SourceItemCards';
 import { fetchNeighbors, fetchTaskSource, submitReview } from '../api';
 import { findTask } from '../lib/progress';
-import type { TaskDataset, TaskSource } from '../lib/taskSchema';
+import { sortLabels, type TaskDataset, type TaskSource } from '../lib/taskSchema';
 
 const AtomViewer = lazy(() =>
   import('../components/AtomViewer').then((module) => ({ default: module.AtomViewer }))
@@ -168,7 +168,12 @@ export function ReviewPage({ projectId, dataset, onRefresh }: Props) {
         </button>
         <div>
           <p className={styles.kicker}>{task.id}{task.dcref ? ` · ${task.dcref}` : ''}</p>
-          <h1>{task.title}</h1>
+          <h1>
+            {task.sort ? (
+              <span className={styles.kindBadge}>{sortLabels[task.sort] ?? task.sort}</span>
+            ) : null}
+            {task.title}
+          </h1>
           <span
             className={`${styles.reviewStatusBadge} ${savedAllDone ? styles.reviewStatusDone : styles.reviewStatusPending}`}
           >

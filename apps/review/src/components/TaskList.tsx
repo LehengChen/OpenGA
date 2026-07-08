@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../App.module.css';
 import { childrenFor, rootTasks, taskProgress, tasksDone, tasksTotal } from '../lib/progress';
-import { ReviewTask, statusLabels } from '../lib/taskSchema';
+import { ReviewTask, sortAbbrev, statusLabels } from '../lib/taskSchema';
 
 type Props = {
   tasks: ReviewTask[];
@@ -67,6 +67,11 @@ function NestedItem({
           aria-pressed={isSelected}
         >
           <span className={styles.nestedStatus}>{statusLabels[task.status]}</span>
+          {!isGroup && task.sort ? (
+            <span className={styles.kindTag} title={task.sort}>
+              {sortAbbrev[task.sort] ?? task.sort}
+            </span>
+          ) : null}
           <span className={styles.nestedTitle} title={task.title}>{task.title}</span>
           <span className={styles.nestedMeta} title={task.id}>{task.id}</span>
 

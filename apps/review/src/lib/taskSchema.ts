@@ -42,6 +42,7 @@ export type ReviewTask = {
   github: TaskGithub;
   review_kind?: ReviewKind;
   source?: TaskSourceRef;
+  sort?: string;
 };
 
 export type TaskDataset = {
@@ -112,3 +113,25 @@ export const statusLabels: Record<TaskStatus, string> = {
 };
 
 export const workflowOrder: TaskStatus[] = ['todo', 'in_progress', 'review', 'done'];
+
+// Atom `sort` (declaration kind) → display labels: full for the review header,
+// abbreviated for the dense roadmap rows.
+export const sortLabels: Record<string, string> = {
+  definition: 'Definition',
+  theorem: 'Theorem',
+  lemma: 'Lemma',
+  proposition: 'Proposition',
+  corollary: 'Corollary',
+  example: 'Example',
+  remark: 'Remark'
+};
+
+export const sortAbbrev: Record<string, string> = {
+  definition: 'Def',
+  theorem: 'Thm',
+  lemma: 'Lem',
+  proposition: 'Prop',
+  corollary: 'Cor',
+  example: 'Ex',
+  remark: 'Rmk'
+};
