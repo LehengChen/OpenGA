@@ -398,6 +398,16 @@
   white-space: nowrap;
 }
 
+.readOnlyBanner {
+  margin: 0;
+  padding: 6px 16px;
+  background: #0f766e;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
 .nestedTitle {
   overflow: hidden;
   color: #111827;

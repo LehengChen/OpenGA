@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { load } from 'js-yaml';
 import { projectRoot } from '../taskStore/paths.js';
+import { readAtom } from '../taskStore/atoms.js';
 import type { ReviewTask, TaskSourceItem } from '../../../src/lib/taskSchema';
 
 // Surfaces the Lean formalization of an atom-based (do Carmo) task by walking the
@@ -122,6 +123,33 @@ function refsForTask(task: ReviewTask): LeanRef[] {
 /** True if the task's statement has at least one linked Lean declaration. */
 export function hasLeanFormalization(task: ReviewTask): boolean {
   return refsForTask(task).length > 0;
+}
+
+/** The declaration kind (definition/theorem/…) from a task atom's `sort` field. */
+export function atomSort(atomPath: string | undefined): string | undefined {
+  if (!atomPath) return undefined;
+  try {
+    const front = /^---\s*\n([\s\S]*?)\n---/.exec(readAtom(atomPath));
+    if (!front) return undefined;
+    const match = /^sort:\s*(.+)$/m.exec(front[1]);
+    return match ? match[1].trim() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Annotate a leaf task with derived roadmap/review metadata: its declaration
+ * kind, whether it is formalized, and a `lean_review` check when it is. Used by
+ * both the live API and the static export so they stay identical.
+ */
+export function enrichLeafTask(task: ReviewTask): void {
+  if (task.kind !== 'leaf' || !task.files.atom) return;
+  task.sort = atomSort(task.files.atom);
+  task.formalized = hasLeanFormalization(task);
+  if (task.formalized) {
+    task.checks = { ...(task.checks ?? {}), lean_review: task.checks?.lean_review ?? 'pending' };
+  }
 }
 
 const DECL_BOUNDARY =

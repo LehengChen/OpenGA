@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { STATIC_MODE } from './api';
 import { fetchProjects, fetchTasks } from './api';
 import styles from './App.module.css';
 import { ProjectIndexPage } from './pages/ProjectIndexPage';
@@ -109,14 +110,20 @@ export default function App() {
     );
   }
 
+  const Router = STATIC_MODE ? HashRouter : BrowserRouter;
   return (
-    <BrowserRouter>
+    <Router>
+      {STATIC_MODE ? (
+        <p className={styles.readOnlyBanner}>
+          Read-only status view — reviews are submitted from the local app.
+        </p>
+      ) : null}
       <Routes>
         <Route path="/" element={<ProjectIndexPage projects={projects} />} />
         <Route path="/projects/:projectId" element={<DatasetRoute mode="home" />} />
         <Route path="/projects/:projectId/review/:taskId" element={<DatasetRoute mode="review" />} />
         <Route path="/review/:taskId" element={<Navigate to="/projects/riemannian-geometry" replace />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
