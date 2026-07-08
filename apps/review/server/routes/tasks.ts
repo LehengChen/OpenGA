@@ -43,6 +43,12 @@ router.get('/', (req, res, next) => {
       if (task.kind === 'leaf' && task.files.atom) {
         task.sort = atomSort(task.files.atom);
         task.formalized = hasLeanFormalization(task);
+        // Formalized statements get a second review check so the Lean can be
+        // reviewed independently of the informal math. Seeded pending here so the
+        // checkbox renders; the first review submit persists it.
+        if (task.formalized) {
+          task.checks = { ...(task.checks ?? {}), lean_review: task.checks?.lean_review ?? 'pending' };
+        }
       }
     }
     res.json(dataset);

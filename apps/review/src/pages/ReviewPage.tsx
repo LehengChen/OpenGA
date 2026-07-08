@@ -20,7 +20,9 @@ type Props = {
 function checkLabel(key: string): string {
   const labels: Record<string, string> = {
     informal_review: 'Informal statement reviewed',
-    formal_review: 'Formal statement reviewed'
+    formal_review: 'Formal statement reviewed',
+    math_review: 'Math review',
+    lean_review: 'Lean review'
   };
   if (labels[key]) return labels[key];
 
