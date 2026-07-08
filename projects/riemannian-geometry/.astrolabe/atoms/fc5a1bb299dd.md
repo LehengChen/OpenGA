@@ -12,6 +12,7 @@ Let $h:(-\delta,\delta)\times U\to\mathbb{R}$ be differentiable with $h(0,q)=0$
 for all $q\in U$. Then there exists a differentiable
 $g:(-\delta,\delta)\times U\to\mathbb{R}$ with $h(t,q)=t\,g(t,q)$; in particular
 $g(0,q)=\frac{\partial h(t,q)}{\partial t}\big|_{t=0}$.
+
 *Proof.* Define $g(t,q)=\int_0^1\frac{\partial h(ts,q)}{\partial(ts)}\,ds$; after
 changing variables, $t\,g(t,q)=\int_0^t\frac{\partial h(ts,q)}{\partial(ts)}\,d(ts)=h(t,q)$.
 $\square$
