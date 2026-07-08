@@ -1,0 +1,8 @@
+---
+ref:
+- fa78a4ba27cd
+- 8c5222cc0a78
+rel: uses
+sort: (lean, lean)
+---
+uses toFun

@@ -1,0 +1,22 @@
+---
+content: "∀ {\U0001D55C : Type u_1} [inst : NontriviallyNormedField \U0001D55C] {E\
+  \ : Type u_2} {E'' : Type u} [inst_1 : NormedAddCommGroup E]\n  [inst_2 : NormedSpace\
+  \ \U0001D55C E] [inst_3 : NormedAddCommGroup E''] [inst_4 : NormedSpace \U0001D55C\
+  \ E''] {H : Type u_7}\n  [inst_5 : TopologicalSpace H] {G : Type u_9} [inst_6 :\
+  \ TopologicalSpace G] {I I_1 : ModelWithCorners \U0001D55C E H}\n  (e_I : I = I_1)\
+  \ {J J_1 : ModelWithCorners \U0001D55C E'' G} (e_J : J = J_1) {M : Type u_11} [inst_7\
+  \ : TopologicalSpace M]\n  [inst_8 : ChartedSpace H M] {N : Type u_13} [inst_9 :\
+  \ TopologicalSpace N] [inst_10 : ChartedSpace G N]\n  {n n_1 : WithTop ℕ∞} (e_n\
+  \ : n = n_1) {f f_1 : M → N} (e_f : f = f_1) {x x_1 : M} (e_x : x = x_1)\n  (h :\
+  \ Manifold.IsImmersionAt I J n f x), h.codChart = ⋯.codChart"
+file: Riemannian/Manifold/DoCarmoCh0.lean
+line: 0
+name: Manifold.IsImmersionAt.codChart.congr_simp
+path: /Users/moqian/OpenGALib/OpenGALib/Riemannian/Manifold/DoCarmoCh0.lean
+ref:
+- 57aeebdc412c
+sort: theorem
+source: lean
+state: proven
+title: congr_simp
+---
