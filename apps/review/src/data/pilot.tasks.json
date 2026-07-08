@@ -1335,9 +1335,11 @@
       "description": "Definition ch1:2.1: Riemannian metric",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.53 checked against do Carmo: exact definition of Riemannian metric; notation and local representation are correct."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/e51da6670107.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1365,9 +1367,11 @@
       "description": "Definition ch1:2.2: isometry",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.53 checked: atom uses \"diffeomorphism\" for do Carmo's \"differentiable bijection with differentiable inverse\"; mathematically equivalent terminology."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/5027f83b7c47.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1395,9 +1399,11 @@
       "description": "Definition ch1:2.3: local isometry",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.54 checked against do Carmo: exact definition of local isometry and locally isometric manifolds."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/e2fb51e4dfaa.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1425,9 +1431,11 @@
       "description": "Example ch1:2.4: Euclidean space",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.54 checked against do Carmo: exact Euclidean-space example."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/889a625445cd.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1457,9 +1465,11 @@
       "description": "Example ch1:2.5: immersed manifolds",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.54 checked: atom uses standard \"regular value\" shorthand for do Carmo's explicit surjectivity condition; mathematically equivalent."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/7b2d0f31107f.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1489,9 +1499,11 @@
       "description": "Example ch1:2.6: Lie groups",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.54-56 checked: Lie-group example, proof of (3), and post-proof characterization paragraph are correctly retained; entryref to ch0:5.4 is appropriate."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/48f7c97ce541.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1522,9 +1534,11 @@
       "description": "Example ch1:2.7: the product metric",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.57 checked against do Carmo: product metric formula and flat-torus example are correct."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/a47005f1c0b9.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1552,9 +1566,11 @@
       "description": "Definition ch1:2.8: parametrized curve",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.57 checked against do Carmo: parametrized-curve definition and self-intersection/corner observation are correct."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/8ad26110a0e9.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1582,9 +1598,11 @@
       "description": "Definition ch1:2.9: vector field along a curve; length",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.58 checked: restored \"tangent vector field\" terminology and the observation that a vector field along a curve need not extend to an open set of M."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/a4a437839e0b.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1612,9 +1630,11 @@
       "description": "Proposition ch1:2.10: existence of Riemannian metrics",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.58 checked against do Carmo: existence proof via partition of unity is mathematically faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/a9965ea4095e.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1642,9 +1662,11 @@
       "description": "Remark ch1:2.11: volume form",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.58-60 checked with the volume setup preceding Remark 2.11; red PDF annotations are non-source markup and were ignored."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/4a6501c59c3e.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
@@ -1672,9 +1694,11 @@
       "description": "Remark ch1:2.12: volume from a volume element",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.60 checked against do Carmo: exact remark on volume elements."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/1934358d851d.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/01-metrics.mdx",
