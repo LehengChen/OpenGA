@@ -1,13 +1,11 @@
 name: Publish review app to Pages
 
+# Dormant until a repo admin enables Pages (Settings -> Pages -> Source:
+# "GitHub Actions"). Until then this runs on manual dispatch only, so it does
+# not auto-fail on every push. Once Pages is enabled, restore the `push` trigger
+# (branches: [main], paths: apps/review/**, projects/riemannian-geometry/**,
+# OpenGALib/**, this file) to publish automatically.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'apps/review/**'
-      - 'projects/riemannian-geometry/**'
-      - 'OpenGALib/**'
-      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
