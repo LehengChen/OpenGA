@@ -12,6 +12,7 @@ import {
   writeTasks
 } from '../lib/taskStore.js';
 import { ValidationError } from '../lib/errors.js';
+import { hasLeanFormalization } from '../lib/sources/docarmoLean.js';
 import type { ReviewTask } from '../../src/lib/taskSchema';
 
 const defaultProjectId = 'riemannian-geometry';
@@ -39,7 +40,10 @@ router.get('/', (req, res, next) => {
   try {
     const dataset = readTasks(projectIdFromRequest(req));
     for (const task of dataset.tasks) {
-      if (task.kind === 'leaf' && task.files.atom) task.sort = atomSort(task.files.atom);
+      if (task.kind === 'leaf' && task.files.atom) {
+        task.sort = atomSort(task.files.atom);
+        task.formalized = hasLeanFormalization(task);
+      }
     }
     res.json(dataset);
   } catch (error) {

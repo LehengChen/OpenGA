@@ -12,6 +12,7 @@ import {
   renderFormalStatements
 } from './lean.js';
 import { dependencyTreesForDeclaration } from './leanDeps.js';
+import { astrolabeLeanItems } from './docarmoLean.js';
 import {
   loadTextbookEntry,
   normalizeTextbookMarkdown,
@@ -98,6 +99,21 @@ export function readTaskSource(projectId: string, task: ReviewTask): TaskSource 
       content: readAtom(task.files.atom),
       editable: task.editable.includes(task.files.atom)
     });
+
+    // Lean formalization linked to this statement via the Astrolabe
+    // `formalizes` / `restates` bridges (do Carmo tasks).
+    const leanItems = astrolabeLeanItems(task);
+    if (leanItems.length > 0) {
+      panels.push({
+        id: 'formalization',
+        title: 'Lean formalization',
+        kind: 'lean',
+        language: 'lean',
+        content: `${leanItems.length} Lean declaration${leanItems.length === 1 ? '' : 's'} formalize this statement.`,
+        items: leanItems,
+        editable: false
+      });
+    }
   }
 
   const textbookEntry = loadTextbookEntry(config, task);

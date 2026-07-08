@@ -43,6 +43,7 @@ export type ReviewTask = {
   review_kind?: ReviewKind;
   source?: TaskSourceRef;
   sort?: string;
+  formalized?: boolean;
 };
 
 export type TaskDataset = {

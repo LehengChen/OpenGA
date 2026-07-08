@@ -72,6 +72,9 @@ function NestedItem({
               {sortAbbrev[task.sort] ?? task.sort}
             </span>
           ) : null}
+          {!isGroup && task.formalized ? (
+            <span className={styles.formalizedTag} title="Formalized in Lean">⊢ Lean</span>
+          ) : null}
           <span className={styles.nestedTitle} title={task.title}>{task.title}</span>
           <span className={styles.nestedMeta} title={task.id}>{task.id}</span>
 

@@ -387,6 +387,17 @@
   vertical-align: middle;
 }
 
+.formalizedTag {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #e3f5f0;
+  color: #0f766e;
+  font-size: 0.64rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .nestedTitle {
   overflow: hidden;
   color: #111827;
