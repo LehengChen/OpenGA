@@ -3228,9 +3228,11 @@
       "description": "Definition ch4:2.1: curvature",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.89-90 checked: curvature definition, Euclidean zero example, coordinate commutator interpretation, and sign-convention warning are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/2b69923f6c3c.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3258,9 +3260,11 @@
       "description": "Proposition ch4:2.2: linearity properties of $R$",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.90 checked: bilinearity in the first two arguments, operator linearity in the third argument, and proof computation are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/1638216efc09.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3290,9 +3294,10 @@
       "description": "Remark ch4:2.3: Remark 2.3",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
       "review_notes": [
+        "PDF p.90 checked: remark is faithful; forward reference to Remark 2.6 is intentional because the source says \"the next\".",
         "Forward dependency / extraction order worth checking: the local text says \"the next\" and refers to \\entryref{d314772a2ae3} (ch4:2.6), which appears later. Target exists and seems intentional; do not treat as an error without source-text comparison."
       ],
       "files": {
@@ -3322,9 +3327,11 @@
       "description": "Proposition ch4:2.4: Bianchi Identity",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.91 checked: Bianchi identity and Jacobi-identity proof are faithful. Moved the post-proof notation sentence for (X,Y,Z,T) to the 2.5 preamble."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/cddf28806b42.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3358,9 +3365,11 @@
       "description": "Proposition ch4:2.5: symmetries of the curvature",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.91-92 checked: curvature symmetries and proof are faithful. Moved the following coordinate-components setup out of this proof atom so it ends cleanly at the proof symbol."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/91101fb52f8d.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3392,9 +3401,11 @@
       "description": "Remark ch4:2.6: Remark 2.6",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.93 checked: coordinate components, equations (1)-(2), lowered-index identities, and Remark 2.6 are faithful. Added the coordinate-components setup here because Equation (1) is used by the remark."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/d314772a2ae3.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3454,9 +3465,11 @@
       "description": "Proposition ch4:3.1: sectional curvature independent of basis",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.94 checked: sectional-curvature quotient and basis-independence proof via elementary basis transformations are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/6314b56aa913.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3484,9 +3497,11 @@
       "description": "Definition ch4:3.2: sectional curvature",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.94 checked: sectional curvature definition and the transition to the algebraic lemma are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/dd2a18c3bee2.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3518,9 +3533,11 @@
       "description": "Lemma ch4:3.3: sectional curvature determines $R$",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.94-95 checked: algebraic lemma, hypotheses on R and R-prime, quotient formula, polarization steps, and cyclic-permutation argument are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/d2fb7e63779b.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3553,9 +3570,11 @@
       "description": "Lemma ch4:3.4: constant curvature characterization",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.96 checked: constant-curvature characterization and proof via Lemma 3.3 are faithful; K_o and the curvature-sign convention are preserved."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/bdd5a5a51f30.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3583,9 +3602,11 @@
       "description": "Corollary ch4:3.5: constant curvature in an orthonormal basis",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.96 checked: orthonormal-basis component formula and equivalent conditions for R_{ijij}, R_{ijji}, and zero remaining components are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/f6a5754fa596.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3641,9 +3662,11 @@
       "description": "Lemma ch4:4.1: curvature on a parametrized surface",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.98-99 checked: parametrized-surface curvature formula and long coordinate proof are faithful; order of D/dt, D/ds and do Carmo curvature sign are preserved."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/3e09a98d7474.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3707,9 +3730,11 @@
       "description": "Definition ch4:5.1: tensor of order $r$",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.100-101 checked: tensor definition, D(M)-multilinearity, moving-frame components, and pointwise-object explanation are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/cb5eff54c665.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3737,9 +3762,11 @@
       "description": "Example ch4:5.2: curvature tensor",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.101 checked: curvature tensor definition and component identity R(X_i,X_j,X_k,X_l)=R_{ijkl} are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/a00a368feda4.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3767,9 +3794,11 @@
       "description": "Example ch4:5.3: metric tensor",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.101 checked: metric tensor definition and component identification with g_{ij} are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/9c53933b9425.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3797,9 +3826,11 @@
       "description": "Example ch4:5.4: the connection is not a tensor",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.101 checked: connection example is faithful; non-tensor reason is exactly nonlinearity in the Y argument."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/41f3e35e2dad.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3827,9 +3858,11 @@
       "description": "Remark ch4:5.5: Remark 5.5",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF pp.101-102 checked: covariant/contravariant tensor distinction and metric-induced identification are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/559ee9b77f6a.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3859,9 +3892,11 @@
       "description": "Remark ch4:5.6: Remark 5.6",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.102 checked: vector-field identification with the associated covariant 1-tensor is faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/9bbb17a32c8b.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3889,9 +3924,11 @@
       "description": "Definition ch4:5.7: covariant differential of a tensor",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.102 checked: covariant differential definition, covariant derivative relative to Z, parallel-frame computation, and component derivative conclusion are faithful; red PDF annotations were ignored."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/44afbc4b197c.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3919,9 +3956,11 @@
       "description": "Example ch4:5.8: covariant differential of the metric tensor",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.103 checked: covariant differential of the metric tensor is zero; formula and Riemannian-connection explanation are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/b7b3cfbb967f.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
@@ -3951,9 +3990,11 @@
       "description": "Example ch4:5.9: covariant derivative of a vector field as a tensor",
       "status": "todo",
       "checks": {
-        "math_review": "pending"
+        "math_review": "done"
       },
-      "review_notes": [],
+      "review_notes": [
+        "PDF p.103 checked: vector-field-as-tensor covariant derivative formula and final identification with the vector field nabla_Z X are faithful."
+      ],
       "files": {
         "atom": "projects/riemannian-geometry/.astrolabe/atoms/d04d9c1e43a8.md",
         "chapter_doc": "projects/riemannian-geometry/.astrolabe/docs/04-curvature.mdx",
