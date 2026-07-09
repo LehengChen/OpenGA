@@ -8,6 +8,16 @@ machine-verified textbook — a shared foundation anyone can learn from,<br/>
 contribute to, reuse, and build on. Made for everyone.
 </p>
 
+<p align="center">
+  <a href="https://lehengchen.github.io/OpenGA/"><strong>Browse the project online →</strong></a>
+</p>
+
+## Explore online
+
+A read-only web view of the project — the blueprint, its dependency graph, and
+progress — is published at **[lehengchen.github.io/OpenGA](https://lehengchen.github.io/OpenGA/)**.
+It is rebuilt automatically on every push to `main`.
+
 ## Use the Lean library
 
 Add the dependency to your `lakefile.lean`:
