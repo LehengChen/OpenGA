@@ -4258,8 +4258,9 @@ tasks:
   description: 'Definition ch7:2.1: extendible'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.145 checked: extendible/non-extendible definition and transition to the next definition are faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/9c2fc0ac6238.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4282,8 +4283,9 @@ tasks:
   description: 'Definition ch7:2.2: geodesically complete'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.145 checked: geodesic completeness definition via exp_p defined on all of T_pM and geodesics defined for all real parameter values is faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/b24dcbe6fb5d.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4306,8 +4308,9 @@ tasks:
   description: 'Proposition ch7:2.3: Proposition 2.3'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.145-146 checked: complete implies non-extendible proposition and proof are faithful. The post-proof converse remark and distance-function preamble are source text; the distance preamble may be a boundary worth checking for extraction, but it is not a mathematical error.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/b293201bcf35.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4330,8 +4333,9 @@ tasks:
   description: 'Definition ch7:2.4: distance'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.146 checked: distance definition as infimum of lengths of piecewise differentiable curves joining p to q is faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/27418c04b90b.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4355,8 +4359,9 @@ tasks:
   description: 'Proposition ch7:2.5: $d$ is a metric'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.146 checked: metric-space properties, proof of positive definiteness, and reference to Chapter 3 Proposition 3.6 are faithful; post-proof minimizing-geodesic remark is source text.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/1500eb50e3ce.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4379,8 +4384,9 @@ tasks:
   description: 'Proposition ch7:2.6: topology coincides'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.146 checked: topology induced by d coincides with the original topology; proof via small normal balls and metric balls is faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/e99760b7fbed.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4403,8 +4409,9 @@ tasks:
   description: 'Corollary ch7:2.7: distance is continuous'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.146 checked: continuity of p -> d(p,p0) and the transition sentence introducing Hopf-Rinow are faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/f2dbff535b81.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4428,8 +4435,9 @@ tasks:
   description: 'Theorem ch7:2.8: Hopf and Rinow [HR]'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.146-149 checked: Hopf-Rinow assertions (a)-(f), proof of a=>f, a=>b, b=>c, c=>d, d=>a, and b<=>e are faithful, including the use of Chapter 3 Corollary 3.9.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/943d1151b8d9.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4452,8 +4460,9 @@ tasks:
   description: 'Corollary ch7:2.9: compact $\Rightarrow$ complete'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.149 checked: compact implies complete corollary is faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/e939791c7ac2.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4476,8 +4485,9 @@ tasks:
   description: 'Corollary ch7:2.10: closed submanifold complete'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.149 checked: closed submanifold of a complete Riemannian manifold is complete in the induced metric; Euclidean-space consequence is faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/92fb32ce610b.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4525,8 +4535,9 @@ tasks:
   description: 'Theorem ch7:3.1: Hadamard'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.149 checked: Hadamard theorem statement is faithful; the proof is correctly kept in the chapter document after Lemmas 3.2 and 3.3.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/0105a61bf621.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4549,8 +4560,9 @@ tasks:
   description: 'Lemma ch7:3.2: no conjugate points when $K\le 0$'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.149-150 checked: non-positive curvature lemma, Jacobi-field convexity computation, empty conjugate locus, and local-diffeomorphism conclusion are faithful; the post-proof transition to Lemma 3.3 is source text.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/655ebe66cd00.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4573,8 +4585,9 @@ tasks:
   description: 'Lemma ch7:3.3: expansion $\Rightarrow$ covering map'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF pp.150-151 checked: expansion local diffeomorphism implies covering map lemma and path-lifting proof are faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/0729becae550.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
@@ -4597,8 +4610,9 @@ tasks:
   description: 'Remark ch7:3.4: poles'
   status: todo
   checks:
-    math_review: pending
-  review_notes: []
+    math_review: done
+  review_notes:
+  - 'PDF p.151 checked: pole definition, non-positive curvature consequence, positive-curvature caveat, and general pole theorem are faithful.'
   files:
     atom: projects/riemannian-geometry/.astrolabe/atoms/747ab1665d1a.md
     chapter_doc: projects/riemannian-geometry/.astrolabe/docs/07-hopf-rinow.mdx
